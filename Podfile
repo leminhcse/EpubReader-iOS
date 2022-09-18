@@ -15,6 +15,8 @@ target 'EpubReader' do
   pod 'Connectivity'
   pod 'Whisper'
   pod 'SwiftyJSON', '4.0'
+  pod 'GoogleSignIn'
+  pod 'FBSDKLoginKit'
   pod 'FolioReaderKit', path: '../'
 
   # Pods for EpubReader
