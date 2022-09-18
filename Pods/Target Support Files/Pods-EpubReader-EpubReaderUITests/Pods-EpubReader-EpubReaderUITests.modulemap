@@ -1,0 +1,6 @@
+framework module Pods_EpubReader_EpubReaderUITests {
+  umbrella header "Pods-EpubReader-EpubReaderUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

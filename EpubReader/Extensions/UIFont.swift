@@ -1,0 +1,59 @@
+//
+//  UIFont.swift
+//  EpubReader
+//
+//  Created by mac on 17/09/2022.
+//
+
+import UIKit
+
+extension UIFont {
+    
+    enum FontStyle {
+        case h0
+        case h1
+        case h2
+        case h3
+        case h4
+        case h5
+        case subtitle
+        
+        var size: CGFloat {
+            let fontSize: CGFloat
+            
+            switch self {
+            case .h0: fontSize = 48
+            case .h1: fontSize = 32
+            case .h2: fontSize = 24
+            case .h3: fontSize = 20
+            case .h4: fontSize = 16
+            case .h5: fontSize = 14
+            case .subtitle: fontSize = 12
+            }
+            return fontSize
+        }
+        
+        var weight: UIFont.Weight {
+            let weight: UIFont.Weight
+            
+            switch self {
+            case .h0, .h1, .h2, .h3, .h4, .h5:
+                weight = .bold
+            case .subtitle:
+                weight = .semibold
+            }
+            return weight
+        }
+        
+        var defaultFontName: String {
+            switch self {
+            case .h0, .h1, .h2, .h3, .h4, .h5: return "OpenSans-Bold"
+            case .subtitle: return "OpenSans-Regular"
+            }
+        }
+    }
+    
+    static func font(with style: FontStyle) -> UIFont {
+        return UIFont(name: style.defaultFontName, size: style.size) ?? UIFont.systemFont(ofSize: style.size, weight: style.weight)
+    }
+}
