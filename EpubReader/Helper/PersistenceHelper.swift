@@ -13,31 +13,47 @@ final class PersistenceHelper: NSObject {
         return FileHelper.shared.documentsDirectory.path as NSString
     }
     
-//    class func saveData(object: AnyObject, key: String) {
-//        let file = documentsDirectory().appendingPathComponent(key)
-//        NSKeyedArchiver.archiveRootObject(object, toFile: file)
-//    }
-    
-    class func saveData(object: AnyObject, key: String) {
-        //UserDefaults.standard.set(object, forKey: key)
+    class func saveData(object: [Book], key: String) {
         do {
-            let data = try NSKeyedArchiver.archivedData(withRootObject: object, requiringSecureCoding: false)
+            let data = try JSONEncoder().encode(object)
             UserDefaults.standard.set(data, forKey: key)
         } catch {
-            print("Couldn't write file")
+            print(error)
         }
     }
     
     class func loadData(key: String) -> AnyObject? {
-        guard let data = UserDefaults.standard.data(forKey: key) else {
+        do {
+            guard let data = UserDefaults.standard.data(forKey: key) else {
+                return nil
+            }
+            let books = try JSONDecoder().decode([Book].self, from: data)
+            return books as AnyObject
+        } catch {
+            print(error)
             return nil
         }
-        guard let mydata = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? AnyObject else {
+    }
+    
+    class func saveAudioData(object: [Audio], key: String) {
+        do {
+            let data = try JSONEncoder().encode(object)
+            UserDefaults.standard.set(data, forKey: key)
+        } catch {
+            print(error)
+        }
+    }
+    
+    class func loadAudioData(key: String) -> AnyObject? {
+        do {
+            guard let data = UserDefaults.standard.data(forKey: key) else {
+                return nil
+            }
+            let books = try JSONDecoder().decode([Audio].self, from: data)
+            return books as AnyObject
+        } catch {
+            print(error)
             return nil
         }
-        return mydata
-//        let file = documentsDirectory().appendingPathComponent(key)
-//        let result = NSKeyedUnarchiver.unarchiveObject(withFile: file)
-//        return result as AnyObject?
     }
 }

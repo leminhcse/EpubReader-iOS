@@ -62,6 +62,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - Connectivity
+  - FBSDKCoreKit
   - FBSDKLoginKit
   - FolioReaderKit (from `../`)
   - GoogleSignIn
@@ -142,6 +143,6 @@ SPEC CHECKSUMS:
   Whisper: 6869ae85284ae2ba0aa4c7d8a826be6436409fed
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: aa192f92ad0fcbf859741705e246b98733e5c26c
+PODFILE CHECKSUM: 11a5668ce44f72c39cd98dbfdb9cf289d5cb2ac3
 
 COCOAPODS: 1.11.3

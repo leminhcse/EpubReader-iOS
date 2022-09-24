@@ -35,6 +35,7 @@
 		045C43E828C7ACF7000A83E4 /* RlmDownloadedAudioPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045C43E728C7ACF7000A83E4 /* RlmDownloadedAudioPath.swift */; };
 		0464017828AC0B3E00CCAD3F /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0464017728AC0B3E00CCAD3F /* AudioPlayer.swift */; };
 		0464017A28AC0C7D00CCAD3F /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0464017928AC0C7D00CCAD3F /* Audio.swift */; };
+		0464618528D7075200563427 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0464618428D7075200563427 /* SignInViewController.swift */; };
 		046C0EB428A8AE44009849B5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046C0EB328A8AE44009849B5 /* UIApplicationExtension.swift */; };
 		046C0EB628A8BAE1009849B5 /* ebook_example.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 046C0EB528A8BAE1009849B5 /* ebook_example.jpeg */; };
 		0471FA8028B3D529009656E7 /* UIScreenExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0471FA7F28B3D529009656E7 /* UIScreenExtensions.swift */; };
@@ -146,6 +147,7 @@
 		045C43E728C7ACF7000A83E4 /* RlmDownloadedAudioPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RlmDownloadedAudioPath.swift; sourceTree = "<group>"; };
 		0464017728AC0B3E00CCAD3F /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		0464017928AC0C7D00CCAD3F /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
+		0464618428D7075200563427 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		046C0EB328A8AE44009849B5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		046C0EB528A8BAE1009849B5 /* ebook_example.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ebook_example.jpeg; sourceTree = "<group>"; };
 		0471FA7F28B3D529009656E7 /* UIScreenExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtensions.swift; sourceTree = "<group>"; };
@@ -427,6 +429,7 @@
 			isa = PBXGroup;
 			children = (
 				FA2F8469283BE64100DF928B /* HomeViewController.swift */,
+				0464618428D7075200563427 /* SignInViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -932,6 +935,7 @@
 				048FDBB128CC9A770080509B /* CultureHistoryViewController.swift in Sources */,
 				04118AE328C905EF00BE4446 /* PersistenceHelper.swift in Sources */,
 				FAC01C23284FB9CB0004A0BA /* ApiWebService.swift in Sources */,
+				0464618528D7075200563427 /* SignInViewController.swift in Sources */,
 				FA2F8470283BE71700DF928B /* MainTabBarViewController.swift in Sources */,
 				043DFB1A28BB77B7003CD6C0 /* Message.swift in Sources */,
 				04CC80CF288DA68800D53C0C /* ItemDownloadHelper.swift in Sources */,
@@ -1140,7 +1144,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 53AS9QTB4M;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EpubReader/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1169,7 +1173,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 53AS9QTB4M;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EpubReader/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

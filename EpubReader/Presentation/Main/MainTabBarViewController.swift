@@ -64,6 +64,7 @@ class MainTabBarViewController: UITabBarController {
         self.viewControllers = [homeViewController, searchViewController, favoritesViewController, bookmarkViewController]
     }
     
+    // MARK: Audio Player Events
     @objc func hideShowAudioPlayer(note: NSNotification) {
         if AudioPlayer.shared.sound != nil {
             if let title = AudioPlayer.shared.audio?.title {

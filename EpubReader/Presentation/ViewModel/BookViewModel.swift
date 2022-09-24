@@ -21,20 +21,15 @@ class BookViewModel: NSObject {
         self.listBook.removeAll()
         if let data = PersistenceHelper.loadData(key: "Books") as? [Book] {
             self.listBook = Utilities.shared.importBookList(books: data)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification), object: nil)
         } else {
             ApiWebService.shared.getBooks()
                 .observe(on: MainScheduler.instance)
                 .subscribe(onNext: { bookList in
-                    print("List of book ", bookList)
                     if bookList.count > 0 {
-                        let myValue: AnyObject = (bookList as? AnyObject)!
-                            
-                        PersistenceHelper.saveData(object: myValue, key: "Books")
+                        PersistenceHelper.saveData(object: bookList, key: "Books")
                         self.listBook = Utilities.shared.importBookList(books: bookList)
-                    }
-                    if self.listBook.count > 0 {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
-                                                        object: nil)
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification), object: nil)
                     }
                 }, onError: { error in
                     switch error {

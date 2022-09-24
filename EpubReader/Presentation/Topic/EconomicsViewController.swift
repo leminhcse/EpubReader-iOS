@@ -22,17 +22,14 @@ class EconomicsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        loadData()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(reloadData(_:)),
                                                name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
                                                object: nil)
+        
+        setupView()
+        loadData()
     }
     
     private func setupView() {
