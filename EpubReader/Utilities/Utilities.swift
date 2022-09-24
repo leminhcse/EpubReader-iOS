@@ -7,6 +7,7 @@
 
 import UIKit
 import Whisper
+import FBSDKLoginKit
 
 class Utilities: NSObject {
     
@@ -121,5 +122,11 @@ class Utilities: NSObject {
                 }
             }
         }
+    }
+
+    func isFacebookSignedIn() -> Bool {
+        let accessToken = AccessToken.current
+        let isLoggedIn = accessToken != nil && !(accessToken?.isExpired ?? false)
+        return isLoggedIn
     }
 }
