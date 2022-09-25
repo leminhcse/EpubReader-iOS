@@ -52,6 +52,11 @@
 		04B360E728B68431005ADBA1 /* close_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B360E628B68431005ADBA1 /* close_button.png */; };
 		04B360E928B68CF1005ADBA1 /* video_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B360E828B68CF1005ADBA1 /* video_play.png */; };
 		04BC25AD2870B018007ECAEE /* chevron_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 04BC25AC2870B018007ECAEE /* chevron_down.png */; };
+		04C79DA528E08EF000593DFD /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C79DA428E08EF000593DFD /* SideMenuViewController.swift */; };
+		04C79DA928E0A24400593DFD /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C79DA828E0A24400593DFD /* MenuTableViewCell.swift */; };
+		04C79DAB28E0C4FA00593DFD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C79DAA28E0C4FA00593DFD /* ProfileViewController.swift */; };
+		04C79DAD28E0C58400593DFD /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C79DAC28E0C58400593DFD /* AboutViewController.swift */; };
+		04C79DAF28E0C6D600593DFD /* DisableAdsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C79DAE28E0C6D600593DFD /* DisableAdsViewController.swift */; };
 		04C9F889287053C3000991C0 /* Epub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C9F888287053C3000991C0 /* Epub.swift */; };
 		04CC80CF288DA68800D53C0C /* ItemDownloadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC80CE288DA68800D53C0C /* ItemDownloadHelper.swift */; };
 		04CC80D1288DA96500D53C0C /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC80D0288DA96500D53C0C /* FileHelper.swift */; };
@@ -164,6 +169,11 @@
 		04B360E628B68431005ADBA1 /* close_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close_button.png; sourceTree = "<group>"; };
 		04B360E828B68CF1005ADBA1 /* video_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_play.png; sourceTree = "<group>"; };
 		04BC25AC2870B018007ECAEE /* chevron_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron_down.png; sourceTree = "<group>"; };
+		04C79DA428E08EF000593DFD /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
+		04C79DA828E0A24400593DFD /* MenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
+		04C79DAA28E0C4FA00593DFD /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		04C79DAC28E0C58400593DFD /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		04C79DAE28E0C6D600593DFD /* DisableAdsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisableAdsViewController.swift; sourceTree = "<group>"; };
 		04C9F888287053C3000991C0 /* Epub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Epub.swift; sourceTree = "<group>"; };
 		04CC80CE288DA68800D53C0C /* ItemDownloadHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDownloadHelper.swift; sourceTree = "<group>"; };
 		04CC80D0288DA96500D53C0C /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
@@ -446,6 +456,10 @@
 			isa = PBXGroup;
 			children = (
 				FA2F846F283BE71700DF928B /* MainTabBarViewController.swift */,
+				04C79DA428E08EF000593DFD /* SideMenuViewController.swift */,
+				04C79DAA28E0C4FA00593DFD /* ProfileViewController.swift */,
+				04C79DAC28E0C58400593DFD /* AboutViewController.swift */,
+				04C79DAE28E0C6D600593DFD /* DisableAdsViewController.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -618,6 +632,7 @@
 			children = (
 				FAD7401A284BCAB0005B9459 /* BookCell.swift */,
 				04ECD18928B7D2D700DAA295 /* AudioResourceCell.swift */,
+				04C79DA828E0A24400593DFD /* MenuTableViewCell.swift */,
 			);
 			path = CollectionViewCells;
 			sourceTree = "<group>";
@@ -923,12 +938,14 @@
 			files = (
 				0464017A28AC0C7D00CCAD3F /* Audio.swift in Sources */,
 				041F9B8F28B11FAC00FB4DEA /* IntExtensions.swift in Sources */,
+				04C79DA928E0A24400593DFD /* MenuTableViewCell.swift in Sources */,
 				FA349DE6284B6490005047DC /* SkillsViewController.swift in Sources */,
 				04CC80D3288DAB4700D53C0C /* FileDownloadInfo.swift in Sources */,
 				FAC51FCA283FC97B0016889F /* UIColorExtensions.swift in Sources */,
 				04ECD19228B7E1AC00DAA295 /* AudioViewController.swift in Sources */,
 				FAC51FC8283FC5810016889F /* AppAppearanceDesigner.swift in Sources */,
 				FADA96B52868BCBB0075627C /* EpubReaderHelper.swift in Sources */,
+				04C79DAB28E0C4FA00593DFD /* ProfileViewController.swift in Sources */,
 				048FDBB328CC9AB70080509B /* ScienceTechnologyViewController.swift in Sources */,
 				041F9B9128B13C6C00FB4DEA /* PlayerViewController.swift in Sources */,
 				04196D7428A2BDC8008FA2FC /* FullScreenAudioPlayerViewController.swift in Sources */,
@@ -945,6 +962,8 @@
 				FAB7F4BD284CD7CB00A16974 /* BookViewModel.swift in Sources */,
 				041F9B9328B13CEC00FB4DEA /* MIniAudioPlayerView.swift in Sources */,
 				043DFB1828BB75C6003CD6C0 /* Reachability.swift in Sources */,
+				04C79DAF28E0C6D600593DFD /* DisableAdsViewController.swift in Sources */,
+				04C79DAD28E0C58400593DFD /* AboutViewController.swift in Sources */,
 				046C0EB428A8AE44009849B5 /* UIApplicationExtension.swift in Sources */,
 				0471FA8028B3D529009656E7 /* UIScreenExtensions.swift in Sources */,
 				FAC654A9283D31D60086CC9D /* UIViewExtensions.swift in Sources */,
@@ -969,6 +988,7 @@
 				FA951F44283BEC3000013A84 /* BookmarkViewController.swift in Sources */,
 				FA2F846A283BE64100DF928B /* HomeViewController.swift in Sources */,
 				FA349DE8284B6503005047DC /* EconomicsViewController.swift in Sources */,
+				04C79DA528E08EF000593DFD /* SideMenuViewController.swift in Sources */,
 				04FA55DF286CB0E900724CF9 /* UIButtonExtension.swift in Sources */,
 				04B21E9C28BA78F700758B03 /* ProgressBarView.swift in Sources */,
 				FA9D0C4028637D9900E667AD /* ApiRouter.swift in Sources */,
