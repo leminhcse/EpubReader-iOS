@@ -41,6 +41,7 @@ class HomeViewController: BaseViewController {
         button.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: size)
         button.tintColor = UIColor.white
         button.setImage(UIImage(named: "menu.png"), for: .normal)
+        button.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
         button.applyNavBarConstraints(size: button.frame.size)
         view.addSubview(button)
         return UIBarButtonItem(customView: view)
@@ -112,5 +113,24 @@ class HomeViewController: BaseViewController {
         print("Selected Segment Index is : \(sender.selectedSegmentIndex)")
         let tabPosition = sender.selectedSegmentIndex
         pageViewController.setViewControllers([viewControllers[tabPosition]], direction: .forward, animated: false, completion: nil)
+    }
+    
+    @objc func menuButtonTapped() {
+        let menuController = SideMenuViewController()
+        if UI_USER_INTERFACE_IDIOM() == .phone {
+            let value = NSNumber(value: UIInterfaceOrientation.portrait.rawValue)
+            UIDevice.current.setValue(value, forKey: "orientation")
+        }
+        let navigationController = UINavigationController(rootViewController: menuController)
+        navigationController.modalPresentationStyle = .overFullScreen
+        if let tabBarController = tabBarController {
+            tabBarController.present(navigationController, animated: false) {
+                menuController.HandleAnimationTapperMenu()
+            }
+        } else {
+            present(navigationController, animated: false) {
+                menuController.HandleAnimationTapperMenu()
+            }
+        }
     }
 }
