@@ -13,6 +13,8 @@ enum ApiRouter: URLRequestConvertible {
     //The endpoint name we'll call later
     case getBooks
     case getAudioList(bookId: String)
+    case getFavorites(userId: String)
+    case getBookSearch(keySearch: String)
     
     //MARK: - URLRequestConvertible
     func asURLRequest() throws -> URLRequest {
@@ -63,6 +65,10 @@ enum ApiRouter: URLRequestConvertible {
             return .get
         case .getAudioList:
             return .get
+        case .getFavorites:
+            return .get
+        case .getBookSearch:
+            return .get
         }
     }
     
@@ -74,6 +80,10 @@ enum ApiRouter: URLRequestConvertible {
             return "getbook.php"
         case .getAudioList:
             return "getAudioList.php"
+        case .getFavorites:
+            return "getFavorites.php"
+        case .getBookSearch:
+            return "getBookSearch.php"
         }
     }
     
@@ -85,6 +95,10 @@ enum ApiRouter: URLRequestConvertible {
             return ["posts" : [Audio].self]
         case .getAudioList(let bookId):
             return [Constants.Parameters.bookId : bookId]
+        case .getFavorites(let userId):
+            return [Constants.Parameters.userId : userId]
+        case .getBookSearch(let keySearch):
+            return [Constants.Parameters.keySearch : keySearch]
         }
     }
 }

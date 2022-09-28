@@ -24,6 +24,7 @@
 		041F9B9528B140D500FB4DEA /* play_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = 041F9B9428B140D500FB4DEA /* play_filled.png */; };
 		041F9B9828B141C000FB4DEA /* fastforward_15_seconds.png in Resources */ = {isa = PBXBuildFile; fileRef = 041F9B9628B141C000FB4DEA /* fastforward_15_seconds.png */; };
 		041F9B9928B141C000FB4DEA /* rewind_15_seconds.png in Resources */ = {isa = PBXBuildFile; fileRef = 041F9B9728B141C000FB4DEA /* rewind_15_seconds.png */; };
+		0423B1B528E1FF7E00750A8E /* BookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0423B1B428E1FF7E00750A8E /* BookTableViewCell.swift */; };
 		043DFB1428BB38A4003CD6C0 /* fi_download.png in Resources */ = {isa = PBXBuildFile; fileRef = 043DFB1328BB38A4003CD6C0 /* fi_download.png */; };
 		043DFB1628BB3905003CD6C0 /* download-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 043DFB1528BB3905003CD6C0 /* download-icon.png */; };
 		043DFB1828BB75C6003CD6C0 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043DFB1728BB75C6003CD6C0 /* Reachability.swift */; };
@@ -141,6 +142,7 @@
 		041F9B9428B140D500FB4DEA /* play_filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_filled.png; sourceTree = "<group>"; };
 		041F9B9628B141C000FB4DEA /* fastforward_15_seconds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fastforward_15_seconds.png; sourceTree = "<group>"; };
 		041F9B9728B141C000FB4DEA /* rewind_15_seconds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rewind_15_seconds.png; sourceTree = "<group>"; };
+		0423B1B428E1FF7E00750A8E /* BookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookTableViewCell.swift; sourceTree = "<group>"; };
 		043DFB1328BB38A4003CD6C0 /* fi_download.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fi_download.png; sourceTree = "<group>"; };
 		043DFB1528BB3905003CD6C0 /* download-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "download-icon.png"; sourceTree = "<group>"; };
 		043DFB1728BB75C6003CD6C0 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -633,6 +635,7 @@
 				FAD7401A284BCAB0005B9459 /* BookCell.swift */,
 				04ECD18928B7D2D700DAA295 /* AudioResourceCell.swift */,
 				04C79DA828E0A24400593DFD /* MenuTableViewCell.swift */,
+				0423B1B428E1FF7E00750A8E /* BookTableViewCell.swift */,
 			);
 			path = CollectionViewCells;
 			sourceTree = "<group>";
@@ -964,6 +967,7 @@
 				043DFB1828BB75C6003CD6C0 /* Reachability.swift in Sources */,
 				04C79DAF28E0C6D600593DFD /* DisableAdsViewController.swift in Sources */,
 				04C79DAD28E0C58400593DFD /* AboutViewController.swift in Sources */,
+				0423B1B528E1FF7E00750A8E /* BookTableViewCell.swift in Sources */,
 				046C0EB428A8AE44009849B5 /* UIApplicationExtension.swift in Sources */,
 				0471FA8028B3D529009656E7 /* UIScreenExtensions.swift in Sources */,
 				FAC654A9283D31D60086CC9D /* UIViewExtensions.swift in Sources */,

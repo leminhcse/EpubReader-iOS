@@ -15,6 +15,8 @@ struct Constants {
     //The parameters (Queries) that we're gonna use
     struct Parameters {
         static let bookId = "bookId"
+        static let userId = "userId"
+        static let keySearch = "keySearch"
     }
     
     //The header fields

@@ -21,6 +21,14 @@ class ApiWebService {
         return request(ApiRouter.getAudioList(bookId: bookId))
     }
     
+    func getFavorites(userId: String) -> Observable<[Book]> {
+        return request(ApiRouter.getFavorites(userId: userId))
+    }
+    
+    func getResultSearch(keySearch: String) -> Observable<[Book]> {
+        return request(ApiRouter.getBookSearch(keySearch: keySearch))
+    }
+    
     func downloadFile(url: URL, completion: ((Bool) -> Void)? = nil) {
         let fileName = url.lastPathComponent
         
