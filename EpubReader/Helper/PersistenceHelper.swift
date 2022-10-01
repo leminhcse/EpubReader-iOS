@@ -56,4 +56,26 @@ final class PersistenceHelper: NSObject {
             return nil
         }
     }
+    
+    class func saveUser(object: User, key: String) {
+        do {
+            let data = try JSONEncoder().encode(object)
+            UserDefaults.standard.set(data, forKey: key)
+        } catch {
+            print(error)
+        }
+    }
+    
+    class func loadUser(key: String) -> AnyObject? {
+        do {
+            guard let data = UserDefaults.standard.data(forKey: key) else {
+                return nil
+            }
+            let user = try JSONDecoder().decode(User.self, from: data)
+            return user as AnyObject
+        } catch {
+            print(error)
+            return nil
+        }
+    }
 }

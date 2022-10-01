@@ -12,6 +12,8 @@ import FBSDKLoginKit
 
 class SignInViewController: UIViewController {
     
+    private var userViewModel = UserViewModel()
+    
     // MARK: - Private Variables
     private static let CLIENT_ID = "390562581850-n9o3gbovbr023j0orfavrgh01mq59r4n.apps.googleusercontent.com"
     
@@ -69,6 +71,8 @@ class SignInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(gotoHome(_:)),
+                                               name: NSNotification.Name(rawValue: EpubReaderHelper.SignInSuccessfullyNotification), object: nil)
         self.view.backgroundColor = .white
         setupUI()
     }
@@ -135,6 +139,39 @@ class SignInViewController: UIViewController {
         AppAppearanceDesigner.updateScrollableSegmentedControl()
     }
     
+    private func getUserProfile(token: AccessToken?, userId: String?) {
+        let graphRequest: GraphRequest = GraphRequest(graphPath: "me", parameters: ["fields": "id, first_name, middle_name, last_name, name, picture, email"])
+        graphRequest.start { _, result, error in
+            if error == nil {
+                let data: [String: AnyObject] = result as! [String: AnyObject]
+                
+                var fbName = ""
+                var fbEmail = ""
+                
+                if let facebookName = data["name"] as? String {
+                    fbName = facebookName
+                }
+
+                let facebookProfilePicURL = "https://graph.facebook.com/\(userId ?? "")/picture?type=large"
+                if let facebookEmail = data["email"] as? String {
+                    fbEmail = facebookEmail
+                }
+                
+                let userInfo = User()
+                userInfo.email = fbEmail
+                userInfo.name = fbName
+                userInfo.avatar = facebookProfilePicURL
+                userInfo.access_token = token?.tokenString ?? ""
+                userInfo.type = "0"
+                userInfo.isPurchased = "0"
+
+                self.userViewModel.putUser(user: userInfo)
+            } else {
+                print("Error: Trying to get user's info")
+            }
+        }
+    }
+    
     // MARK: SignIn Action Events
     @objc func googleAuthLogin() {
         let signInConfig = GIDConfiguration.init(clientID: SignInViewController.CLIENT_ID)
@@ -144,24 +181,20 @@ class SignInViewController: UIViewController {
                     print("Uh oh. The user cancelled the Google login.")
                     return
                 }
-                let userId = user.userID ?? ""
-                print("Google User ID: \(userId)")
-                
+                //let userId = user.userID ?? ""
                 let userIdToken = user.authentication.idToken ?? ""
-                print("Google ID Token: \(userIdToken)")
-                
-                let userFirstName = user.profile?.givenName ?? ""
-                print("Google User First Name: \(userFirstName)")
-                
-                let userLastName = user.profile?.familyName ?? ""
-                print("Google User Last Name: \(userLastName)")
-                
                 let userEmail = user.profile?.email ?? ""
-                print("Google User Email: \(userEmail)")
-                
                 let googleProfilePicURL = user.profile?.imageURL(withDimension: 150)?.absoluteString ?? ""
-                print("Google Profile Avatar URL: \(googleProfilePicURL)")
-                self.gotoHomeScreen()
+
+                let userInfo = User()
+                userInfo.email = userEmail
+                userInfo.name = user.profile?.name ?? ""
+                userInfo.avatar = googleProfilePicURL
+                userInfo.access_token = userIdToken
+                userInfo.type = "0"
+                userInfo.isPurchased = "0"
+
+                self.userViewModel.putUser(user: userInfo)
             }
         }
     }
@@ -182,64 +215,8 @@ class SignInViewController: UIViewController {
             }
         })
     }
-
-    func getUserProfile(token: AccessToken?, userId: String?) {
-        let graphRequest: GraphRequest = GraphRequest(graphPath: "me", parameters: ["fields": "id, first_name, middle_name, last_name, name, picture, email"])
-        graphRequest.start { _, result, error in
-            if error == nil {
-                let data: [String: AnyObject] = result as! [String: AnyObject]
-                
-                // Facebook Id
-                if let facebookId = data["id"] as? String {
-                    print("Facebook Id: \(facebookId)")
-                } else {
-                    print("Facebook Id: Not exists")
-                }
-                
-                // Facebook First Name
-                if let facebookFirstName = data["first_name"] as? String {
-                    print("Facebook First Name: \(facebookFirstName)")
-                } else {
-                    print("Facebook First Name: Not exists")
-                }
-                
-                // Facebook Middle Name
-                if let facebookMiddleName = data["middle_name"] as? String {
-                    print("Facebook Middle Name: \(facebookMiddleName)")
-                } else {
-                    print("Facebook Middle Name: Not exists")
-                }
-                
-                // Facebook Last Name
-                if let facebookLastName = data["last_name"] as? String {
-                    print("Facebook Last Name: \(facebookLastName)")
-                } else {
-                    print("Facebook Last Name: Not exists")
-                }
-                
-                // Facebook Name
-                if let facebookName = data["name"] as? String {
-                    print("Facebook Name: \(facebookName)")
-                } else {
-                    print("Facebook Name: Not exists")
-                }
-                
-                // Facebook Profile Pic URL
-                let facebookProfilePicURL = "https://graph.facebook.com/\(userId ?? "")/picture?type=large"
-                print("Facebook Profile Pic URL: \(facebookProfilePicURL)")
-                
-                // Facebook Email
-                if let facebookEmail = data["email"] as? String {
-                    print("Facebook Email: \(facebookEmail)")
-                } else {
-                    print("Facebook Email: Not exists")
-                }
-                
-                print("Facebook Access Token: \(token?.tokenString ?? "")")
-                self.gotoHomeScreen()
-            } else {
-                print("Error: Trying to get user's info")
-            }
-        }
+    
+    @objc func gotoHome(_ notification: NSNotification) {
+        gotoHomeScreen()
     }
 }

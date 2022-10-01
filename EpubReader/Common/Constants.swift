@@ -17,6 +17,8 @@ struct Constants {
         static let bookId = "bookId"
         static let userId = "userId"
         static let keySearch = "keySearch"
+        static let email = "email"
+        static let name = "name"
     }
     
     //The header fields

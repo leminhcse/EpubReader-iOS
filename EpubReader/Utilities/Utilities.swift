@@ -129,4 +129,13 @@ class Utilities: NSObject {
         let isLoggedIn = accessToken != nil && !(accessToken?.isExpired ?? false)
         return isLoggedIn
     }
+    
+    func isFavorited(bookId: String) -> Bool {
+        for item in EpubReaderHelper.shared.favoritedBooks {
+            if item.id == bookId {
+                return true
+            }
+        }
+        return false
+    }
 }

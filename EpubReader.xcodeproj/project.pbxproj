@@ -40,6 +40,8 @@
 		046C0EB428A8AE44009849B5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046C0EB328A8AE44009849B5 /* UIApplicationExtension.swift */; };
 		046C0EB628A8BAE1009849B5 /* ebook_example.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 046C0EB528A8BAE1009849B5 /* ebook_example.jpeg */; };
 		0471FA8028B3D529009656E7 /* UIScreenExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0471FA7F28B3D529009656E7 /* UIScreenExtensions.swift */; };
+		04785B7328E6E456009CD72C /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04785B7228E6E456009CD72C /* UserViewModel.swift */; };
+		04856C1728E6050C00426B6C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04856C1628E6050C00426B6C /* User.swift */; };
 		048FDBB128CC9A770080509B /* CultureHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048FDBB028CC9A770080509B /* CultureHistoryViewController.swift */; };
 		048FDBB328CC9AB70080509B /* ScienceTechnologyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048FDBB228CC9AB70080509B /* ScienceTechnologyViewController.swift */; };
 		048FDBB528CC9AE20080509B /* HealthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048FDBB428CC9AE20080509B /* HealthViewController.swift */; };
@@ -158,6 +160,8 @@
 		046C0EB328A8AE44009849B5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		046C0EB528A8BAE1009849B5 /* ebook_example.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ebook_example.jpeg; sourceTree = "<group>"; };
 		0471FA7F28B3D529009656E7 /* UIScreenExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtensions.swift; sourceTree = "<group>"; };
+		04785B7228E6E456009CD72C /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		04856C1628E6050C00426B6C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		048FDBB028CC9A770080509B /* CultureHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CultureHistoryViewController.swift; sourceTree = "<group>"; };
 		048FDBB228CC9AB70080509B /* ScienceTechnologyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScienceTechnologyViewController.swift; sourceTree = "<group>"; };
 		048FDBB428CC9AE20080509B /* HealthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthViewController.swift; sourceTree = "<group>"; };
@@ -563,6 +567,7 @@
 				0464017728AC0B3E00CCAD3F /* AudioPlayer.swift */,
 				0464017928AC0C7D00CCAD3F /* Audio.swift */,
 				043DFB1928BB77B7003CD6C0 /* Message.swift */,
+				04856C1628E6050C00426B6C /* User.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -572,6 +577,7 @@
 			children = (
 				FAB7F4BC284CD7CB00A16974 /* BookViewModel.swift */,
 				0401C1F428BE7463008A686B /* AudioViewModel.swift */,
+				04785B7228E6E456009CD72C /* UserViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -986,6 +992,7 @@
 				FA951F42283BEBFA00013A84 /* FavoritesViewController.swift in Sources */,
 				04182A66288BBB8100894854 /* LiteraryViewController.swift in Sources */,
 				04C9F889287053C3000991C0 /* Epub.swift in Sources */,
+				04856C1728E6050C00426B6C /* User.swift in Sources */,
 				FADA96B72868C4870075627C /* UIImageExtension.swift in Sources */,
 				0464017828AC0B3E00CCAD3F /* AudioPlayer.swift in Sources */,
 				045C43E828C7ACF7000A83E4 /* RlmDownloadedAudioPath.swift in Sources */,
@@ -995,6 +1002,7 @@
 				04C79DA528E08EF000593DFD /* SideMenuViewController.swift in Sources */,
 				04FA55DF286CB0E900724CF9 /* UIButtonExtension.swift in Sources */,
 				04B21E9C28BA78F700758B03 /* ProgressBarView.swift in Sources */,
+				04785B7328E6E456009CD72C /* UserViewModel.swift in Sources */,
 				FA9D0C4028637D9900E667AD /* ApiRouter.swift in Sources */,
 				FAB7F4B6284CC90800A16974 /* UIDeviceExtensions.swift in Sources */,
 				048FDBB528CC9AE20080509B /* HealthViewController.swift in Sources */,

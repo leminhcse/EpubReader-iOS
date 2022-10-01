@@ -217,6 +217,7 @@ class BookDetailViewController: UIViewController {
     private var pageViewController = UIPageViewController()
     private var book: Book
     private var audioViewModel = AudioViewModel()
+    private var userViewModel = UserViewModel()
 
     // MARK: - Constructor
     required init(book: Book) {
@@ -235,6 +236,10 @@ class BookDetailViewController: UIViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(reloadData(_:)),
                                                name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(reloadFavoriteStatus(_:)),
+                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteDataNotification),
                                                object: nil)
         
         setupViews()
@@ -489,6 +494,13 @@ class BookDetailViewController: UIViewController {
                 downloadButton.setTitle("Tải Sách", for: .normal)
             }
         }
+        
+        var imageName = "fi_heart.png"
+        if Utilities.shared.isFavorited(bookId: book.id) {
+            imageName = "fi_heart_fill.png"
+        }
+        let downArrowIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+        favoriteButton.setImage(downArrowIcon, for: .normal)
     }
     
     private func readerConfiguration(forEpub epub: Epub) -> FolioReaderConfig {
@@ -557,6 +569,10 @@ class BookDetailViewController: UIViewController {
         }
     }
     
+    @objc func reloadFavoriteStatus(_ notification: NSNotification) {
+        setStatusButton()
+    }
+    
     @objc func closeButtonTapped() {
         if AudioPlayer.shared.sound != nil && !playerView.isHidden {
             DispatchQueue.main.async {
@@ -569,7 +585,12 @@ class BookDetailViewController: UIViewController {
     }
     
     @objc func favoriteButtonTapped() {
-        
+        let id = EpubReaderHelper.shared.user.id
+        if Utilities.shared.isFavorited(bookId: book.id) {
+            userViewModel.removeFavorite(bookId: book.id, userId: id)
+        } else {
+            userViewModel.putToFavorites(book: book, userId: id)
+        }
     }
     
     @objc func downloadButtonTapped() {
