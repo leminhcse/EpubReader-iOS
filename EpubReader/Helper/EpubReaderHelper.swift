@@ -12,8 +12,26 @@ class EpubReaderHelper: NSObject {
     static let shared = EpubReaderHelper()
     static let ReloadDataNotification = "ReloadDataNotification"
     static let ShowResultSearch = "ShowResultSearch"
+    static let SignInSuccessfullyNotification = "SignInSuccessfullyNotification"
+    static let SignInFailedNotification = "SignInFailedNotification"
+    static let ReloadFavoriteDataNotification = "ReloadFavoriteDataNotification"
+    static let AddFavoriteSuccessNotification = "AddFavoriteSuccessNotification"
+    static let RemoveFavoriteSuccessNotification = "RemoveFavoriteSuccessNotification"
+    static let AddFavoriteFailedNotification = "AddFavoriteFailedNotification"
+    static let RemoveFavoriteFailedNotification = "RemoveFavoriteFailedNotification"
+    
+    var user: User!
+    var favoritedBooks = [Book]()
     
     private override init() {
         super.init()
+        
+        if let data = PersistenceHelper.loadUser(key: "User") as? User {
+            self.user = data
+        }
+        
+        if let data = PersistenceHelper.loadData(key: "favoritedBook") as? [Book] {
+            favoritedBooks = Utilities.shared.importBookList(books: data)
+        }
     }
 }

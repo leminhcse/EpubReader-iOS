@@ -13,6 +13,10 @@ class ApiWebService {
 
     static let shared = ApiWebService()
     
+    func getUser(email: String, name: String) -> Observable<[User]> {
+        return request(ApiRouter.getUser(email: email, name: name))
+    }
+    
     func getBooks() -> Observable<[Book]> {
         return request(ApiRouter.getBooks)
     }

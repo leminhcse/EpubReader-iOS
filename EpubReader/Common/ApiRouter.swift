@@ -11,6 +11,7 @@ import Alamofire
 enum ApiRouter: URLRequestConvertible {
     
     //The endpoint name we'll call later
+    case getUser(email: String, name: String)
     case getBooks
     case getAudioList(bookId: String)
     case getFavorites(userId: String)
@@ -69,6 +70,8 @@ enum ApiRouter: URLRequestConvertible {
             return .get
         case .getBookSearch:
             return .get
+        case .getUser:
+            return .get
         }
     }
     
@@ -84,6 +87,8 @@ enum ApiRouter: URLRequestConvertible {
             return "getFavorites.php"
         case .getBookSearch:
             return "getBookSearch.php"
+        case .getUser:
+            return "getUser.php"
         }
     }
     
@@ -99,6 +104,8 @@ enum ApiRouter: URLRequestConvertible {
             return [Constants.Parameters.userId : userId]
         case .getBookSearch(let keySearch):
             return [Constants.Parameters.keySearch : keySearch]
+        case .getUser(let email, let name):
+            return [Constants.Parameters.email: email, Constants.Parameters.name: name]
         }
     }
 }

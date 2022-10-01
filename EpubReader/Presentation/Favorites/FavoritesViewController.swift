@@ -43,6 +43,10 @@ class FavoritesViewController: BaseViewController {
                                                selector: #selector(reloadData(_:)),
                                                name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(reloadData(_:)),
+                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteDataNotification),
+                                               object: nil)
         
         self.title = "Yêu Thích"
         self.view.backgroundColor = UIColor.white
@@ -70,13 +74,15 @@ class FavoritesViewController: BaseViewController {
     }
     
     private func loadData() {
-        bookViewModel.getFavoritesBook(userId: "1")
+        let id = EpubReaderHelper.shared.user.id
+        bookViewModel.getFavoritesBook(userId: id)
     }
     
     @objc func reloadData(_ notification: NSNotification) {
-        if bookViewModel.favoritesBook.count > 0 {
+        let count = EpubReaderHelper.shared.favoritedBooks.count
+        if count > 0 {
             self.favoritedBooks.removeAll()
-            self.favoritedBooks = bookViewModel.favoritesBook//.filter({$0.type == "3"})
+            self.favoritedBooks = EpubReaderHelper.shared.favoritedBooks
             self.bookTableView.reloadData()
         }
     }
@@ -96,5 +102,14 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         let book = self.favoritedBooks[indexPath.row]
         cell.configure(book: book)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let book = self.favoritedBooks[indexPath.row]
+        let viewController = BookDetailViewController(book: book)
+        viewController.providesPresentationContextTransitionStyle = true
+        viewController.definesPresentationContext = true
+        viewController.modalPresentationStyle = .overCurrentContext
+        tabBarController?.present(viewController, animated: true)
     }
 }
