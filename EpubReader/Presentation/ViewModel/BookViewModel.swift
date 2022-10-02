@@ -73,25 +73,30 @@ class BookViewModel: NSObject {
             .disposed(by: disposeBag)
     }
     
-    func getResultSearch(keySearch: String) {
+    func getResultSearch(keySearch: String, completion: ((Bool) -> Void)? = nil) {
         self.resultSearch.removeAll()
         ApiWebService.shared.getResultSearch(keySearch: keySearch)
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { bookList in
                 if bookList.count > 0 {
                     self.resultSearch = Utilities.shared.importBookList(books: bookList)
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ShowResultSearch), object: nil)
+                    completion?(true)
+                    //NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ShowResultSearch), object: nil)
                 }
             }, onError: { error in
                 switch error {
                 case ApiError.conflict:
                     print("Conflict error")
+                    completion?(false)
                 case ApiError.forbidden:
                     print("Forbidden error")
+                    completion?(false)
                 case ApiError.notFound:
                     print("Not found error")
+                    completion?(false)
                 default:
                     print("Unknown error:", error)
+                    completion?(false)
                 }
             })
             .disposed(by: disposeBag)

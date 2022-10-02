@@ -100,6 +100,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookTableViewCell", for: indexPath) as! BookTableViewCell
         let book = self.favoritedBooks[indexPath.row]
+        cell.selectionStyle = .none
         cell.configure(book: book)
         return cell
     }
