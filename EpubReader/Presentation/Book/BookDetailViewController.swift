@@ -239,7 +239,7 @@ class BookDetailViewController: UIViewController {
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(reloadFavoriteStatus(_:)),
-                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteDataNotification),
+                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification),
                                                object: nil)
         
         setupViews()
@@ -653,7 +653,7 @@ extension BookDetailViewController: MiniAudioPlayerViewDelegate {
     }
 }
 
-//MARK: - Extension with UICollectionView -
+//MARK: - Extension with UICollectionView
 extension BookDetailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1

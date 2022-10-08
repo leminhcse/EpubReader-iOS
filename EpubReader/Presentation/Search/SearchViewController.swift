@@ -11,12 +11,14 @@ import SnapKit
 
 class SearchViewController: BaseViewController {
     
+    //MARK: - Local variables
     private var searchResults: [Book] = []
     private var bookViewModel = BookViewModel()
     
     var frameWidth: CGFloat = UIScreen.main.bounds.width
     var frameHeight: CGFloat = UIScreen.main.bounds.height
     
+    // MARK: - UI Controls
     private lazy var searchView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -42,6 +44,7 @@ class SearchViewController: BaseViewController {
         return bookTableView
     }()
     
+    // MARK: UIViewController - LIFE CYCLE
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -70,6 +73,7 @@ class SearchViewController: BaseViewController {
         setupConstraint()
     }
     
+    // MARK: Setup UI
     private func setupConstraint() {
         let safeAreaTop = self.view.safeAreaInsets.top
         let searchTop = safeAreaTop
@@ -90,6 +94,7 @@ class SearchViewController: BaseViewController {
     }
 }
 
+//MARK: - Extension with UISearchBarDelegate, UISearchControllerDelegate
 extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -117,6 +122,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
     }
 }
 
+//MARK: - Extension with UITableViewDelegate, UITableViewDataSource
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.searchResults.count

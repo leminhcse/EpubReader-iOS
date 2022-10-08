@@ -11,17 +11,22 @@ import SnapKit
 
 class FavoritesViewController: BaseViewController {
     
+    // MARK: - Local variables
     var frameWidth: CGFloat = UIScreen.main.bounds.width
     var frameHeight: CGFloat = UIScreen.main.bounds.height
     
     private var favoritedBooks = [Book]()
     private var bookViewModel = BookViewModel()
     
+    // MARK: - UI Controls
     private lazy var label: UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 41))
         label.center = CGPoint(x: 160, y: 285)
+        label.font = UIFont.font(with: .h3)
+        label.textColor = UIColor.color(with: .background)
         label.textAlignment = .center
-        label.text = "Favorites View"
+        label.text = "You haven't any favorite books yet"
+        label.isHidden = true
         return label
     }()
     
@@ -36,6 +41,7 @@ class FavoritesViewController: BaseViewController {
         return bookTableView
     }()
     
+    // MARK: UIViewController - LIFE CYCLE
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,13 +51,14 @@ class FavoritesViewController: BaseViewController {
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(reloadData(_:)),
-                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteDataNotification),
+                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(reloadData(_:)),
+                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteFailedNotification),
                                                object: nil)
         
-        self.title = "Yêu Thích"
-        self.view.backgroundColor = UIColor.white
-        self.view.addSubview(bookTableView)
-        
+        setupUI()
         setupConstranst()
         loadData()
     }
@@ -65,7 +72,20 @@ class FavoritesViewController: BaseViewController {
         setupConstranst()
     }
     
+    // MARK: Setup UI
+    private func setupUI() {
+        self.title = "Yêu Thích"
+        self.view.backgroundColor = UIColor.white
+        self.view.addSubview(label)
+        self.view.addSubview(bookTableView)
+    }
+    
     private func setupConstranst() {
+        label.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        
         bookTableView.snp.makeConstraints{ (make) in
             make.leading.equalToSuperview()
             make.top.equalToSuperview().offset(100)
@@ -73,6 +93,7 @@ class FavoritesViewController: BaseViewController {
         }
     }
     
+    // MARK: Handle favorite data
     private func loadData() {
         let id = EpubReaderHelper.shared.user.id
         bookViewModel.getFavoritesBook(userId: id)
@@ -84,10 +105,16 @@ class FavoritesViewController: BaseViewController {
             self.favoritedBooks.removeAll()
             self.favoritedBooks = EpubReaderHelper.shared.favoritedBooks
             self.bookTableView.reloadData()
+            self.label.isHidden = true
+            self.bookTableView.isHidden = false
+        } else {
+            self.label.isHidden = false
+            self.bookTableView.isHidden = true
         }
     }
 }
 
+//MARK: - Extension with UITableView
 extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.favoritedBooks.count
