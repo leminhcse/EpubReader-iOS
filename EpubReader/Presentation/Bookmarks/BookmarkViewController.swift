@@ -20,7 +20,7 @@ class BookmarkViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Đang Đọc"
+        self.title = "Đang Đọc".uppercased()
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(label)
     }
