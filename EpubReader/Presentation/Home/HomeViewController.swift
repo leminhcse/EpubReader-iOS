@@ -16,7 +16,7 @@ class HomeViewController: BaseViewController {
     private let listTopic = ["KĨ NĂNG SỐNG", "KINH TẾ - TÀI CHÍNH", "VĂN HỌC - TIỂU THUYẾT", "VĂN HÓA - LỊCH SỬ", "KHOA HỌC - KĨ THUẬT", "SỨC KHỎE - TÂM LÝ"]
     
     private lazy var segmentedControl: ScrollableSegmentedControl = {
-        let segmentFrame: CGRect = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
+        let segmentFrame: CGRect = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54)
         let segmentedControl = ScrollableSegmentedControl.init(frame: segmentFrame)
         let boldFont = UIFont(name: "Helvetica-Bold", size: 14.0)
         for i in 0..<(listTopic.count) {
@@ -91,7 +91,7 @@ class HomeViewController: BaseViewController {
         
         segmentedControl.snp.makeConstraints { (make) in
             make.top.equalTo(segmentControlsTop)
-            make.height.equalTo(64)
+            make.height.equalTo(54)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }

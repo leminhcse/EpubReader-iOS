@@ -26,7 +26,7 @@ class FavoritesViewController: BaseViewController {
         label.textColor = UIColor.color(with: .background)
         label.textAlignment = .center
         label.text = "You haven't any favorite books yet"
-        label.isHidden = true
+        label.isHidden = false
         return label
     }()
     
@@ -38,6 +38,7 @@ class FavoritesViewController: BaseViewController {
         bookTableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         bookTableView.separatorInset = .zero
         bookTableView.backgroundColor = .clear
+        bookTableView.isHidden = true
         return bookTableView
     }()
     
@@ -74,7 +75,7 @@ class FavoritesViewController: BaseViewController {
     
     // MARK: Setup UI
     private func setupUI() {
-        self.title = "Yêu Thích"
+        self.title = "Yêu Thích".uppercased()
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(label)
         self.view.addSubview(bookTableView)

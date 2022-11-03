@@ -14,8 +14,8 @@ class UserViewModel: NSObject {
     private let disposeBag = DisposeBag()
     
     private let putUserUrl = "http://minhhdmbp152019/PHP_API/addUser.php"
-    private let addFavoriteUrl = "http://minhhdmbp152019/PHP_API/addUser.php"
-    private let removeFavotireUrl = "http://minhhdmbp152019/PHP_API/addUser.php"
+    private let addFavoriteUrl = "http://minhhdmbp152019/PHP_API/addToFavorite.php"
+    private let removeFavotireUrl = "http://minhhdmbp152019/PHP_API/removeFavorite.php"
     
     override init() {
         super.init()

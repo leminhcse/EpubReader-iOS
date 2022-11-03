@@ -48,7 +48,7 @@ class SearchViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Tìm Kiếm"
+        self.title = "Tìm Kiếm".uppercased()
         self.view.backgroundColor = UIColor.white
         
         searchController.searchResultsUpdater = self
