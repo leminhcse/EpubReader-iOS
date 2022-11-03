@@ -31,6 +31,8 @@ class FavoritesViewController: BaseViewController {
     }()
     
     private lazy var bookTableView: UITableView = {
+        let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.size.height ?? 64
+        let bottom = tabBarHeight + inset*9
         let bookTableView = UITableView()
         bookTableView.register(BookTableViewCell.self, forCellReuseIdentifier: "BookTableViewCell")
         bookTableView.delegate = self
@@ -38,6 +40,7 @@ class FavoritesViewController: BaseViewController {
         bookTableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         bookTableView.separatorInset = .zero
         bookTableView.backgroundColor = .clear
+        bookTableView.contentInset = .init(top: 0, left: 0, bottom: bottom, right: 0)
         bookTableView.isHidden = true
         return bookTableView
     }()

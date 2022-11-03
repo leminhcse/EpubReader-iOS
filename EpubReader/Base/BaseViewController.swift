@@ -9,6 +9,8 @@ import UIKit
 
 class BaseViewController: UIViewController {
     
+    let inset: CGFloat = 16
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }

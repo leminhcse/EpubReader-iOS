@@ -36,11 +36,14 @@ class SearchViewController: BaseViewController {
     }()
     
     private lazy var bookTableView: UITableView = {
+        let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.size.height ?? 64
+        let bottom = tabBarHeight + inset*9
         let bookTableView = UITableView()
         bookTableView.register(BookTableViewCell.self, forCellReuseIdentifier: "BookTableViewCell")
         bookTableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         bookTableView.separatorInset = .zero
         bookTableView.backgroundColor = .white
+        bookTableView.contentInset = .init(top: 0, left: 0, bottom: bottom, right: 0)
         return bookTableView
     }()
     
@@ -86,7 +89,7 @@ class SearchViewController: BaseViewController {
         }
         
         bookTableView.snp.makeConstraints { (make) in
-            make.top.equalTo(searchView.snp.bottom)
+            make.top.equalTo(searchView.snp.bottom).offset(12)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.size.equalTo(CGSize(width: frameWidth, height: frameHeight))
@@ -109,6 +112,9 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
                     self.bookTableView.reloadData()
                 }
             }
+        } else {
+            self.searchResults.removeAll()
+            self.bookTableView.isHidden = true
         }
     }
        
