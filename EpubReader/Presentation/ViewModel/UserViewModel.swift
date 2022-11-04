@@ -79,6 +79,7 @@ class UserViewModel: NSObject {
             if success == 200 {
                 print("Add success")
                 EpubReaderHelper.shared.favoritedBooks.append(book)
+                PersistenceHelper.saveData(object: EpubReaderHelper.shared.favoritedBooks, key: "favoritedBook")
                 NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification), object: nil)
             } else {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.AddFavoriteFailedNotification), object: nil)
@@ -94,6 +95,7 @@ class UserViewModel: NSObject {
             if success == 200 {
                 print("Remove success")
                 EpubReaderHelper.shared.favoritedBooks.removeAll{ $0.id == bookId }
+                PersistenceHelper.saveData(object: EpubReaderHelper.shared.favoritedBooks, key: "favoritedBook")
                 NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification), object: nil)
             } else {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveFavoriteFailedNotification), object: nil)
