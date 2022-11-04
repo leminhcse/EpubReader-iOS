@@ -89,9 +89,14 @@ class HomeViewController: BaseViewController {
         let safeAreaTop = self.view.safeAreaInsets.top
         let segmentControlsTop = safeAreaTop
         
+        var segmentHeight = CGFloat(54)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            segmentHeight = 72
+        }
+        
         segmentedControl.snp.makeConstraints { (make) in
             make.top.equalTo(segmentControlsTop)
-            make.height.equalTo(54)
+            make.height.equalTo(segmentHeight)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }

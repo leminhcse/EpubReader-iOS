@@ -22,11 +22,15 @@ class FavoritesViewController: BaseViewController {
     private lazy var label: UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 41))
         label.center = CGPoint(x: 160, y: 285)
-        label.font = UIFont.font(with: .h3)
         label.textColor = UIColor.color(with: .background)
         label.textAlignment = .center
         label.text = "You haven't any favorite books yet"
         label.isHidden = false
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            label.font = UIFont.font(with: .h1)
+        } else {
+            label.font = UIFont.font(with: .h3)
+        }
         return label
     }()
     
@@ -125,7 +129,11 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return 250
+        } else {
+            return 150
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

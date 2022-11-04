@@ -42,7 +42,7 @@ class SearchViewController: BaseViewController {
         bookTableView.register(BookTableViewCell.self, forCellReuseIdentifier: "BookTableViewCell")
         bookTableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         bookTableView.separatorInset = .zero
-        bookTableView.backgroundColor = .white
+        bookTableView.backgroundColor = .clear
         bookTableView.contentInset = .init(top: 0, left: 0, bottom: bottom, right: 0)
         return bookTableView
     }()
@@ -63,12 +63,17 @@ class SearchViewController: BaseViewController {
         searchView.addSubview(searchController.searchBar)
         searchController.delegate = self
         
-        bookTableView.backgroundColor = UIColor.white
+        //bookTableView.backgroundColor = UIColor.white
         bookTableView.delegate = self
         bookTableView.dataSource = self
         
         self.view.addSubview(searchView)
         self.view.addSubview(bookTableView)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.view.backgroundColor = UIColor.white
     }
     
     override func viewDidLayoutSubviews() {
@@ -113,14 +118,14 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
                 }
             }
         } else {
-            self.searchResults.removeAll()
-            self.bookTableView.isHidden = true
+            //self.searchResults.removeAll()
+            //self.bookTableView.isHidden = true
         }
     }
        
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.searchResults.removeAll()
-        self.bookTableView.isHidden = true
+        //self.searchResults.removeAll()
+        //self.bookTableView.isHidden = true
     }
    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -135,7 +140,11 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return 250
+        } else {
+            return 150
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

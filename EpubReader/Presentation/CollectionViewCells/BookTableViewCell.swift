@@ -21,17 +21,25 @@ class BookTableViewCell: UITableViewCell {
     
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = UIFont.font(with: .h4)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            titleLabel.font = UIFont.font(with: .h2)
+        } else {
+            titleLabel.font = UIFont.font(with: .h4)
+        }
         titleLabel.textColor = .darkText
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.5
-        titleLabel.numberOfLines = 2
+        titleLabel.numberOfLines = 1
         return titleLabel
     }()
     
     private lazy var composerLabel: UILabel = {
         let composerLabel = UILabel()
-        composerLabel.font = UIFont.font(with: .h5)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            composerLabel.font = UIFont.font(with: .h3)
+        } else {
+            composerLabel.font = UIFont.font(with: .h5)
+        }
         composerLabel.textColor = .darkGray
         composerLabel.adjustsFontSizeToFitWidth = true
         composerLabel.minimumScaleFactor = 0.5
@@ -63,19 +71,29 @@ class BookTableViewCell: UITableViewCell {
         let width = self.frame.size.width
         let height = self.frame.size.height
         
-        let imageWidth = width/5 + 24
-        let imageHeight = height*2 + 48
+        var imageWidth = width/5 + 24
+        var imageHeight = height*2 + 48
+        var titleWidth = width - imageWidth
+        var titleHeight = height/3
+        var titleY = CGFloat(36)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            imageWidth = width/5 + 96
+            imageHeight = height*2 + 144
+            titleWidth = titleWidth*2
+            titleHeight = titleHeight*1.5
+            titleY = CGFloat(58)
+        }
+        
         image.snp.makeConstraints { (make) in
             make.leading.equalToSuperview().offset(12)
             make.size.equalTo(CGSize(width: imageWidth, height: imageHeight))
         }
         
-        let titleWidth = width - imageWidth
-        let titleHeight = height/3
         titleLabel.snp.makeConstraints { (make) in
             make.leading.equalTo(image.snp.trailing).offset(12)
             make.size.equalTo(CGSize(width: titleWidth, height: titleHeight*2))
-            make.top.equalToSuperview().offset(32)
+            make.top.equalToSuperview().offset(titleY)
         }
         
         composerLabel.snp.makeConstraints { (make) in
