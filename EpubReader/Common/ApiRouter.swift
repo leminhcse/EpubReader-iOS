@@ -30,13 +30,6 @@ enum ApiRouter: URLRequestConvertible {
         urlRequest.setValue(Constants.ContentType.json.rawValue, forHTTPHeaderField: Constants.HttpHeaderField.acceptType.rawValue)
         urlRequest.setValue(Constants.ContentType.json.rawValue, forHTTPHeaderField: Constants.HttpHeaderField.contentType.rawValue)
         
-//        switch self {
-//        case let .getPosts(parameters, _):
-//            urlRequest = try JSONParameterEncoder().encode(parameters, into: request)
-//        }
-//
-//        return urlRequest
-        
         if let parameters = parameters {
             do {
                 urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)

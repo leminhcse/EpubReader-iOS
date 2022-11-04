@@ -217,7 +217,7 @@ class BookDetailViewController: UIViewController {
     private var pageViewController = UIPageViewController()
     private var book: Book
     private var audioViewModel = AudioViewModel()
-    private var userViewModel = UserViewModel()
+    private var bookViewModel = BookViewModel()
 
     // MARK: - Constructor
     required init(book: Book) {
@@ -587,9 +587,9 @@ class BookDetailViewController: UIViewController {
     @objc func favoriteButtonTapped() {
         let id = EpubReaderHelper.shared.user.id
         if Utilities.shared.isFavorited(bookId: book.id) {
-            userViewModel.removeFavorite(bookId: book.id, userId: id)
+            bookViewModel.removeFavorite(bookId: book.id, userId: id)
         } else {
-            userViewModel.putToFavorites(book: book, userId: id)
+            bookViewModel.putToFavorites(book: book, userId: id)
         }
     }
     

@@ -24,8 +24,12 @@ class SignInViewController: UIViewController {
         title1.backgroundColor = .clear
         title1.textAlignment = .center
         title1.sizeToFit()
-        title1.font = UIFont.font(with: .h1)
         title1.text = "Let's Get Started"
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            title1.font = UIFont.font(with: .h0)
+        } else {
+            title1.font = UIFont.font(with: .h1)
+        }
         return title1
     }()
     
@@ -35,20 +39,29 @@ class SignInViewController: UIViewController {
         title2.backgroundColor = .clear
         title2.textAlignment = .center
         title2.sizeToFit()
-        title2.font = UIFont.font(with: .h2)
         title2.numberOfLines = 2
         title2.text = "Make a login using with social network accounts"
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            title2.font = UIFont.font(with: .h1)
+        } else {
+            title2.font = UIFont.font(with: .h2)
+        }
         return title2
     }()
     
     private lazy var googleSignButton: UIButton = {
         let googleSignButton = UIButton()
         googleSignButton.layer.borderWidth = 2
-        googleSignButton.layer.cornerRadius = 24
         googleSignButton.addTarget(self, action: #selector(googleAuthLogin), for: .touchUpInside)
         googleSignButton.setTitle("Sign in with Google", for: .normal)
         googleSignButton.setTitleColor(UIColor.color(with: .background), for: .normal)
-        googleSignButton.titleLabel?.font = UIFont.font(with: .h3)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            googleSignButton.titleLabel?.font = UIFont.font(with: .h1)
+            googleSignButton.layer.cornerRadius = 32
+        } else {
+            googleSignButton.titleLabel?.font = UIFont.font(with: .h3)
+            googleSignButton.layer.cornerRadius = 24
+        }
         googleSignButton.setImage(UIImage(named: "google_icon"), for: .normal)
         googleSignButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 30)
         return googleSignButton
@@ -57,11 +70,16 @@ class SignInViewController: UIViewController {
     private lazy var facebookSignInButton: UIButton = {
         let facebookSignInButton = UIButton()
         facebookSignInButton.layer.borderWidth = 2
-        facebookSignInButton.layer.cornerRadius = 24
         facebookSignInButton.addTarget(self, action: #selector(facebookAuthLogin), for: .touchUpInside)
         facebookSignInButton.setTitle("Sign in with Facbook", for: .normal)
         facebookSignInButton.setTitleColor(UIColor.color(with: .background), for: .normal)
-        facebookSignInButton.titleLabel?.font = UIFont.font(with: .h3)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            facebookSignInButton.titleLabel?.font = UIFont.font(with: .h1)
+            facebookSignInButton.layer.cornerRadius = 32
+        } else {
+            facebookSignInButton.titleLabel?.font = UIFont.font(with: .h3)
+            facebookSignInButton.layer.cornerRadius = 24
+        }
         facebookSignInButton.setImage(UIImage(named: "facebook_icon"), for: .normal)
         facebookSignInButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 18)
         return facebookSignInButton
@@ -97,8 +115,12 @@ class SignInViewController: UIViewController {
         let top: CGFloat = 24
         let signInButtonWidth = width/2 + 72
         let title1Top = height/2 - 192
-        let buttonHeight: CGFloat = 48
+        var buttonHeight: CGFloat = 48
         let padding: CGFloat = 48
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            buttonHeight = 64
+        }
         
         title1.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()

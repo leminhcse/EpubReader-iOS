@@ -7,12 +7,16 @@
 
 import Foundation
 import RxSwift
+import Alamofire
 
 class BookViewModel: NSObject {
     
     var listBook = [Book]()
     var resultSearch = [Book]()
+    
     private let disposeBag = DisposeBag()
+    private let addFavoriteUrl = "http://minhhdmbp152019/PHP_API/addToFavorite.php"
+    private let removeFavotireUrl = "http://minhhdmbp152019/PHP_API/removeFavorite.php"
     
     override init() {
         super.init()
@@ -105,5 +109,37 @@ class BookViewModel: NSObject {
                 }
             })
             .disposed(by: disposeBag)
+    }
+    
+    func putToFavorites(book: Book, userId: String) {
+        let parameters = ["bookId": book.id,
+                          "userId": userId]
+        AF.request(addFavoriteUrl, parameters: parameters).response { response in
+            let success = response.response?.statusCode
+            if success == 200 {
+                print("Add success")
+                EpubReaderHelper.shared.favoritedBooks.append(book)
+                PersistenceHelper.saveData(object: EpubReaderHelper.shared.favoritedBooks, key: "favoritedBook")
+                NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification), object: nil)
+            } else {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.AddFavoriteFailedNotification), object: nil)
+            }
+        }
+    }
+    
+    func removeFavorite(bookId: String, userId: String) {
+        let parameters = ["bookId": bookId,
+                          "userId": userId]
+        AF.request(removeFavotireUrl, parameters: parameters).response { response in
+            let success = response.response?.statusCode
+            if success == 200 {
+                print("Remove success")
+                EpubReaderHelper.shared.favoritedBooks.removeAll{ $0.id == bookId }
+                PersistenceHelper.saveData(object: EpubReaderHelper.shared.favoritedBooks, key: "favoritedBook")
+                NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification), object: nil)
+            } else {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveFavoriteFailedNotification), object: nil)
+            }
+        }
     }
 }
