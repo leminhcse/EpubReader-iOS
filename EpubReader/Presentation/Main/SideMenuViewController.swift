@@ -18,7 +18,7 @@ class SideMenuViewController: BaseViewController {
     var frameHeight: CGFloat = UIScreen.main.bounds.height
     var ratiowidth: CGFloat = 0.815
     
-    private let listMenu = ["Profile", "About Us", "Rating", "Disable Ads"]
+    private let listMenu = ["Hồ Sơ", "Về Chúng Tôi", "Đánh Gía", "Tắt Quảng Cáo"]
     
     // MARK: UIViewController - LIFE CYCLE
     override func viewDidLoad() {
@@ -130,19 +130,19 @@ extension SideMenuViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let title = self.listMenu[indexPath.row]
         switch title {
-        case "Profile":
+        case self.listMenu[0]:
             let viewController = ProfileViewController()
             self.navigationController?.pushViewController(viewController, animated: true)
             break
-        case "About Us":
+        case self.listMenu[1]:
             let viewController = AboutViewController()
-            self.navigationController?.pushViewController(viewController, animated: true)
+            self.navigationController?.present(viewController, animated: true)
             break
-        case "Rating":
+        case self.listMenu[2]:
             break
-        case "Disable Ads":
+        case self.listMenu[3]:
             let viewController = DisableAdsViewController()
-            self.navigationController?.pushViewController(viewController, animated: true)
+            self.navigationController?.present(viewController, animated: true)
             break
         default:
             break
