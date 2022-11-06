@@ -25,10 +25,9 @@ class SignInViewController: UIViewController {
         title1.textAlignment = .center
         title1.sizeToFit()
         title1.text = "Let's Get Started"
+        title1.font = UIFont.font(with: .h1)
         if UIDevice.current.userInterfaceIdiom == .pad {
             title1.font = UIFont.font(with: .h0)
-        } else {
-            title1.font = UIFont.font(with: .h1)
         }
         return title1
     }()
@@ -41,10 +40,9 @@ class SignInViewController: UIViewController {
         title2.sizeToFit()
         title2.numberOfLines = 2
         title2.text = "Make a login using with social network accounts"
+        title2.font = UIFont.font(with: .h2)
         if UIDevice.current.userInterfaceIdiom == .pad {
             title2.font = UIFont.font(with: .h1)
-        } else {
-            title2.font = UIFont.font(with: .h2)
         }
         return title2
     }()
@@ -55,12 +53,11 @@ class SignInViewController: UIViewController {
         googleSignButton.addTarget(self, action: #selector(googleAuthLogin), for: .touchUpInside)
         googleSignButton.setTitle("Sign in with Google", for: .normal)
         googleSignButton.setTitleColor(UIColor.color(with: .background), for: .normal)
+        googleSignButton.titleLabel?.font = UIFont.font(with: .h3)
+        googleSignButton.layer.cornerRadius = 24
         if UIDevice.current.userInterfaceIdiom == .pad {
             googleSignButton.titleLabel?.font = UIFont.font(with: .h1)
             googleSignButton.layer.cornerRadius = 32
-        } else {
-            googleSignButton.titleLabel?.font = UIFont.font(with: .h3)
-            googleSignButton.layer.cornerRadius = 24
         }
         googleSignButton.setImage(UIImage(named: "google_icon"), for: .normal)
         googleSignButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 30)
@@ -73,12 +70,11 @@ class SignInViewController: UIViewController {
         facebookSignInButton.addTarget(self, action: #selector(facebookAuthLogin), for: .touchUpInside)
         facebookSignInButton.setTitle("Sign in with Facbook", for: .normal)
         facebookSignInButton.setTitleColor(UIColor.color(with: .background), for: .normal)
+        facebookSignInButton.titleLabel?.font = UIFont.font(with: .h3)
+        facebookSignInButton.layer.cornerRadius = 24
         if UIDevice.current.userInterfaceIdiom == .pad {
             facebookSignInButton.titleLabel?.font = UIFont.font(with: .h1)
             facebookSignInButton.layer.cornerRadius = 32
-        } else {
-            facebookSignInButton.titleLabel?.font = UIFont.font(with: .h3)
-            facebookSignInButton.layer.cornerRadius = 24
         }
         facebookSignInButton.setImage(UIImage(named: "facebook_icon"), for: .normal)
         facebookSignInButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 18)
@@ -186,8 +182,14 @@ class SignInViewController: UIViewController {
                 userInfo.access_token = token?.tokenString ?? ""
                 userInfo.type = "0"
                 userInfo.isPurchased = "0"
-
-                self.userViewModel.putUser(user: userInfo)
+                
+                self.userViewModel.isUserExists(email: userInfo.email, name: userInfo.name) { success in
+                    if success == true {
+                        self.gotoHomeScreen()
+                    } else {
+                        self.userViewModel.putUser(user: userInfo)
+                    }
+                }
             } else {
                 print("Error: Trying to get user's info")
             }
@@ -215,8 +217,14 @@ class SignInViewController: UIViewController {
                 userInfo.access_token = userIdToken
                 userInfo.type = "0"
                 userInfo.isPurchased = "0"
-
-                self.userViewModel.putUser(user: userInfo)
+                
+                self.userViewModel.isUserExists(email: userInfo.email, name: userInfo.name) { success in
+                    if success == true {
+                        self.gotoHomeScreen()
+                    } else {
+                        self.userViewModel.putUser(user: userInfo)
+                    }
+                }
             }
         }
     }
