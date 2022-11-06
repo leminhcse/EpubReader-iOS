@@ -261,7 +261,7 @@ class ProfileViewController: UIViewController {
         let height = self.view.frame.height
         
         let profileViewHeight = height/4
-        let profileLabelWidth = width - 256
+        let profileLabelWidth = width
         let profileLabelHeight = CGFloat(32)
         let paddingTop = CGFloat(12)
         

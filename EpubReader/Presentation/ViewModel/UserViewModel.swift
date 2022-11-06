@@ -67,4 +67,41 @@ class UserViewModel: NSObject {
             })
             .disposed(by: disposeBag)
     }
+    
+    func isUserExists(email: String, name: String, completion: ((Bool) -> Void)? = nil) {
+        ApiWebService.shared.getUser(email: email, name: name)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { list in
+                print("Get user success")
+                let user = User()
+                for item in list {
+                    user.id = item.id
+                    user.email = item.email
+                    user.name = item.name
+                    user.access_token = item.access_token
+                    user.avatar = item.avatar
+                    user.isPurchased = item.isPurchased
+                    user.type = item.type
+                }
+                PersistenceHelper.saveUser(object: user, key: "User")
+                EpubReaderHelper.shared.user = user
+                completion?(true)
+            }, onError: { error in
+                switch error {
+                case ApiError.conflict:
+                    print("Conflict error")
+                    completion?(false)
+                case ApiError.forbidden:
+                    print("Forbidden error")
+                    completion?(false)
+                case ApiError.notFound:
+                    print("Not found error")
+                    completion?(false)
+                default:
+                    print("Unknown error:", error)
+                    completion?(false)
+                }
+            })
+            .disposed(by: disposeBag)
+    }
 }
