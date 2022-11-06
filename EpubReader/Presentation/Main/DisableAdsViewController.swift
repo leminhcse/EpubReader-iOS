@@ -41,7 +41,6 @@ class DisableAdsViewController: UIViewController {
         wkWebViewDes.scrollView.showsVerticalScrollIndicator = false
         wkWebViewDes.scrollView.showsHorizontalScrollIndicator = false
         wkWebViewDes.backgroundColor = .clear
-        wkWebViewDes.scrollView.backgroundColor = .clear
         return wkWebViewDes
     }()
 
@@ -55,6 +54,8 @@ class DisableAdsViewController: UIViewController {
     // MARK: Setup UI
     private func setupUI() {
         self.view.backgroundColor = .white
+        self.navigationController?.navigationBar.topItem?.title = ""
+        self.title = "Tắt Quảng Cáo".uppercased()
         
         purchaseView.addSubview(purchaseButton)
         self.view.addSubview(swipeView)
@@ -67,9 +68,15 @@ class DisableAdsViewController: UIViewController {
     private func setupConstraints() {
         let width = self.view.frame.width
         let height = self.view.frame.height
-        let purchaseViewHeight = CGFloat(120)
+        var purchaseViewHeight = CGFloat(120)
         let webWidth = width - 24
         let webHeight = height - purchaseViewHeight
+        var buttonHeight = CGFloat(42)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            buttonHeight = 72
+            purchaseViewHeight = 164
+        }
         
         swipeView.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(8)
@@ -92,7 +99,7 @@ class DisableAdsViewController: UIViewController {
         }
         
         purchaseButton.snp.makeConstraints { (make) in
-            make.size.equalTo(CGSize(width: width/2 + 64, height: 42))
+            make.size.equalTo(CGSize(width: width/2 + 64, height: buttonHeight))
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }

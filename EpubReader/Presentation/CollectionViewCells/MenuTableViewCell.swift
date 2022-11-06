@@ -12,10 +12,13 @@ class MenuTableViewCell: UITableViewCell {
 
     var title: UILabel = {
         let title = UILabel()
-        title.font = UIFont.font(with: .h4)
         title.textColor = .darkText
         title.adjustsFontSizeToFitWidth = true
         title.minimumScaleFactor = 0.5
+        title.font = UIFont.font(with: .h4)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            title.font = UIFont.font(with: .h2)
+        }
         return title
     }()
     
@@ -43,5 +46,4 @@ class MenuTableViewCell: UITableViewCell {
             make.trailing.equalToSuperview().inset(21)
         }
     }
-
 }
