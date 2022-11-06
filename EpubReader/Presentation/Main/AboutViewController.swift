@@ -55,6 +55,8 @@ class AboutViewController: UIViewController {
     // MARK: Setup UI
     private func setupUI() {
         self.view.backgroundColor = .white
+        self.navigationController?.navigationBar.topItem?.title = ""
+        self.title = "Về Chúng Tôi".uppercased()
         
         sendEmailView.addSubview(sendEmailButton)
         self.view.addSubview(swipeView)
@@ -67,9 +69,14 @@ class AboutViewController: UIViewController {
     private func setupConstraints() {
         let width = self.view.frame.width
         let height = self.view.frame.height
-        let emailViewHeight = CGFloat(100)
+        var emailViewHeight = CGFloat(100)
         let webWidth = width - 24
         let webHeight = height - emailViewHeight
+        var buttonHeight = CGFloat(42)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            buttonHeight = 72
+            emailViewHeight = 164
+        }
         
         swipeView.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(8)
@@ -92,7 +99,7 @@ class AboutViewController: UIViewController {
         }
         
         sendEmailButton.snp.makeConstraints { (make) in
-            make.size.equalTo(CGSize(width: width/2, height: 42))
+            make.size.equalTo(CGSize(width: width/2, height: buttonHeight))
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
