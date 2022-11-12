@@ -59,9 +59,8 @@ class MiniAudioPlayerView: UIView {
     
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.text = "minh nè"
         titleLabel.textColor = UIColor.color(with: .hightlight)
-        titleLabel.font = UIFont.font(with: .h4)
+        titleLabel.font = UIFont.font(with: .h5)
         return titleLabel
     }()
     

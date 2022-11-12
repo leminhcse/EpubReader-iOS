@@ -58,7 +58,7 @@ class AudioResourceCell: UICollectionViewCell {
         titleLabel.backgroundColor = .clear
         titleLabel.numberOfLines = 2
         titleLabel.sizeToFit()
-        titleLabel.font = UIFont(name: "Helvetica", size: 18.0)
+        titleLabel.font = UIFont.font(with: .h5)
         
         progressDownloadView = ProgressBarView(frame: CGRect(x: 250, y: 0, width: 24, height: 24))
         progressDownloadView.tintColor = UIColor.color(with: .darkColor)

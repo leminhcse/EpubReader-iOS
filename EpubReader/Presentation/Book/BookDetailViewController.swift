@@ -8,7 +8,6 @@
 import UIKit
 import FolioReaderKit
 import Kingfisher
-import ScrollableSegmentedControl
 
 class BookDetailViewController: UIViewController {
     
@@ -135,10 +134,9 @@ class BookDetailViewController: UIViewController {
         downloadButton.addTarget(self, action: #selector(downloadButtonTapped), for: .touchUpInside)
         downloadButton.tintColor = UIColor.color(with: .background)
         downloadButton.setTitle("Tải Sách", for: .normal)
+        downloadButton.titleLabel?.font = UIFont.font(with: .h4)
         if UIDevice.current.userInterfaceIdiom == .pad {
             downloadButton.titleLabel?.font = UIFont.font(with: .h2)
-        } else {
-            downloadButton.titleLabel?.font = UIFont.font(with: .h4)
         }
         return downloadButton
     }()
@@ -174,24 +172,10 @@ class BookDetailViewController: UIViewController {
         return audioCollectionView
     }()
     
-    private lazy var segmentedControl: ScrollableSegmentedControl = {
-        let segmentFrame: CGRect = CGRect(x: 0, y: 0, width: self.view.frame.width / 2, height: 50)
-        let segmentedControl = ScrollableSegmentedControl.init(frame: segmentFrame)
-        let boldFont = UIFont.font(with: .h4)
-        for i in 0..<(listTopic.count) {
-            segmentedControl.insertSegment(withTitle: listTopic[i], at: i)
-        }
-        segmentedControl.segmentStyle = .textOnly
-        segmentedControl.underlineSelected = true
-        segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.addTarget(self, action: #selector(segmentedValueChanged(_:)), for: .valueChanged)
-        segmentedControl.layer.masksToBounds = false
-        segmentedControl.layer.shadowOpacity = 0.1
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.font(with: .h2)], for: .normal)
-        } else {
-            segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: boldFont as Any], for: .normal)
-        }
+    private lazy var segmentedControl: ScrollUISegmentController = {
+        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 42)
+        let segmentedControl = ScrollUISegmentController(frame: frame)
+        segmentedControl.segmentDelegate = self
         return segmentedControl
     }()
     
@@ -200,9 +184,9 @@ class BookDetailViewController: UIViewController {
         overviewView.isScrollEnabled = true
         overviewView.backgroundColor = .white
         overviewView.isHidden = false
+        overviewView.textColor = UIColor.color(with: .darkColor)
+        overviewView.font = UIFont.font(with: .h5)
         if UIDevice.current.userInterfaceIdiom == .pad {
-            overviewView.font = UIFont.font(with: .h3)
-        } else {
             overviewView.font = UIFont.font(with: .h4)
         }
         return overviewView
@@ -218,6 +202,10 @@ class BookDetailViewController: UIViewController {
     private var book: Book
     private var audioViewModel = AudioViewModel()
     private var bookViewModel = BookViewModel()
+    private var selectedSegmentIndex: Int = 0
+    
+    private let segmentHeight = CGFloat(42)
+    private let padding = CGFloat(12)
 
     // MARK: - Constructor
     required init(book: Book) {
@@ -285,6 +273,14 @@ class BookDetailViewController: UIViewController {
         view.addSubview(largeContainerView)
     }
     
+    private func setUpSegmentControls() {
+        segmentedControl.itemWidth = Utils.getLengthMaxOfTextArray(arrStr: self.listTopic,
+                                                                   font: UIFont.font(with: .h3),
+                                                                   height: segmentHeight) + 20
+        segmentedControl.segmentItems = self.listTopic
+        segmentedControl.segmentedControl.selectedSegmentIndex = selectedSegmentIndex
+    }
+    
     private func setupConstraint() {
         let safeAreaTop = self.view.safeAreaInsets.top
         let top = safeAreaTop
@@ -309,7 +305,7 @@ class BookDetailViewController: UIViewController {
         
         topButtonView.snp.makeConstraints { (make) in
             make.top.equalTo(top)
-            make.size.equalTo(CGSize(width: frameWidth, height: 42))
+            make.size.equalTo(CGSize(width: frameWidth, height: segmentHeight))
         }
         closeButtonView.snp.makeConstraints{ (make) in
             make.centerY.equalToSuperview()
@@ -341,7 +337,7 @@ class BookDetailViewController: UIViewController {
             bookDescHeight = bookViewHeight / 1.5 + 100
             bookDescription.snp.makeConstraints { (make) in
                 make.centerX.equalToSuperview()
-                make.centerY.equalToSuperview().offset(12)
+                make.centerY.equalToSuperview().offset(padding)
                 make.size.equalTo(CGSize(width: bookDescWidth, height: bookDescHeight))
             }
         } else {
@@ -387,7 +383,7 @@ class BookDetailViewController: UIViewController {
         }
         
         downloadButtonView.snp.makeConstraints { (make) in
-            make.top.equalTo(bookDescription.snp.bottom).offset(12)
+            make.top.equalTo(bookDescription.snp.bottom).offset(padding)
             make.bottom.equalTo(booksDetailsView.snp.bottom).inset(downloadButtonY)
             make.centerX.equalToSuperview()
             make.size.equalTo(CGSize(width: downloadButtonViewWidth, height: downloadButtonViewHeight))
@@ -401,7 +397,7 @@ class BookDetailViewController: UIViewController {
         
         segmentedControl.snp.makeConstraints { (make) in
             make.top.equalTo(bookViewHeight)
-            make.height.equalTo(50)
+            make.height.equalTo(segmentHeight)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
@@ -413,7 +409,7 @@ class BookDetailViewController: UIViewController {
         }
 
         audioCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(segmentedControl.snp.bottom).offset(24)
+            make.top.equalTo(segmentedControl.snp.bottom).offset(padding + 6)
             make.bottom.equalToSuperview().inset(inset)
             make.height.equalTo(descHeight)
             make.leading.equalToSuperview()
@@ -421,11 +417,11 @@ class BookDetailViewController: UIViewController {
         }
         
         overviewView.snp.makeConstraints { (make) in
-            make.top.equalTo(segmentedControl.snp.bottom).offset(12)
+            make.top.equalTo(segmentedControl.snp.bottom).offset(8)
             make.bottom.equalToSuperview().inset(inset)
             make.height.equalTo(descHeight)
-            make.leading.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview().inset(12)
+            make.leading.equalToSuperview().offset(padding)
+            make.trailing.equalToSuperview().inset(padding)
         }
         overviewView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -474,6 +470,7 @@ class BookDetailViewController: UIViewController {
         setStatusButton()
         loadAudioData()
         loadDescription()
+        setUpSegmentControls()
     }
     
     private func loadAudioData() {
@@ -560,6 +557,16 @@ class BookDetailViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    private func segmentChanged(segmentControl: UISegmentedControl) {
+        if segmentControl.selectedSegmentIndex == 0 {
+            self.audioCollectionView.isHidden = true
+            self.overviewView.isHidden = false
+        } else if segmentControl.selectedSegmentIndex == 1 {
+            self.audioCollectionView.isHidden = false
+            self.overviewView.isHidden = true
+        }
+    }
+    
     //MARK: - @objc Attributes
     @objc func reloadData(_ notification: NSNotification) {
         if audioViewModel.listAudio.count > 0 {
@@ -609,18 +616,6 @@ class BookDetailViewController: UIViewController {
             }
         } else {
             showAlertDialog(title: "", message: "Sorry, this book is comming soon")
-        }
-    }
-    
-    @objc func segmentedValueChanged(_ sender:UISegmentedControl!) {
-        print("Selected Segment Index is : \(sender.selectedSegmentIndex)")
-        setupConstraint()
-        if sender.selectedSegmentIndex == 0 {
-            self.audioCollectionView.isHidden = true
-            self.overviewView.isHidden = false
-        } else if sender.selectedSegmentIndex == 1 {
-            self.audioCollectionView.isHidden = false
-            self.overviewView.isHidden = true
         }
     }
     
@@ -687,5 +682,12 @@ extension BookDetailViewController: UICollectionViewDataSource, UICollectionView
         return AudioResourceCell.sizeForResource(audio: self.listAudio[indexPath.row],
                                             cellWidth: collectionView.bounds.width,
                                             cell: audioCollectionView.cellForItem(at: indexPath) as? AudioResourceCell)
+    }
+}
+
+// MARK: - ScrollUISegmentControllerDelegate
+extension BookDetailViewController: ScrollUISegmentControllerDelegate{
+    func selectItemAt(_ sender: SegmentedControl) {
+        self.segmentChanged(segmentControl: sender)
     }
 }

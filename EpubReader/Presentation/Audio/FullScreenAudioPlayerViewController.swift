@@ -27,12 +27,11 @@ class FullScreenAudioPlayerViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = UIFont.font(with: .h2)
+        titleLabel.font = UIFont.font(with: .h3)
         titleLabel.textColor = UIColor.color(with: .background)
         titleLabel.backgroundColor = .clear
         titleLabel.numberOfLines = 2
         titleLabel.textAlignment = .center
-        titleLabel.text = "Witness the Sensation - Audio Only"
         return titleLabel
     }()
     

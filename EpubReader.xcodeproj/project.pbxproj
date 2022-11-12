@@ -12,6 +12,9 @@
 		040509052916186600A956C7 /* disable_ads.html in Resources */ = {isa = PBXBuildFile; fileRef = 040509042916186600A956C7 /* disable_ads.html */; };
 		04054ABE289FB386006E71BA /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04054ABD289FB386006E71BA /* UIImage.swift */; };
 		04118AE328C905EF00BE4446 /* PersistenceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04118AE228C905EF00BE4446 /* PersistenceHelper.swift */; };
+		041457A5291951D0008CD627 /* ScrollUISegmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041457A4291951D0008CD627 /* ScrollUISegmentController.swift */; };
+		041457A729195216008CD627 /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041457A629195216008CD627 /* SegmentedControl.swift */; };
+		041457A929195653008CD627 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041457A829195653008CD627 /* Utils.swift */; };
 		04182A66288BBB8100894854 /* LiteraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04182A65288BBB8100894854 /* LiteraryViewController.swift */; };
 		04196D7028A2BD3B008FA2FC /* video_pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 04196D6E28A2BD3A008FA2FC /* video_pause.png */; };
 		04196D7128A2BD3B008FA2FC /* audio_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 04196D6F28A2BD3A008FA2FC /* audio_play.png */; };
@@ -136,6 +139,9 @@
 		040509042916186600A956C7 /* disable_ads.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = disable_ads.html; sourceTree = "<group>"; };
 		04054ABD289FB386006E71BA /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		04118AE228C905EF00BE4446 /* PersistenceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceHelper.swift; sourceTree = "<group>"; };
+		041457A4291951D0008CD627 /* ScrollUISegmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollUISegmentController.swift; sourceTree = "<group>"; };
+		041457A629195216008CD627 /* SegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControl.swift; sourceTree = "<group>"; };
+		041457A829195653008CD627 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		04182A65288BBB8100894854 /* LiteraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteraryViewController.swift; sourceTree = "<group>"; };
 		04196D6E28A2BD3A008FA2FC /* video_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = video_pause.png; path = "EpubReader/Graphics/Full Audio Player/video_pause.png"; sourceTree = SOURCE_ROOT; };
 		04196D6F28A2BD3A008FA2FC /* audio_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = audio_play.png; path = "EpubReader/Graphics/Full Audio Player/audio_play.png"; sourceTree = SOURCE_ROOT; };
@@ -356,6 +362,8 @@
 			children = (
 				04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */,
 				04ECD19128B7E1AC00DAA295 /* AudioViewController.swift */,
+				041457A4291951D0008CD627 /* ScrollUISegmentController.swift */,
+				041457A629195216008CD627 /* SegmentedControl.swift */,
 			);
 			path = Book;
 			sourceTree = "<group>";
@@ -609,6 +617,7 @@
 				FAC51FC7283FC5800016889F /* AppAppearanceDesigner.swift */,
 				FADA96B82868C6A60075627C /* Utilities.swift */,
 				043DFB1728BB75C6003CD6C0 /* Reachability.swift */,
+				041457A829195653008CD627 /* Utils.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -966,6 +975,7 @@
 				04C79DA928E0A24400593DFD /* MenuTableViewCell.swift in Sources */,
 				FA349DE6284B6490005047DC /* SkillsViewController.swift in Sources */,
 				04CC80D3288DAB4700D53C0C /* FileDownloadInfo.swift in Sources */,
+				041457A929195653008CD627 /* Utils.swift in Sources */,
 				FAC51FCA283FC97B0016889F /* UIColorExtensions.swift in Sources */,
 				04ECD19228B7E1AC00DAA295 /* AudioViewController.swift in Sources */,
 				FAC51FC8283FC5810016889F /* AppAppearanceDesigner.swift in Sources */,
@@ -1007,6 +1017,7 @@
 				FA9D0C3E28637D6300E667AD /* ApiError.swift in Sources */,
 				FA951F42283BEBFA00013A84 /* FavoritesViewController.swift in Sources */,
 				04182A66288BBB8100894854 /* LiteraryViewController.swift in Sources */,
+				041457A729195216008CD627 /* SegmentedControl.swift in Sources */,
 				04C9F889287053C3000991C0 /* Epub.swift in Sources */,
 				04856C1728E6050C00426B6C /* User.swift in Sources */,
 				FADA96B72868C4870075627C /* UIImageExtension.swift in Sources */,
@@ -1022,6 +1033,7 @@
 				FA9D0C4028637D9900E667AD /* ApiRouter.swift in Sources */,
 				FAB7F4B6284CC90800A16974 /* UIDeviceExtensions.swift in Sources */,
 				048FDBB528CC9AE20080509B /* HealthViewController.swift in Sources */,
+				041457A5291951D0008CD627 /* ScrollUISegmentController.swift in Sources */,
 				FA9D0C3C28637B7800E667AD /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
