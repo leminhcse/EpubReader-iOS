@@ -127,9 +127,7 @@ class MiniAudioPlayerView: UIView {
     
     var title : String = "" {
         didSet {
-            if self.titleLabel.text != nil {
-                self.titleLabel.text = title
-            }
+            self.titleLabel.text = title
         }
     }
     

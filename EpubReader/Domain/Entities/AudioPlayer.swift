@@ -22,6 +22,7 @@ class AudioPlayer: NSObject {
     var pauseBf = false
     var upNextAudios = [Audio]()
     var audio: Audio?
+    var nextAudio: Audio?
     
     var isPlaying: Bool {
         guard let sound = sound else {
@@ -71,6 +72,24 @@ class AudioPlayer: NSObject {
     }
 
     private func removeMPTarget() {
+    }
+    
+    private func getNextAudio() {
+        if EpubReaderHelper.shared.listAudio.count > 1 {
+            guard let id = Int(self.audio!.id) else {
+                return
+            }
+            let currentAudio = Int(id)
+            for audio in EpubReaderHelper.shared.listAudio {
+                guard let nextAudio = Int(audio.id) else {
+                    return
+                }
+                if nextAudio > currentAudio {
+                    self.nextAudio = audio
+                    break
+                }
+            }
+        }
     }
     
     //MARK: - Methods
@@ -137,6 +156,8 @@ class AudioPlayer: NSObject {
     
     func play(audio: Audio, thumbnail: String) {
         self.audio = audio
+        self.getNextAudio()
+        
         if let thumbnail = URL(string: thumbnail) {
             imgThumbnail = thumbnail
         }

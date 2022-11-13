@@ -10,7 +10,6 @@ import RxSwift
 
 class AudioViewModel: NSObject {
     
-    var listAudio = [Audio]()
     private let disposeBag = DisposeBag()
     
     override init() {
@@ -18,9 +17,9 @@ class AudioViewModel: NSObject {
     }
     
     func getAudioList(bookId: String) {
-        self.listAudio.removeAll()
+        EpubReaderHelper.shared.listAudio.removeAll()
         if let data = PersistenceHelper.loadAudioData(key: "Audios") as? [Audio] {
-            self.listAudio = Utilities.shared.importAudioList(audioList: data)
+            EpubReaderHelper.shared.listAudio = Utilities.shared.importAudioList(audioList: data)
             NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification), object: nil)
         } else {
             ApiWebService.shared.getAudioList(bookId: bookId)
@@ -29,7 +28,7 @@ class AudioViewModel: NSObject {
                     print("List of Audio ", audioList)
                     if audioList.count > 0 {
                         PersistenceHelper.saveAudioData(object: audioList, key: "Audios")
-                        self.listAudio = Utilities.shared.importAudioList(audioList: audioList)
+                        EpubReaderHelper.shared.listAudio = Utilities.shared.importAudioList(audioList: audioList)
                         NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
                                                         object: nil)
                     }
