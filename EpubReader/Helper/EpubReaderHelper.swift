@@ -23,6 +23,7 @@ class EpubReaderHelper: NSObject {
     
     var user: User!
     var favoritedBooks = [Book]()
+    var listAudio = [Audio]()
     
     private override init() {
         super.init()

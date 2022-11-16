@@ -569,9 +569,9 @@ class BookDetailViewController: UIViewController {
     
     //MARK: - @objc Attributes
     @objc func reloadData(_ notification: NSNotification) {
-        if audioViewModel.listAudio.count > 0 {
+        if EpubReaderHelper.shared.listAudio.count > 0 {
             self.listAudio.removeAll()
-            self.listAudio = audioViewModel.listAudio
+            self.listAudio = EpubReaderHelper.shared.listAudio
             self.audioCollectionView.reloadData()
         }
     }

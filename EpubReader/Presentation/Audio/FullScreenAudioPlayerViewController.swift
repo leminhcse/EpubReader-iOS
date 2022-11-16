@@ -179,6 +179,7 @@ class FullScreenAudioPlayerViewController: UIViewController {
         self.view.backgroundColor = UIColor.color(with: .backgroundFullScreenAudioPlayer)
         
         initUI()
+        setupData()
         setupConstraints()
         
         updateDurationLabels()
@@ -198,17 +199,6 @@ class FullScreenAudioPlayerViewController: UIViewController {
         self.view.addSubview(containerStack)
         self.view.addSubview(soundSlider)
         self.view.addSubview(activityIndicator)
-        
-        if let title = AudioPlayer.shared.audio?.title {
-            titleLabel.text = title
-        }
-        
-        if let imgThumbnail = AudioPlayer.shared.imgThumbnail {
-            imageView.kf_setImage(url: imgThumbnail)
-        }
-        
-        AudioPlayer.shared.isPaused = !AudioPlayer.shared.isPlaying
-        updatePlayPauseButton()
     }
     
     private func setupConstraints() {
@@ -340,6 +330,19 @@ class FullScreenAudioPlayerViewController: UIViewController {
         }
     }
     
+    private func setupData() {
+        if let title = AudioPlayer.shared.audio?.title {
+            titleLabel.text = title
+        }
+        
+        if let imgThumbnail = AudioPlayer.shared.imgThumbnail {
+            imageView.kf_setImage(url: imgThumbnail)
+        }
+        
+        AudioPlayer.shared.isPaused = !AudioPlayer.shared.isPlaying
+        updatePlayPauseButton()
+    }
+    
     //MARK:  - Control events -
     @objc private func playButtonClick() {
         if AudioPlayer.shared.isPaused {
@@ -377,6 +380,7 @@ class FullScreenAudioPlayerViewController: UIViewController {
         let maxValue = scrubber.maximumValue
         let value = scrubber.value
         AudioPlayer.shared.seekToPercentage(Double(value/(maxValue-minValue)))
+        setupData()
         updateDurationLabels()
     }
     
