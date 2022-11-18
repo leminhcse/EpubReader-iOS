@@ -14,6 +14,10 @@ class AudioPlayer: NSObject {
     
     public typealias ProgressViewUpdate = (_ to: Float) -> Void
     public var progressViewUpdate: ProgressViewUpdate?
+    
+    public typealias UpdateAudioTitle = (_ to: String) -> Void
+    public var updateAudioTitle: UpdateAudioTitle?
+    
     public var sound: AVPlayer?
     
     var isPlayingUpdate: ((Bool) -> ())?
@@ -179,6 +183,10 @@ class AudioPlayer: NSObject {
         }
         self.sound = AVPlayer(playerItem: AVPlayerItem(url: audioUrl))
         self.play()
+        
+        if let title = self.audio?.title {
+            self.updateAudioTitle?(title)
+        }
         
         periodicTimeObserver = self.sound?.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1, preferredTimescale: 1),
                                                                    queue: DispatchQueue.main,

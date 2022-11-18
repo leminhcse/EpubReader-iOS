@@ -183,6 +183,7 @@ class FullScreenAudioPlayerViewController: UIViewController {
         setupConstraints()
         
         updateDurationLabels()
+        updateAudioTitle()
         updateProgressView()
         updatePlayPauseButton()
     }
@@ -343,6 +344,12 @@ class FullScreenAudioPlayerViewController: UIViewController {
         updatePlayPauseButton()
     }
     
+    private func updateAudioTitle() {
+        AudioPlayer.shared.updateAudioTitle = {[weak self] (title) in
+            self?.titleLabel.text = title
+        }
+    }
+
     //MARK:  - Control events -
     @objc private func playButtonClick() {
         if AudioPlayer.shared.isPaused {
@@ -380,7 +387,6 @@ class FullScreenAudioPlayerViewController: UIViewController {
         let maxValue = scrubber.maximumValue
         let value = scrubber.value
         AudioPlayer.shared.seekToPercentage(Double(value/(maxValue-minValue)))
-        setupData()
         updateDurationLabels()
     }
     
