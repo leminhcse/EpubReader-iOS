@@ -93,8 +93,6 @@ class MiniAudioPlayerView: UIView {
     let uiImagePause = UIImage(named: "video_pause.png")?.withRenderingMode(.alwaysTemplate)
     let uiImagePlay = UIImage.init(named: "video_play.png")?.withRenderingMode(.alwaysTemplate)
     
-    var currentVideoPosition: UILabel!
-    var durationLabel: UILabel!
     var progressView: UIProgressView!
     var blurEffectStyle: UIBlurEffect.Style!
     var buttonColour: UIColor!
