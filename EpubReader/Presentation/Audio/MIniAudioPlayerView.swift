@@ -61,6 +61,7 @@ class MiniAudioPlayerView: UIView {
         let titleLabel = UILabel()
         titleLabel.textColor = UIColor.color(with: .hightlight)
         titleLabel.font = UIFont.font(with: .h5)
+        titleLabel.numberOfLines = 2
         return titleLabel
     }()
     
@@ -97,7 +98,7 @@ class MiniAudioPlayerView: UIView {
     var blurEffectStyle: UIBlurEffect.Style!
     var buttonColour: UIColor!
     var ratio : CGFloat = 16/9
-    var heightlabel : CGFloat = 32.0
+    var heightlabel : CGFloat = 42.0
     var pading: CGFloat!
     var sizeButton: CGFloat!
     var viewType: Constants.audioViewType = .minimized
@@ -199,7 +200,7 @@ class MiniAudioPlayerView: UIView {
 
             let imageWidth = height*ratio*0.5
             imageView.snp.makeConstraints{ (make) in
-                make.leading.equalToSuperview().offset(10)
+                make.leading.equalToSuperview().offset(8)
                 make.top.equalToSuperview().offset(height*0.1)
                 make.size.equalTo(CGSize(width: imageWidth, height: 0.8*height))
             }
