@@ -39,6 +39,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window?.rootViewController = signInViewController
         }
         
+        MusicPlayerHelper.setupAppAudioSession()
+        
         return true
     }
 

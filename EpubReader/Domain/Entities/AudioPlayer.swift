@@ -19,6 +19,7 @@ class AudioPlayer: NSObject {
     public var updateAudioTitle: UpdateAudioTitle?
     
     public var sound: AVPlayer?
+    private let musicPlayerHelper = MusicPlayerHelper.shared
     
     var isPlayingUpdate: ((Bool) -> ())?
     var periodicTimeObserver : Any?
@@ -73,9 +74,19 @@ class AudioPlayer: NSObject {
     }
     
     private func setupMPTarget() {
+        musicPlayerHelper.removeListener(self)
+        musicPlayerHelper.addListener(self,
+                                       playHandler: #selector(playCommandDidUpdate),
+                                       pauseHandler: #selector(pauseCommandDidUpdate),
+                                       positionHandler: #selector(changePlaybackPositionCommandDidUpdate),
+                                       forwardHandler: #selector(forwardCommandDidUpdate),
+                                       backwardHandler: #selector(backwardCommandDidUpdate))
     }
 
     private func removeMPTarget() {
+        sound?.removeTimeObserver(periodicTimeObserver)
+        periodicTimeObserver = nil
+        musicPlayerHelper.removeListener(self)
     }
     
     private func getNextAudio() {
@@ -94,6 +105,16 @@ class AudioPlayer: NSObject {
                 }
             }
         }
+    }
+    
+    private func updateNowPlayingInfo(totalTime: Float64, time: Float64) {
+        MPNowPlayingInfoCenter.default().nowPlayingInfo =
+            [MPMediaItemPropertyTitle: self.audio?.title ?? "",
+             MPMediaItemPropertyPlaybackDuration: totalTime ,
+             MPNowPlayingInfoPropertyElapsedPlaybackTime: time,
+             MPNowPlayingInfoPropertyPlaybackRate: self.isPaused ? 0.0 : 1.0,
+             MPMediaItemPropertyArtwork : MPMediaItemArtwork.init(boundsSize: self.image.size,
+                                                                  requestHandler: { (size) -> UIImage in return self.image })]
     }
     
     //MARK: - Methods
@@ -196,6 +217,7 @@ class AudioPlayer: NSObject {
                     let time: Float64 = CMTimeGetSeconds(currentTime)
                     let totalTime: Float64 = CMTimeGetSeconds(duration)
                     self.progressViewUpdate?(Float(time) / Float(totalTime))
+                    self.updateNowPlayingInfo(totalTime: totalTime, time: time)
                 }
             }
         })
@@ -263,5 +285,42 @@ class AudioPlayer: NSObject {
                 }
             }
         }
+    }
+    
+    @objc private func playCommandDidUpdate() -> MPRemoteCommandHandlerStatus {
+        play()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: FullScreenAudioPlayerViewController.UpdatePlayPauseNotification), object: nil)
+        return .success
+     }
+     
+     @objc private func pauseCommandDidUpdate() -> MPRemoteCommandHandlerStatus {
+         pause()
+         NotificationCenter.default.post(name: NSNotification.Name(rawValue: FullScreenAudioPlayerViewController.UpdatePlayPauseNotification), object: nil)
+         return .success
+    }
+    
+    @objc private func changePlaybackPositionCommandDidUpdate(event: MPChangePlaybackPositionCommandEvent) -> MPRemoteCommandHandlerStatus {
+        seekTo(time: event.positionTime)
+        return .success
+    }
+    
+    @objc private func forwardCommandDidUpdate(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        if let command = event.command as? MPSkipIntervalCommand,
+            let interval = command.preferredIntervals.first?.floatValue {
+            let timeToSeek = self.getCurrentProgress() + interval
+            seek(seconds: Int(timeToSeek))
+            return .success
+        }
+        return .commandFailed
+    }
+    
+    @objc private func backwardCommandDidUpdate(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        if let command = event.command as? MPSkipIntervalCommand,
+            let interval = command.preferredIntervals.first?.floatValue {
+            let timeToSeek = self.getCurrentProgress() - interval
+            seek(seconds: Int(timeToSeek))
+            return .success
+        }
+        return .commandFailed
     }
 }

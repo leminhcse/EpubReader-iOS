@@ -77,6 +77,7 @@
 		04ECD18F28B7DA5800DAA295 /* headphones.png in Resources */ = {isa = PBXBuildFile; fileRef = 04ECD18C28B7DA5800DAA295 /* headphones.png */; };
 		04ECD19028B7DA5800DAA295 /* fi_heart_fill.png in Resources */ = {isa = PBXBuildFile; fileRef = 04ECD18D28B7DA5800DAA295 /* fi_heart_fill.png */; };
 		04ECD19228B7E1AC00DAA295 /* AudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04ECD19128B7E1AC00DAA295 /* AudioViewController.swift */; };
+		04F3647B2928E09700EAF994 /* MusicPlayerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F3647A2928E09700EAF994 /* MusicPlayerHelper.swift */; };
 		04FA55DD286C651D00724CF9 /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */; };
 		04FA55DF286CB0E900724CF9 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FA55DE286CB0E900724CF9 /* UIButtonExtension.swift */; };
 		8BC8BF17FD90027C3027604C /* Pods_EpubReaderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83E9F9CB594D13B99F40DF3F /* Pods_EpubReaderTests.framework */; };
@@ -204,6 +205,7 @@
 		04ECD18C28B7DA5800DAA295 /* headphones.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = headphones.png; sourceTree = "<group>"; };
 		04ECD18D28B7DA5800DAA295 /* fi_heart_fill.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fi_heart_fill.png; sourceTree = "<group>"; };
 		04ECD19128B7E1AC00DAA295 /* AudioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioViewController.swift; sourceTree = "<group>"; };
+		04F3647A2928E09700EAF994 /* MusicPlayerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerHelper.swift; sourceTree = "<group>"; };
 		04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
 		04FA55DE286CB0E900724CF9 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
 		1ACAA9E66AE1AE9938FCFA67 /* Pods-EpubReader-EpubReaderUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpubReader-EpubReaderUITests.release.xcconfig"; path = "Target Support Files/Pods-EpubReader-EpubReaderUITests/Pods-EpubReader-EpubReaderUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -675,6 +677,7 @@
 				04CC80D0288DA96500D53C0C /* FileHelper.swift */,
 				045C43E428C7ABDB000A83E4 /* DatabaseHelper.swift */,
 				04118AE228C905EF00BE4446 /* PersistenceHelper.swift */,
+				04F3647A2928E09700EAF994 /* MusicPlayerHelper.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -990,6 +993,7 @@
 				0464618528D7075200563427 /* SignInViewController.swift in Sources */,
 				FA2F8470283BE71700DF928B /* MainTabBarViewController.swift in Sources */,
 				043DFB1A28BB77B7003CD6C0 /* Message.swift in Sources */,
+				04F3647B2928E09700EAF994 /* MusicPlayerHelper.swift in Sources */,
 				04CC80CF288DA68800D53C0C /* ItemDownloadHelper.swift in Sources */,
 				FAD7401B284BCAB0005B9459 /* BookCell.swift in Sources */,
 				04ECD18A28B7D2D700DAA295 /* AudioResourceCell.swift in Sources */,
