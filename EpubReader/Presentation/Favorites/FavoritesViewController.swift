@@ -103,8 +103,9 @@ class FavoritesViewController: BaseViewController {
     
     // MARK: Handle favorite data
     private func loadData() {
-        let id = EpubReaderHelper.shared.user.id
-        bookViewModel.getFavoritesBook(userId: id)
+        if let user = EpubReaderHelper.shared.user {
+            bookViewModel.getFavoritesBook(userId: user.id)
+        }
     }
     
     @objc func reloadData(_ notification: NSNotification) {

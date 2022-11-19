@@ -200,6 +200,9 @@ class FullScreenAudioPlayerViewController: UIViewController {
         self.view.addSubview(containerStack)
         self.view.addSubview(soundSlider)
         self.view.addSubview(activityIndicator)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updatePlayPauseButton),
+                                               name: NSNotification.Name(rawValue: FullScreenAudioPlayerViewController.UpdatePlayPauseNotification), object: nil)
     }
     
     private func setupConstraints() {
@@ -311,7 +314,7 @@ class FullScreenAudioPlayerViewController: UIViewController {
         scrubber.value = progress
     }
     
-    private func updatePlayPauseButton() {
+    @objc private func updatePlayPauseButton() {
         if AudioPlayer.shared.isPaused {
             setPlayImage()
         } else {
