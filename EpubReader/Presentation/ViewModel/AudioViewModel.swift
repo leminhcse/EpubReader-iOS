@@ -18,7 +18,7 @@ class AudioViewModel: NSObject {
     
     func getAudioList(bookId: String) {
         EpubReaderHelper.shared.listAudio.removeAll()
-        if let data = PersistenceHelper.loadAudioData(key: "Audios") as? [Audio] {
+        if let data = PersistenceHelper.loadAudioData(key: bookId) as? [Audio] {
             EpubReaderHelper.shared.listAudio = Utilities.shared.importAudioList(audioList: data)
             NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification), object: nil)
         } else {
@@ -27,7 +27,7 @@ class AudioViewModel: NSObject {
                 .subscribe(onNext: { audioList in
                     print("List of Audio ", audioList)
                     if audioList.count > 0 {
-                        PersistenceHelper.saveAudioData(object: audioList, key: "Audios")
+                        PersistenceHelper.saveAudioData(object: audioList, key: bookId)
                         EpubReaderHelper.shared.listAudio = Utilities.shared.importAudioList(audioList: audioList)
                         NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
                                                         object: nil)

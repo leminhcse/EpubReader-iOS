@@ -158,7 +158,7 @@ class FullScreenAudioPlayerViewController: UIViewController {
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let activity = UIActivityIndicatorView()
-        activity.tintColor = UIColor.color(with: .hightlight)
+        activity.color = UIColor.color(with: .hightlight)
         activity.heightAnchor.constraint(equalToConstant: 67).isActive = true
         activity.widthAnchor.constraint(equalToConstant: 67).isActive = true
         return activity
@@ -257,7 +257,7 @@ class FullScreenAudioPlayerViewController: UIViewController {
         
         activityIndicator.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom).offset(16)
+            make.top.equalTo(titleLabel.snp.bottom).inset(8)
         }
         
         containerStack.snp.makeConstraints { (make) in
