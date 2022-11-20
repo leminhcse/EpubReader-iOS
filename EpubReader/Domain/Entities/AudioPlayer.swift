@@ -81,6 +81,8 @@ class AudioPlayer: NSObject {
                                        positionHandler: #selector(changePlaybackPositionCommandDidUpdate),
                                        forwardHandler: #selector(forwardCommandDidUpdate),
                                        backwardHandler: #selector(backwardCommandDidUpdate))
+        
+        initSession()
     }
 
     private func removeMPTarget() {
@@ -119,6 +121,10 @@ class AudioPlayer: NSObject {
     
     //MARK: - Methods
     func initSession() {
+        if let sound = sound {
+            MusicPlayerHelper.setupAVAudioSession(avPlayer: sound)
+            volume = sound.volume
+        }
     }
     
     func seekTo(time: Float64) {
