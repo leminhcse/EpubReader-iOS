@@ -54,4 +54,35 @@ class MusicPlayerHelper {
             print(error)
         }
     }
+    
+    static func setupInterruptSpokenAudioAndMixWithOthers() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+            try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            print(error)
+        }
+    }
+
+    static func setupMixWitOthers() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print(error)
+        }
+    }
+    
+    static func setupAVAudioSession(avPlayer: AVPlayer) {
+        if allowAudioFromOtherApps {
+            setupMixWitOthers()
+        } else {
+            setupAppAudioSession()
+            //setupInterruptSpokenAudioAndMixWithOthers()
+        }
+    }
+    
+    static var allowAudioFromOtherApps: Bool {
+        return UserDefs.allowBackgroundAudio
+    }
 }
