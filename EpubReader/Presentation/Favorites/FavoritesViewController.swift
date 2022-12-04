@@ -12,9 +12,6 @@ import SnapKit
 class FavoritesViewController: BaseViewController {
     
     // MARK: - Local variables
-    var frameWidth: CGFloat = UIScreen.main.bounds.width
-    var frameHeight: CGFloat = UIScreen.main.bounds.height
-    
     private var favoritedBooks = [Book]()
     private var bookViewModel = BookViewModel()
     
@@ -96,7 +93,7 @@ class FavoritesViewController: BaseViewController {
         
         bookTableView.snp.makeConstraints{ (make) in
             make.leading.equalToSuperview()
-            make.top.equalToSuperview().offset(100)
+            make.top.equalToSuperview().offset(112)
             make.size.equalTo(CGSize(width: frameWidth, height: frameHeight))
         }
     }

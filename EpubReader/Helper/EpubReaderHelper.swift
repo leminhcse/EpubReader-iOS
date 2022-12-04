@@ -20,9 +20,12 @@ class EpubReaderHelper: NSObject {
     static let RemoveFavoriteSuccessNotification = "RemoveFavoriteSuccessNotification"
     static let AddFavoriteFailedNotification = "AddFavoriteFailedNotification"
     static let RemoveFavoriteFailedNotification = "RemoveFavoriteFailedNotification"
+    static let GetReadingBookSuccessNotification = "GetReadingBookSuccessNotification"
+    static let GetReadingBookFailedNotification = "GetReadingBookFailedNotification"
     
     var user: User!
     var favoritedBooks = [Book]()
+    var readingBook = [ReadingBook]()
     var listAudio = [Audio]()
     
     private override init() {

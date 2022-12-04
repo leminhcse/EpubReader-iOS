@@ -13,9 +13,6 @@ class SideMenuViewController: BaseViewController {
     var viewMenu: UIView!
     var menuTableView = UITableView()
     var buttonViewCloseTouch: UIButton!
-    
-    var frameWidth: CGFloat = UIScreen.main.bounds.width
-    var frameHeight: CGFloat = UIScreen.main.bounds.height
     var ratiowidth: CGFloat = 0.815
     
     private let listMenu = ["Profile", "Về Chúng Tôi", "Đánh Gía", "Tắt Quảng Cáo"]
@@ -30,9 +27,6 @@ class SideMenuViewController: BaseViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        frameHeight = self.view.bounds.size.height
-        frameWidth = self.view.bounds.size.width
         setupConstraint()
     }
     
@@ -106,7 +100,6 @@ class SideMenuViewController: BaseViewController {
         UIView.animate(withDuration: 0.2, animations: {
             self.viewMenu.frame = CGRect(x: 0, y: 0, width: self.frameWidth*self.ratiowidth, height: self.frameHeight)
         }, completion: nil)
-
     }
 }
 
