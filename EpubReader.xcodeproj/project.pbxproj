@@ -73,6 +73,7 @@
 		04CC80D1288DA96500D53C0C /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC80D0288DA96500D53C0C /* FileHelper.swift */; };
 		04CC80D3288DAB4700D53C0C /* FileDownloadInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC80D2288DAB4700D53C0C /* FileDownloadInfo.swift */; };
 		04CC80D5288DABA200D53C0C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC80D4288DABA200D53C0C /* NetworkManager.swift */; };
+		04DDDCFF293C67970060E639 /* ReadingBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DDDCFE293C67970060E639 /* ReadingBook.swift */; };
 		04ECD18A28B7D2D700DAA295 /* AudioResourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04ECD18928B7D2D700DAA295 /* AudioResourceCell.swift */; };
 		04ECD18E28B7DA5800DAA295 /* fi_heart.png in Resources */ = {isa = PBXBuildFile; fileRef = 04ECD18B28B7DA5800DAA295 /* fi_heart.png */; };
 		04ECD18F28B7DA5800DAA295 /* headphones.png in Resources */ = {isa = PBXBuildFile; fileRef = 04ECD18C28B7DA5800DAA295 /* headphones.png */; };
@@ -202,6 +203,7 @@
 		04CC80D0288DA96500D53C0C /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		04CC80D2288DAB4700D53C0C /* FileDownloadInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloadInfo.swift; sourceTree = "<group>"; };
 		04CC80D4288DABA200D53C0C /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		04DDDCFE293C67970060E639 /* ReadingBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingBook.swift; sourceTree = "<group>"; };
 		04ECD18928B7D2D700DAA295 /* AudioResourceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioResourceCell.swift; sourceTree = "<group>"; };
 		04ECD18B28B7DA5800DAA295 /* fi_heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fi_heart.png; sourceTree = "<group>"; };
 		04ECD18C28B7DA5800DAA295 /* headphones.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = headphones.png; sourceTree = "<group>"; };
@@ -592,6 +594,7 @@
 				0464017928AC0C7D00CCAD3F /* Audio.swift */,
 				043DFB1928BB77B7003CD6C0 /* Message.swift */,
 				04856C1628E6050C00426B6C /* User.swift */,
+				04DDDCFE293C67970060E639 /* ReadingBook.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -1009,6 +1012,7 @@
 				04C79DAD28E0C58400593DFD /* AboutViewController.swift in Sources */,
 				0423B1B528E1FF7E00750A8E /* BookTableViewCell.swift in Sources */,
 				046C0EB428A8AE44009849B5 /* UIApplicationExtension.swift in Sources */,
+				04DDDCFF293C67970060E639 /* ReadingBook.swift in Sources */,
 				0471FA8028B3D529009656E7 /* UIScreenExtensions.swift in Sources */,
 				FAC654A9283D31D60086CC9D /* UIViewExtensions.swift in Sources */,
 				04CC80D1288DA96500D53C0C /* FileHelper.swift in Sources */,
@@ -1215,6 +1219,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EpubReader/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Access to your network allows app to discover and connect to devices such as your iPhone, iPad";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -1244,6 +1249,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EpubReader/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Access to your network allows app to discover and connect to devices such as your iPhone, iPad";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
