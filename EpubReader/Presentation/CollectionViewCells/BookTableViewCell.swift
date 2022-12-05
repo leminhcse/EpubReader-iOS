@@ -10,6 +10,8 @@ import SnapKit
 
 class BookTableViewCell: UITableViewCell {
     
+    private var book: Book!
+    
     private lazy var image: UIImageView = {
         let image = UIImageView()
         image.clipsToBounds = true
@@ -63,6 +65,15 @@ class BookTableViewCell: UITableViewCell {
         pageLabel.isHidden = true
         return pageLabel
     }()
+    
+    private lazy var moreButton: UIButton = {
+        let moreButton = UIButton()
+        moreButton.style(with: .more)
+        moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
+        moreButton.tintColor = UIColor.darkText
+        moreButton.isHidden = true
+        return moreButton
+    }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -83,6 +94,7 @@ class BookTableViewCell: UITableViewCell {
         self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(composerLabel)
         self.contentView.addSubview(pageLabel)
+        self.contentView.addSubview(moreButton)
     }
     
     private func setupConstraints() {
@@ -126,9 +138,15 @@ class BookTableViewCell: UITableViewCell {
             make.size.equalTo(CGSize(width: titleWidth/2, height: titleHeight + 8))
         }
         
+        moreButton.snp.makeConstraints { (make) in
+            make.trailing.equalToSuperview().inset(24)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(CGSize(width: 32, height: titleHeight + 12))
+        }
     }
     
     public func configure(book: Book) {
+        self.book = book
         DispatchQueue.main.async {
             if let url = URL(string: book.thumbnail) {
                 self.image.kf_setImage(url: url) { _ in
@@ -142,6 +160,7 @@ class BookTableViewCell: UITableViewCell {
         }
         titleLabel.text = book.title
         composerLabel.text = book.composer
+        moreButton.isHidden = false
     }
     
     public func configure(book: Book, pageNumber: Int) {
@@ -160,5 +179,22 @@ class BookTableViewCell: UITableViewCell {
         composerLabel.text = book.composer
         pageLabel.isHidden = false
         pageLabel.text = "Đã đọc \(pageNumber) trang"
+        moreButton.isHidden = true
+    }
+    
+    @objc func moreButtonTapped() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.view.tintColor = UIColor.color(with: .darkColor)
+        alert.popoverPresentationController?.permittedArrowDirections = []
+
+        let favouritesAction = UIAlertAction(title: "Xóa khỏi Yêu thích", style: .default) { action in
+            let bookViewModel = BookViewModel()
+            bookViewModel.removeFavorite(bookId: self.book.id, userId: EpubReaderHelper.shared.user.id)
+        }
+        alert.addAction(favouritesAction)
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(cancelAction)
+        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
     }
 }
