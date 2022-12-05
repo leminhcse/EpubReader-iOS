@@ -12,6 +12,7 @@ enum ButtonStyle {
     case downArrow
     case favorite
     case profile
+    case more
 }
 
 extension UIButton {
@@ -33,6 +34,12 @@ extension UIButton {
         case .profile:
             let inset: CGFloat = 0
             let imageName = "ic_next.png"
+            let nextIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            setImage(nextIcon, for: .normal)
+            imageEdgeInsets = UIEdgeInsets(top: inset, left: 0, bottom: inset, right: inset)
+        case .more:
+            let inset: CGFloat = 0
+            let imageName = "ic_more.png"
             let nextIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
             setImage(nextIcon, for: .normal)
             imageEdgeInsets = UIEdgeInsets(top: inset, left: 0, bottom: inset, right: inset)
