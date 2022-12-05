@@ -15,9 +15,6 @@ class SearchViewController: BaseViewController {
     private var searchResults: [Book] = []
     private var bookViewModel = BookViewModel()
     
-    var frameWidth: CGFloat = UIScreen.main.bounds.width
-    var frameHeight: CGFloat = UIScreen.main.bounds.height
-    
     // MARK: - UI Controls
     private lazy var searchView: UIView = {
         let view = UIView()

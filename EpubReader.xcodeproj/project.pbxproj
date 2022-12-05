@@ -29,6 +29,7 @@
 		041F9B9828B141C000FB4DEA /* fastforward_15_seconds.png in Resources */ = {isa = PBXBuildFile; fileRef = 041F9B9628B141C000FB4DEA /* fastforward_15_seconds.png */; };
 		041F9B9928B141C000FB4DEA /* rewind_15_seconds.png in Resources */ = {isa = PBXBuildFile; fileRef = 041F9B9728B141C000FB4DEA /* rewind_15_seconds.png */; };
 		0423B1B528E1FF7E00750A8E /* BookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0423B1B428E1FF7E00750A8E /* BookTableViewCell.swift */; };
+		0427875429292F330071AEB5 /* UserDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0427875329292F330071AEB5 /* UserDefs.swift */; };
 		043DFB1428BB38A4003CD6C0 /* fi_download.png in Resources */ = {isa = PBXBuildFile; fileRef = 043DFB1328BB38A4003CD6C0 /* fi_download.png */; };
 		043DFB1628BB3905003CD6C0 /* download-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 043DFB1528BB3905003CD6C0 /* download-icon.png */; };
 		043DFB1828BB75C6003CD6C0 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043DFB1728BB75C6003CD6C0 /* Reachability.swift */; };
@@ -72,11 +73,13 @@
 		04CC80D1288DA96500D53C0C /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC80D0288DA96500D53C0C /* FileHelper.swift */; };
 		04CC80D3288DAB4700D53C0C /* FileDownloadInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC80D2288DAB4700D53C0C /* FileDownloadInfo.swift */; };
 		04CC80D5288DABA200D53C0C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC80D4288DABA200D53C0C /* NetworkManager.swift */; };
+		04DDDCFF293C67970060E639 /* ReadingBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DDDCFE293C67970060E639 /* ReadingBook.swift */; };
 		04ECD18A28B7D2D700DAA295 /* AudioResourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04ECD18928B7D2D700DAA295 /* AudioResourceCell.swift */; };
 		04ECD18E28B7DA5800DAA295 /* fi_heart.png in Resources */ = {isa = PBXBuildFile; fileRef = 04ECD18B28B7DA5800DAA295 /* fi_heart.png */; };
 		04ECD18F28B7DA5800DAA295 /* headphones.png in Resources */ = {isa = PBXBuildFile; fileRef = 04ECD18C28B7DA5800DAA295 /* headphones.png */; };
 		04ECD19028B7DA5800DAA295 /* fi_heart_fill.png in Resources */ = {isa = PBXBuildFile; fileRef = 04ECD18D28B7DA5800DAA295 /* fi_heart_fill.png */; };
 		04ECD19228B7E1AC00DAA295 /* AudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04ECD19128B7E1AC00DAA295 /* AudioViewController.swift */; };
+		04F3647B2928E09700EAF994 /* MusicPlayerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F3647A2928E09700EAF994 /* MusicPlayerHelper.swift */; };
 		04FA55DD286C651D00724CF9 /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */; };
 		04FA55DF286CB0E900724CF9 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FA55DE286CB0E900724CF9 /* UIButtonExtension.swift */; };
 		8BC8BF17FD90027C3027604C /* Pods_EpubReaderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83E9F9CB594D13B99F40DF3F /* Pods_EpubReaderTests.framework */; };
@@ -156,6 +159,7 @@
 		041F9B9628B141C000FB4DEA /* fastforward_15_seconds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fastforward_15_seconds.png; sourceTree = "<group>"; };
 		041F9B9728B141C000FB4DEA /* rewind_15_seconds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rewind_15_seconds.png; sourceTree = "<group>"; };
 		0423B1B428E1FF7E00750A8E /* BookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookTableViewCell.swift; sourceTree = "<group>"; };
+		0427875329292F330071AEB5 /* UserDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefs.swift; sourceTree = "<group>"; };
 		043DFB1328BB38A4003CD6C0 /* fi_download.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fi_download.png; sourceTree = "<group>"; };
 		043DFB1528BB3905003CD6C0 /* download-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "download-icon.png"; sourceTree = "<group>"; };
 		043DFB1728BB75C6003CD6C0 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -199,11 +203,13 @@
 		04CC80D0288DA96500D53C0C /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		04CC80D2288DAB4700D53C0C /* FileDownloadInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloadInfo.swift; sourceTree = "<group>"; };
 		04CC80D4288DABA200D53C0C /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		04DDDCFE293C67970060E639 /* ReadingBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingBook.swift; sourceTree = "<group>"; };
 		04ECD18928B7D2D700DAA295 /* AudioResourceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioResourceCell.swift; sourceTree = "<group>"; };
 		04ECD18B28B7DA5800DAA295 /* fi_heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fi_heart.png; sourceTree = "<group>"; };
 		04ECD18C28B7DA5800DAA295 /* headphones.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = headphones.png; sourceTree = "<group>"; };
 		04ECD18D28B7DA5800DAA295 /* fi_heart_fill.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fi_heart_fill.png; sourceTree = "<group>"; };
 		04ECD19128B7E1AC00DAA295 /* AudioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioViewController.swift; sourceTree = "<group>"; };
+		04F3647A2928E09700EAF994 /* MusicPlayerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerHelper.swift; sourceTree = "<group>"; };
 		04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
 		04FA55DE286CB0E900724CF9 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
 		1ACAA9E66AE1AE9938FCFA67 /* Pods-EpubReader-EpubReaderUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpubReader-EpubReaderUITests.release.xcconfig"; path = "Target Support Files/Pods-EpubReader-EpubReaderUITests/Pods-EpubReader-EpubReaderUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -588,6 +594,7 @@
 				0464017928AC0C7D00CCAD3F /* Audio.swift */,
 				043DFB1928BB77B7003CD6C0 /* Message.swift */,
 				04856C1628E6050C00426B6C /* User.swift */,
+				04DDDCFE293C67970060E639 /* ReadingBook.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -618,6 +625,7 @@
 				FADA96B82868C6A60075627C /* Utilities.swift */,
 				043DFB1728BB75C6003CD6C0 /* Reachability.swift */,
 				041457A829195653008CD627 /* Utils.swift */,
+				0427875329292F330071AEB5 /* UserDefs.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -675,6 +683,7 @@
 				04CC80D0288DA96500D53C0C /* FileHelper.swift */,
 				045C43E428C7ABDB000A83E4 /* DatabaseHelper.swift */,
 				04118AE228C905EF00BE4446 /* PersistenceHelper.swift */,
+				04F3647A2928E09700EAF994 /* MusicPlayerHelper.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -990,6 +999,7 @@
 				0464618528D7075200563427 /* SignInViewController.swift in Sources */,
 				FA2F8470283BE71700DF928B /* MainTabBarViewController.swift in Sources */,
 				043DFB1A28BB77B7003CD6C0 /* Message.swift in Sources */,
+				04F3647B2928E09700EAF994 /* MusicPlayerHelper.swift in Sources */,
 				04CC80CF288DA68800D53C0C /* ItemDownloadHelper.swift in Sources */,
 				FAD7401B284BCAB0005B9459 /* BookCell.swift in Sources */,
 				04ECD18A28B7D2D700DAA295 /* AudioResourceCell.swift in Sources */,
@@ -997,10 +1007,12 @@
 				FAB7F4BD284CD7CB00A16974 /* BookViewModel.swift in Sources */,
 				041F9B9328B13CEC00FB4DEA /* MIniAudioPlayerView.swift in Sources */,
 				043DFB1828BB75C6003CD6C0 /* Reachability.swift in Sources */,
+				0427875429292F330071AEB5 /* UserDefs.swift in Sources */,
 				04C79DAF28E0C6D600593DFD /* DisableAdsViewController.swift in Sources */,
 				04C79DAD28E0C58400593DFD /* AboutViewController.swift in Sources */,
 				0423B1B528E1FF7E00750A8E /* BookTableViewCell.swift in Sources */,
 				046C0EB428A8AE44009849B5 /* UIApplicationExtension.swift in Sources */,
+				04DDDCFF293C67970060E639 /* ReadingBook.swift in Sources */,
 				0471FA8028B3D529009656E7 /* UIScreenExtensions.swift in Sources */,
 				FAC654A9283D31D60086CC9D /* UIViewExtensions.swift in Sources */,
 				04CC80D1288DA96500D53C0C /* FileHelper.swift in Sources */,
@@ -1207,6 +1219,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EpubReader/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Access to your network allows app to discover and connect to devices such as your iPhone, iPad";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -1236,6 +1249,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EpubReader/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Access to your network allows app to discover and connect to devices such as your iPhone, iPad";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

@@ -35,6 +35,28 @@ final class PersistenceHelper: NSObject {
         }
     }
     
+    class func saveReadingBook(object: [ReadingBook], key: String) {
+        do {
+            let data = try JSONEncoder().encode(object)
+            UserDefaults.standard.set(data, forKey: key)
+        } catch {
+            print(error)
+        }
+    }
+    
+    class func loadReadingBook(key: String) -> AnyObject? {
+        do {
+            guard let data = UserDefaults.standard.data(forKey: key) else {
+                return nil
+            }
+            let books = try JSONDecoder().decode([ReadingBook].self, from: data)
+            return books as AnyObject
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
     class func saveAudioData(object: [Audio], key: String) {
         do {
             let data = try JSONEncoder().encode(object)

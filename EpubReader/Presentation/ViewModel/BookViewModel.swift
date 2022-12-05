@@ -142,4 +142,30 @@ class BookViewModel: NSObject {
             }
         }
     }
+    
+    func getReadingBook() {
+        if EpubReaderHelper.shared.readingBook.count > 0 {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.GetReadingBookSuccessNotification), object: nil)
+        } else if let data = PersistenceHelper.loadReadingBook(key: "readingBook") as? [ReadingBook] {
+            EpubReaderHelper.shared.readingBook = data
+            NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.GetReadingBookSuccessNotification), object: nil)
+        } else {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.GetReadingBookFailedNotification), object: nil)
+        }
+    }
+    
+    func putToReading(book: Book, currentPage: Int) {
+        let readingBook = ReadingBook()
+        readingBook.book = book
+        readingBook.currentPage = currentPage
+        
+        if EpubReaderHelper.shared.readingBook.contains(where: {$0.book?.id == book.id}) {
+            EpubReaderHelper.shared.readingBook.removeAll(where: {$0.book?.id == book.id })
+            EpubReaderHelper.shared.readingBook.append(readingBook)
+        } else {
+            EpubReaderHelper.shared.readingBook.append(readingBook)
+        }
+        PersistenceHelper.saveReadingBook(object: EpubReaderHelper.shared.readingBook, key: "readingBook")
+        NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.GetReadingBookSuccessNotification), object: nil)
+    }
 }

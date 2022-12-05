@@ -203,6 +203,7 @@ class BookDetailViewController: UIViewController {
     private var audioViewModel = AudioViewModel()
     private var bookViewModel = BookViewModel()
     private var selectedSegmentIndex: Int = 0
+    private var currentPage: Int = 0
     
     private let segmentHeight = CGFloat(42)
     private let padding = CGFloat(12)
@@ -229,6 +230,9 @@ class BookDetailViewController: UIViewController {
                                                selector: #selector(reloadFavoriteStatus(_:)),
                                                name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification),
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(getCurrentPageNumber(_:)),
+                                               name: NSNotification.Name(rawValue: "pageNumberNotification"), object: nil)
         
         setupViews()
         setupData()
@@ -578,6 +582,13 @@ class BookDetailViewController: UIViewController {
     
     @objc func reloadFavoriteStatus(_ notification: NSNotification) {
         setStatusButton()
+    }
+    
+    @objc func getCurrentPageNumber(_ notification: NSNotification) {
+        if let pageNumber = notification.userInfo?["pageNumber"] as? Int {
+            currentPage = pageNumber
+        }
+        bookViewModel.putToReading(book: book, currentPage: currentPage)
     }
     
     @objc func closeButtonTapped() {

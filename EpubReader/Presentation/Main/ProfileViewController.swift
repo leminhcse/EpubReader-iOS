@@ -153,7 +153,7 @@ class ProfileViewController: UIViewController {
     
     private lazy var switchControl1: UISwitch = {
         let switchControl1 = UISwitch()
-        switchControl1.isOn = true
+        switchControl1.isOn = false
         switchControl1.isEnabled = true
         switchControl1.onTintColor = UIColor.color(with: .background)
         switchControl1.translatesAutoresizingMaskIntoConstraints = false
@@ -163,7 +163,7 @@ class ProfileViewController: UIViewController {
     
     private lazy var switchControl2: UISwitch = {
         let switchControl2 = UISwitch()
-        switchControl2.isOn = true
+        switchControl2.isOn = false
         switchControl2.isEnabled = true
         switchControl2.onTintColor = UIColor.color(with: .background)
         switchControl2.translatesAutoresizingMaskIntoConstraints = false
@@ -173,7 +173,7 @@ class ProfileViewController: UIViewController {
     
     private lazy var switchControl3: UISwitch = {
         let switchControl3 = UISwitch()
-        switchControl3.isOn = true
+        switchControl3.isOn = false
         switchControl3.isEnabled = true
         switchControl3.onTintColor = UIColor.color(with: .background)
         switchControl3.translatesAutoresizingMaskIntoConstraints = false
@@ -183,7 +183,7 @@ class ProfileViewController: UIViewController {
     
     private lazy var switchControl4: UISwitch = {
         let switchControl4 = UISwitch()
-        switchControl4.isOn = true
+        switchControl4.isOn = false
         switchControl4.isEnabled = true
         switchControl4.onTintColor = UIColor.color(with: .background)
         switchControl4.translatesAutoresizingMaskIntoConstraints = false
@@ -218,6 +218,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
+        updateStatusToogle()
         loadData()
     }
     
@@ -410,25 +411,82 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    private func updateStatusToogle() {
+        if UserDefs.isAutoPlay {
+            switchControl.isOn = true
+        } else {
+            switchControl.isOn = false
+        }
+        
+        if UserDefs.continueAudioInBackground {
+            switchControl1.isOn = true
+        } else {
+            switchControl1.isOn = false
+        }
+        
+        if UserDefs.allowBackgroundAudio {
+            switchControl2.isOn = true
+        } else {
+            switchControl2.isOn = false
+        }
+        
+        if UserDefs.isDownloadViaWifi {
+            switchControl3.isOn = true
+        } else {
+            switchControl3.isOn = false
+        }
+        
+        if UserDefs.isDarkMode {
+            switchControl4.isOn = true
+        } else {
+            switchControl4.isOn = false
+        }
+    }
+    
     // MARK: Selector methods
     @objc private func handleSwitchAction() {
-        print("switch action")
+        print("Auto play next audio click")
+        if switchControl.isOn {
+            UserDefs.userSetting["isAutoPlay"] = true
+        } else {
+            UserDefs.userSetting["isAutoPlay"] = false
+        }
     }
     
     @objc private func handleSwitchAction1() {
-        print("switch action1")
+        print("Continue audio in background click")
+        if switchControl1.isOn {
+            UserDefs.userSetting["continueAudioInBackground"] = true
+        } else {
+            UserDefs.userSetting["continueAudioInBackground"] = false
+        }
     }
     
     @objc private func handleSwitchAction2() {
-        print("switch action2")
+        print("Allow audio from another apps click")
+        if switchControl2.isOn {
+            UserDefs.userSetting["allowBackgroundAudio"] = true
+        } else {
+            UserDefs.userSetting["allowBackgroundAudio"] = false
+        }
     }
     
     @objc private func handleSwitchAction3() {
-        print("switch action3")
+        print("Download via wifi click")
+        if switchControl3.isOn {
+            UserDefs.userSetting["isDownloadViaWifi"] = true
+        } else {
+            UserDefs.userSetting["isDownloadViaWifi"] = false
+        }
     }
     
     @objc private func handleSwitchAction4() {
-        print("switch action4")
+        print("Dark mode enable click")
+        if switchControl4.isOn {
+            UserDefs.userSetting["isDarkMode"] = true
+        } else {
+            UserDefs.userSetting["isDarkMode"] = false
+        }
     }
     
     @objc private func deleteTapped() {

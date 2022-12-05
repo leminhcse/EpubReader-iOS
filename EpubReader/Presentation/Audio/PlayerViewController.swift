@@ -63,6 +63,12 @@ class PlayerViewController: UIViewController {
     }
     
     @objc func playerItemDidReachEnd(notification: NSNotification) {
+        if !UserDefs.isAutoPlay {
+            AudioPlayer.shared.sound = nil
+            AudioPlayer.shared.isPaused = true
+            return
+        }
+        
         self.miniAudioPlayerView.statusPlay = true
         if let audio = AudioPlayer.shared.nextAudio {
             AudioPlayer.shared.sound = nil
