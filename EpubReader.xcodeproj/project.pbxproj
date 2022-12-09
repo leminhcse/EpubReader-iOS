@@ -55,6 +55,8 @@
 		049F879829166F6D008D4456 /* ic_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 049F879729166F6D008D4456 /* ic_profile.png */; };
 		049F879A2916B875008D4456 /* ic_next.png in Resources */ = {isa = PBXBuildFile; fileRef = 049F87992916B875008D4456 /* ic_next.png */; };
 		04A081122871525200FFAFBF /* demo-bg.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 04A081112871525200FFAFBF /* demo-bg.jpeg */; };
+		04B21A3F2941EA3300499FF9 /* BannerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B21A3E2941EA3300499FF9 /* BannerHelper.swift */; };
+		04B21A412941EADE00499FF9 /* Banner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B21A402941EADE00499FF9 /* Banner.swift */; };
 		04B21E9728BA773200758B03 /* template_stop_square.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B21E9328BA773200758B03 /* template_stop_square.png */; };
 		04B21E9828BA773200758B03 /* template_stop_download.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B21E9428BA773200758B03 /* template_stop_download.png */; };
 		04B21E9928BA773200758B03 /* download_remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B21E9528BA773200758B03 /* download_remove.png */; };
@@ -186,6 +188,8 @@
 		049F879729166F6D008D4456 /* ic_profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_profile.png; sourceTree = "<group>"; };
 		049F87992916B875008D4456 /* ic_next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_next.png; sourceTree = "<group>"; };
 		04A081112871525200FFAFBF /* demo-bg.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "demo-bg.jpeg"; sourceTree = "<group>"; };
+		04B21A3E2941EA3300499FF9 /* BannerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerHelper.swift; sourceTree = "<group>"; };
+		04B21A402941EADE00499FF9 /* Banner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Banner.swift; sourceTree = "<group>"; };
 		04B21E9328BA773200758B03 /* template_stop_square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = template_stop_square.png; sourceTree = "<group>"; };
 		04B21E9428BA773200758B03 /* template_stop_download.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = template_stop_download.png; sourceTree = "<group>"; };
 		04B21E9528BA773200758B03 /* download_remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = download_remove.png; sourceTree = "<group>"; };
@@ -466,6 +470,7 @@
 			children = (
 				FAC51FCB283FCE590016889F /* BaseViewController.swift */,
 				04CC80D2288DAB4700D53C0C /* FileDownloadInfo.swift */,
+				04B21A402941EADE00499FF9 /* Banner.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -687,6 +692,7 @@
 				045C43E428C7ABDB000A83E4 /* DatabaseHelper.swift */,
 				04118AE228C905EF00BE4446 /* PersistenceHelper.swift */,
 				04F3647A2928E09700EAF994 /* MusicPlayerHelper.swift */,
+				04B21A3E2941EA3300499FF9 /* BannerHelper.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -1031,6 +1037,7 @@
 				04FA55DD286C651D00724CF9 /* BookDetailViewController.swift in Sources */,
 				04CC80D5288DABA200D53C0C /* NetworkManager.swift in Sources */,
 				FA9D0C3E28637D6300E667AD /* ApiError.swift in Sources */,
+				04B21A3F2941EA3300499FF9 /* BannerHelper.swift in Sources */,
 				FA951F42283BEBFA00013A84 /* FavoritesViewController.swift in Sources */,
 				04182A66288BBB8100894854 /* LiteraryViewController.swift in Sources */,
 				041457A729195216008CD627 /* SegmentedControl.swift in Sources */,
@@ -1049,6 +1056,7 @@
 				FA9D0C4028637D9900E667AD /* ApiRouter.swift in Sources */,
 				FAB7F4B6284CC90800A16974 /* UIDeviceExtensions.swift in Sources */,
 				048FDBB528CC9AE20080509B /* HealthViewController.swift in Sources */,
+				04B21A412941EADE00499FF9 /* Banner.swift in Sources */,
 				041457A5291951D0008CD627 /* ScrollUISegmentController.swift in Sources */,
 				FA9D0C3C28637B7800E667AD /* Constants.swift in Sources */,
 			);

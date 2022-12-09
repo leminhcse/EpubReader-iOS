@@ -14,6 +14,8 @@ extension UIColor {
         case darkColor
         case hightlight
         case backgroundFullScreenAudioPlayer
+        case primaryItem
+        case backgroudTransparent
         
         fileprivate var lightModeColor: UIColor {
             let color: UIColor
@@ -26,6 +28,10 @@ extension UIColor {
                 color = UIColor(hex: "#2d4170")
             case .backgroundFullScreenAudioPlayer:
                 color = UIColor(hex: "#FEFEFE")
+            case .backgroudTransparent:
+                color = UIColor(hex: "#FEFEFE")
+            case .primaryItem:
+                color = UIColor(hex: "#484848")
             }
             return color
         }

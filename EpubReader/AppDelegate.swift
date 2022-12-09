@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         self.window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
+        _ = Reachability.shared
         
         if GIDSignIn.sharedInstance.hasPreviousSignIn() {
             GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in

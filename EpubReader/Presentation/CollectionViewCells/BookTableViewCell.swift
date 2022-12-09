@@ -71,7 +71,7 @@ class BookTableViewCell: UITableViewCell {
         moreButton.style(with: .more)
         moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
         moreButton.tintColor = UIColor.darkText
-        moreButton.isHidden = true
+        moreButton.isHidden = false
         return moreButton
     }()
 
@@ -160,10 +160,10 @@ class BookTableViewCell: UITableViewCell {
         }
         titleLabel.text = book.title
         composerLabel.text = book.composer
-        moreButton.isHidden = false
     }
     
     public func configure(book: Book, pageNumber: Int) {
+        self.book = book
         DispatchQueue.main.async {
             if let url = URL(string: book.thumbnail) {
                 self.image.kf_setImage(url: url) { _ in
@@ -179,7 +179,6 @@ class BookTableViewCell: UITableViewCell {
         composerLabel.text = book.composer
         pageLabel.isHidden = false
         pageLabel.text = "Đã đọc \(pageNumber) trang"
-        moreButton.isHidden = true
     }
     
     @objc func moreButtonTapped() {
@@ -187,11 +186,57 @@ class BookTableViewCell: UITableViewCell {
         alert.view.tintColor = UIColor.color(with: .darkColor)
         alert.popoverPresentationController?.permittedArrowDirections = []
 
-        let favouritesAction = UIAlertAction(title: "Xóa khỏi Yêu thích", style: .default) { action in
-            let bookViewModel = BookViewModel()
-            bookViewModel.removeFavorite(bookId: self.book.id, userId: EpubReaderHelper.shared.user.id)
+        if Utilities.shared.isFavorited(bookId: self.book.id) {
+            let favouritesAction = UIAlertAction(title: "Xóa khỏi Yêu thích", style: .default) { action in
+                let bookViewModel = BookViewModel()
+                bookViewModel.removeFavorite(bookId: self.book.id, userId: EpubReaderHelper.shared.user.id) { success in
+                    BannerNotification.removedFromFavourites.present()
+                }
+            }
+            alert.addAction(favouritesAction)
+        } else {
+            let favouritesAction = UIAlertAction(title: "Thêm vào Yêu thích", style: .default) { action in
+                let bookViewModel = BookViewModel()
+                bookViewModel.putToFavorites(book: self.book, userId: EpubReaderHelper.shared.user.id) { success in
+                    BannerNotification.addedToFavourites.present()
+                }
+            }
+            alert.addAction(favouritesAction)
         }
-        alert.addAction(favouritesAction)
+    
+        if let bookUrl = URL(string: self.book.epub_source), pageLabel.isHidden {
+            let fileName = bookUrl.lastPathComponent
+            let path: String = Utilities.shared.getFileExist(fileName: fileName)
+            if path != "" {
+                let downloadAction = UIAlertAction(title: "Xóa sách", style: .default) { action in
+                    try? FileManager.default.removeItem(atPath: path)
+                    DispatchQueue.main.async {
+                        BannerNotification.downloadDeleted(title: self.book.title).present()
+                    }
+                }
+                alert.addAction(downloadAction)
+            } else {
+                let downloadAction = UIAlertAction(title: "Tải sách", style: .default) { action in
+                    if !Reachability.shared.isConnectedToNetwork {
+                        Utilities.shared.noConnectionAlert()
+                        return
+                    }
+                    if !self.book.epub_source.contains("http") {
+                        Utilities.shared.showAlertDialog(title: "", message: "Không thể tải, đã xảy ra lỗi!")
+                    } else {
+                        ApiWebService.shared.downloadFile(url: bookUrl) { success in
+                            print("download")
+                            if success {
+                                DispatchQueue.main.async {
+                                    BannerNotification.downloadSuccessful(title: self.book.title).present()
+                                }
+                            }
+                        }
+                    }
+                }
+                alert.addAction(downloadAction)
+            }
+        }
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addAction(cancelAction)
