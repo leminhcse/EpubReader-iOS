@@ -82,7 +82,6 @@ class Utilities: NSObject {
         let docDir = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
         let filePath = docDir.appendingPathComponent(fileName)
         do {
-            //try FileManager.default.removeItem(at: filePath.absoluteString)
             try FileManager.default.removeItem(atPath: filePath.absoluteString)
             print("File deleted")
             return true
@@ -103,7 +102,7 @@ class Utilities: NSObject {
             if let topController = UIApplication.topViewController() {
                 if let navigationController = topController.navigationController {
                     let errorMessage = Reachability.shared.connectivity.status.errorMessage
-                    let message = Message(title: errorMessage, backgroundColor: UIColor.lightGray.withAlphaComponent(0.9))
+                    //let message = Message(title: errorMessage, backgroundColor: UIColor.lightGray.withAlphaComponent(0.9))
                     
                     self.isNoInternetDisplaying = true
                     //Whisper.show(whisper: message, to: navigationController, action: .present)
@@ -113,14 +112,23 @@ class Utilities: NSObject {
                     })
                 }
                 else {
-//                    let banner = BannerNotification.noInternetConnection.banner
-//                    banner.didDismissBlock = { () -> Void in
-//                        self.isNoInternetDisplaying = false
-//                    }
-//                    self.isNoInternetDisplaying = true
-//                    banner.show(duration: 5.0)
+                    let banner = BannerNotification.noInternetConnection.banner
+                    banner.didDismissBlock = { () -> Void in
+                        self.isNoInternetDisplaying = false
+                    }
+                    self.isNoInternetDisplaying = true
+                    banner.show(duration: 5.0)
                 }
             }
+        }
+    }
+    
+    func showAlertDialog(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel)
+        alert.addAction(action)
+        DispatchQueue.main.async {
+            UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
         }
     }
 

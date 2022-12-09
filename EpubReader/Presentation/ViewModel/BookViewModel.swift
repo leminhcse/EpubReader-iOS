@@ -111,23 +111,43 @@ class BookViewModel: NSObject {
             .disposed(by: disposeBag)
     }
     
-    func putToFavorites(book: Book, userId: String) {
+    func putToFavorites(book: Book, userId: String, completion: ((Bool) -> Void)? = nil) {
+        if !Reachability.shared.isConnectedToNetwork {
+            Utilities.shared.noConnectionAlert()
+            completion?(false)
+            return
+        }
+        
+        EpubReaderHelper.shared.favoritedBooks.append(book)
         let parameters = ["bookId": book.id,
                           "userId": userId]
         AF.request(addFavoriteUrl, parameters: parameters).response { response in
             let success = response.response?.statusCode
             if success == 200 {
                 print("Add success")
-                EpubReaderHelper.shared.favoritedBooks.append(book)
                 PersistenceHelper.saveData(object: EpubReaderHelper.shared.favoritedBooks, key: "favoritedBook")
                 NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification), object: nil)
+                completion?(true)
             } else {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.AddFavoriteFailedNotification), object: nil)
+                if Utilities.shared.isFavorited(bookId: book.id) {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification), object: nil)
+                    completion?(true)
+                } else {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.AddFavoriteFailedNotification), object: nil)
+                    completion?(false)
+                }
             }
         }
     }
     
-    func removeFavorite(bookId: String, userId: String) {
+    func removeFavorite(bookId: String, userId: String, completion: ((Bool) -> Void)? = nil) {
+        if !Reachability.shared.isConnectedToNetwork {
+            Utilities.shared.noConnectionAlert()
+            completion?(false)
+            return
+        }
+        
+        EpubReaderHelper.shared.favoritedBooks.removeAll{ $0.id == bookId }
         let parameters = ["bookId": bookId,
                           "userId": userId]
         AF.request(removeFavotireUrl, parameters: parameters).response { response in
@@ -137,8 +157,15 @@ class BookViewModel: NSObject {
                 EpubReaderHelper.shared.favoritedBooks.removeAll{ $0.id == bookId }
                 PersistenceHelper.saveData(object: EpubReaderHelper.shared.favoritedBooks, key: "favoritedBook")
                 NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification), object: nil)
+                completion?(true)
             } else {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveFavoriteFailedNotification), object: nil)
+                if !Utilities.shared.isFavorited(bookId: bookId) {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification), object: nil)
+                    completion?(true)
+                } else {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveFavoriteFailedNotification), object: nil)
+                    completion?(false)
+                }
             }
         }
     }

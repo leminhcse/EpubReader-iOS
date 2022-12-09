@@ -554,13 +554,6 @@ class BookDetailViewController: UIViewController {
         }
     }
     
-    private func showAlertDialog(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel)
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
-    }
-    
     private func segmentChanged(segmentControl: UISegmentedControl) {
         if segmentControl.selectedSegmentIndex == 0 {
             self.audioCollectionView.isHidden = true
@@ -605,9 +598,17 @@ class BookDetailViewController: UIViewController {
     @objc func favoriteButtonTapped() {
         let id = EpubReaderHelper.shared.user.id
         if Utilities.shared.isFavorited(bookId: book.id) {
-            bookViewModel.removeFavorite(bookId: book.id, userId: id)
+            bookViewModel.removeFavorite(bookId: book.id, userId: id) { success in
+                if success {
+                    BannerNotification.removedFromFavourites.present()
+                }
+            }
         } else {
-            bookViewModel.putToFavorites(book: book, userId: id)
+            bookViewModel.putToFavorites(book: book, userId: id) { success in
+                if success {
+                    BannerNotification.addedToFavourites.present()
+                }
+            }
         }
     }
     
@@ -618,15 +619,26 @@ class BookDetailViewController: UIViewController {
             if path != "" {
                 self.open(path: path)
             } else {
-                ApiWebService.shared.downloadFile(url: url) { success in
-                    print("download")
-                    DispatchQueue.main.async {
-                        self.setStatusButton()
+                if !Reachability.shared.isConnectedToNetwork {
+                    Utilities.shared.noConnectionAlert()
+                    return
+                }
+                if !book.epub_source.contains("http") {
+                    Utilities.shared.showAlertDialog(title: "", message: "Không thể tải, đã xảy ra lỗi!")
+                } else {
+                    ApiWebService.shared.downloadFile(url: url) { success in
+                        print("download")
+                        if success {
+                            DispatchQueue.main.async {
+                                self.setStatusButton()
+                                BannerNotification.downloadSuccessful(title: self.book.title).present()
+                            }
+                        }
                     }
                 }
             }
         } else {
-            showAlertDialog(title: "", message: "Sorry, this book is comming soon")
+            Utilities.shared.showAlertDialog(title: "", message: "Sorry, this book is comming soon")
         }
     }
     
@@ -683,7 +695,7 @@ extension BookDetailViewController: UICollectionViewDataSource, UICollectionView
             self.showFullScreenAudio()
             self.handleShowMiniPlayer()
         } else {
-            showAlertDialog(title: "", message: "Sorry, this audio is comming soon")
+            Utilities.shared.showAlertDialog(title: "", message: "Sorry, this audio is comming soon")
         }
     }
     

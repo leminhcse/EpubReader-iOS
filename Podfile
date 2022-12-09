@@ -18,6 +18,7 @@ target 'EpubReader' do
   pod 'GoogleSignIn'
   pod 'FBSDKCoreKit'
   pod 'FBSDKLoginKit'
+  pod 'VisualEffectView', '4.1.3'
   pod 'FolioReaderKit', path: '../'
 
   # Pods for EpubReader
