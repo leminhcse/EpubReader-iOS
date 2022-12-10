@@ -170,6 +170,7 @@ class AudioResourceCell: UICollectionViewCell {
                 let deleteAction = UIAlertAction(title: "Có", style: .default, handler: { (action) in
                     try? FileManager.default.removeItem(atPath: itemPath)
                     self.progressDownloadView.status = .notDownloaded
+                    BannerNotification.downloadDeleted(title: title).present()
                 })
                 let cancelAction = UIAlertAction(title: "Không", style: .cancel)
                 
