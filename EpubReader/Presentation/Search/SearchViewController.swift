@@ -16,20 +16,13 @@ class SearchViewController: BaseViewController {
     private var bookViewModel = BookViewModel()
     
     // MARK: - UI Controls
-    private lazy var searchView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        return view
-    }()
-    
-    private lazy var searchController: UISearchController = {
-        let sb = UISearchController()
-        sb.searchBar.placeholder = "Tìm sách"
-        sb.searchBar.searchBarStyle = .default
-        sb.searchBar.tintColor = .white
-        sb.searchBar.layer.borderWidth = 2
-        sb.searchBar.layer.borderColor = UIColor.clear.cgColor
-        return sb
+    private lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.showsCancelButton = true
+        searchBar.searchBarStyle = .default
+        searchBar.placeholder = " Tìm sách....."
+        searchBar.sizeToFit()
+        return searchBar
     }()
     
     private lazy var bookTableView: UITableView = {
@@ -51,26 +44,12 @@ class SearchViewController: BaseViewController {
         self.title = "Tìm Kiếm".uppercased()
         self.view.backgroundColor = UIColor.white
         
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.tintColor = UIColor.orange
-        searchController.searchBar.barTintColor = UIColor.white
-        
-        searchView.addSubview(searchController.searchBar)
-        searchController.delegate = self
-        
-        //bookTableView.backgroundColor = UIColor.white
         bookTableView.delegate = self
         bookTableView.dataSource = self
+        searchBar.delegate = self
         
-        self.view.addSubview(searchView)
+        self.view.addSubview(searchBar)
         self.view.addSubview(bookTableView)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.view.backgroundColor = UIColor.white
     }
     
     override func viewDidLayoutSubviews() {
@@ -83,7 +62,7 @@ class SearchViewController: BaseViewController {
         let safeAreaTop = self.view.safeAreaInsets.top
         let searchTop = safeAreaTop
         
-        searchView.snp.makeConstraints { (make) in
+        searchBar.snp.makeConstraints { (make) in
             make.top.equalTo(searchTop)
             make.height.equalTo(56)
             make.leading.equalToSuperview()
@@ -91,7 +70,7 @@ class SearchViewController: BaseViewController {
         }
         
         bookTableView.snp.makeConstraints { (make) in
-            make.top.equalTo(searchView.snp.bottom).offset(12)
+            make.top.equalTo(searchBar.snp.bottom).offset(12)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.size.equalTo(CGSize(width: frameWidth, height: frameHeight))
@@ -100,12 +79,17 @@ class SearchViewController: BaseViewController {
 }
 
 //MARK: - Extension with UISearchBarDelegate, UISearchControllerDelegate
-extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
+extension SearchViewController: UISearchBarDelegate {
     
-    func updateSearchResults(for searchController: UISearchController) {
-        guard let searchText = searchController.searchBar.text else {
-            return
-        }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        print("Cancel search")
+        self.searchBar.text = ""
+        self.searchResults.removeAll()
+        self.bookTableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print("Key search is: \(searchText)")
         if searchText != "" {
             bookViewModel.getResultSearch(keySearch: searchText) { success in
                 if success == true {
@@ -115,18 +99,10 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
                 }
             }
         } else {
-            //self.searchResults.removeAll()
-            //self.bookTableView.isHidden = true
+            print("clear search")
+            self.searchResults.removeAll()
+            self.bookTableView.reloadData()
         }
-    }
-       
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        //self.searchResults.removeAll()
-        //self.bookTableView.isHidden = true
-    }
-   
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-       // Click on search button on keyboard
     }
 }
 

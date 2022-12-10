@@ -42,7 +42,7 @@ enum BannerNotification {
     
     private var subtitle: String? {
         switch self {
-        case .downloadSuccessful(let title): return "\("Đã tải sách") \(title) \("thành công!")"
+        case .downloadSuccessful(let title): return "\("Đã tải ") \(title) \("thành công!")"
         case .downloadDeleted(let title): return "\(title) \("đã được xóa! ")"
         case .addedToMyList: return "\("Successfully added to")"
         case .removedFromMyList: return "\("Removed from")"
@@ -56,21 +56,4 @@ enum BannerNotification {
     private var backgroundColor: UIColor {
         UIColor.color(with: .backgroudTransparent).withAlphaComponent(0.8)
     }
-    
 }
-//    private var image: UIImage? {
-//        var image: UIImage?
-//
-//        switch self {
-//        case .downloadSuccessful: image = UIImage(named: "tick_icon")
-//        case .downloadDeleted: image = UIImage(named: "cross_icon")
-//        case .addedToMyList: image = UIImage(named: "tick_icon")
-//        case .removedFromMyList: image = UIImage(named: "cross_icon")
-//        case .addedToFavourites: image = UIImage(named: "tick_icon")
-//        case .removedFromFavourites: image = UIImage(named: "cross_icon")
-//        case .noInternetConnection: image = UIImage(named: "no_wifi_icon")
-//        case .notLoggedIn: image = UIImage(named: "cross_icon")
-//        }
-//
-//        return image?.withRenderingMode(.alwaysTemplate)
-//    }

@@ -145,7 +145,7 @@ class BookTableViewCell: UITableViewCell {
         }
     }
     
-    public func configure(book: Book) {
+    public func configure(book: Book, pageNumber: Int? = nil) {
         self.book = book
         DispatchQueue.main.async {
             if let url = URL(string: book.thumbnail) {
@@ -160,25 +160,11 @@ class BookTableViewCell: UITableViewCell {
         }
         titleLabel.text = book.title
         composerLabel.text = book.composer
-    }
-    
-    public func configure(book: Book, pageNumber: Int) {
-        self.book = book
-        DispatchQueue.main.async {
-            if let url = URL(string: book.thumbnail) {
-                self.image.kf_setImage(url: url) { _ in
-                    let imageWidth = self.image.image?.size.width ?? 0
-                    let imageHeight = self.image.image?.size.height ?? 0
-                    if imageHeight > imageWidth {
-                        self.image.backgroundColor = .clear
-                    }
-                }
-            }
+        
+        if pageNumber != nil {
+            pageLabel.isHidden = false
+            pageLabel.text = "Đã đọc \(pageNumber ?? 1) trang"
         }
-        titleLabel.text = book.title
-        composerLabel.text = book.composer
-        pageLabel.isHidden = false
-        pageLabel.text = "Đã đọc \(pageNumber) trang"
     }
     
     @objc func moreButtonTapped() {
@@ -229,6 +215,10 @@ class BookTableViewCell: UITableViewCell {
                             if success {
                                 DispatchQueue.main.async {
                                     BannerNotification.downloadSuccessful(title: self.book.title).present()
+                                }
+                            } else {
+                                DispatchQueue.main.async {
+                                    Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
                                 }
                             }
                         }

@@ -633,6 +633,11 @@ class BookDetailViewController: UIViewController {
                                 self.setStatusButton()
                                 BannerNotification.downloadSuccessful(title: self.book.title).present()
                             }
+                        } else {
+                            DispatchQueue.main.async {
+                                self.setStatusButton()
+                                Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
+                            }
                         }
                     }
                 }
