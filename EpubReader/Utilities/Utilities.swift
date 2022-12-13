@@ -131,6 +131,31 @@ class Utilities: NSObject {
             UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
         }
     }
+    
+    func openAudioPlayer(audio: Audio, thumbnail: String) {
+        AudioPlayer.shared.sound = nil
+        AudioPlayer.shared.play(audio: audio, thumbnail: thumbnail)
+        AudioPlayer.shared.isPaused = false
+    }
+    
+    func showFullScreenAudio() {
+        let viewController = FullScreenAudioPlayerViewController()
+        if (UI_USER_INTERFACE_IDIOM() == .phone) {
+            let value = NSNumber(value: UIInterfaceOrientation.portrait.rawValue)
+            UIDevice.current.setValue(value, forKey: "orientation")
+        }
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        if let tabBar = appDelegate.window?.rootViewController as? UITabBarController {
+            DispatchQueue.main.async {
+                tabBar.present(viewController, animated: true, completion: nil)
+            }
+        } else if let topController = UIApplication.topViewController() {
+            DispatchQueue.main.async {
+                topController.present(viewController, animated: true, completion: nil)
+            }
+        }
+    }
 
     func isFacebookSignedIn() -> Bool {
         let accessToken = AccessToken.current

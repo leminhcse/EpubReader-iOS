@@ -170,6 +170,8 @@ class AudioResourceCell: UICollectionViewCell {
                 let deleteAction = UIAlertAction(title: "Có", style: .default, handler: { (action) in
                     try? FileManager.default.removeItem(atPath: itemPath)
                     self.progressDownloadView.status = .notDownloaded
+                    EpubReaderHelper.shared.downloadAudio.removeAll(where: {$0.id == self.audio?.id})
+                    PersistenceHelper.saveAudioData(object: EpubReaderHelper.shared.downloadAudio, key: "downloadAudio")
                     BannerNotification.downloadDeleted(title: title).present()
                 })
                 let cancelAction = UIAlertAction(title: "Không", style: .cancel)

@@ -530,30 +530,6 @@ class BookDetailViewController: UIViewController {
         folioReader.presentReader(parentViewController: self, withEpubPath: path, andConfig: config)
     }
     
-    private func openAudioPlayer(audio: Audio) {
-        AudioPlayer.shared.sound = nil
-        AudioPlayer.shared.play(audio: audio, thumbnail: book.thumbnail)
-        AudioPlayer.shared.isPaused = false
-    }
-    
-    private func showFullScreenAudio() {
-        let viewController = FullScreenAudioPlayerViewController()
-        if (UI_USER_INTERFACE_IDIOM() == .phone) {
-            let value = NSNumber(value: UIInterfaceOrientation.portrait.rawValue)
-            UIDevice.current.setValue(value, forKey: "orientation")
-        }
-        
-        if let tabBar = self.tabBarController {
-            DispatchQueue.main.async {
-                tabBar.present(viewController, animated: true, completion: nil)
-            }
-        } else if let topController = UIApplication.topViewController() {
-            DispatchQueue.main.async {
-                topController.present(viewController, animated: true, completion: nil)
-            }
-        }
-    }
-    
     private func segmentChanged(segmentControl: UISegmentedControl) {
         if segmentControl.selectedSegmentIndex == 0 {
             self.audioCollectionView.isHidden = true
@@ -632,6 +608,8 @@ class BookDetailViewController: UIViewController {
                             DispatchQueue.main.async {
                                 self.setStatusButton()
                                 BannerNotification.downloadSuccessful(title: self.book.title).present()
+                                EpubReaderHelper.shared.downloadBooks.append(self.book)
+                                PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
                             }
                         } else {
                             DispatchQueue.main.async {
@@ -696,8 +674,8 @@ extension BookDetailViewController: UICollectionViewDataSource, UICollectionView
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let audio = self.listAudio[indexPath.row]
         if audio.fileAudio != "" {
-            self.openAudioPlayer(audio: audio)
-            self.showFullScreenAudio()
+            Utilities.shared.openAudioPlayer(audio: audio, thumbnail: book.thumbnail)
+            Utilities.shared.showFullScreenAudio()
             self.handleShowMiniPlayer()
         } else {
             Utilities.shared.showAlertDialog(title: "", message: "Sorry, this audio is comming soon")
