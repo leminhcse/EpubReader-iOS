@@ -58,6 +58,8 @@ class ApiWebService {
             print("download audio finish!")
             if success {
                 print("download success!")
+                EpubReaderHelper.shared.downloadAudio.append(audio)
+                PersistenceHelper.saveAudioData(object: EpubReaderHelper.shared.downloadAudio, key: "downloadAudio")
                 BannerNotification.downloadSuccessful(title: audio.title).present()
             } else {
                 print("download success!")

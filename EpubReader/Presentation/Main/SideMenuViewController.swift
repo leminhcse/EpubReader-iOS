@@ -15,7 +15,7 @@ class SideMenuViewController: BaseViewController {
     var buttonViewCloseTouch: UIButton!
     var ratiowidth: CGFloat = 0.815
     
-    private let listMenu = ["Profile", "Danh sách download", "Về Chúng Tôi", "Đánh Gía", "Tắt Quảng Cáo", "Hẹn Giờ"]
+    private let listMenu = ["Profile", "Book Downloads", "Audio Downloads", "Về Chúng Tôi", "Đánh Gía", "Tắt Quảng Cáo", "Hẹn Giờ"]
     
     // MARK: UIViewController - LIFE CYCLE
     override func viewDidLoad() {
@@ -131,18 +131,24 @@ extension SideMenuViewController: UITableViewDelegate, UITableViewDataSource {
             self.navigationController?.pushViewController(viewController, animated: true)
             break
         case self.listMenu[1]:
+            let viewController = BookDownloadsViewController()
+            self.navigationController?.pushViewController(viewController, animated: true)
             break
         case self.listMenu[2]:
-            let viewController = AboutViewController()
+            let viewController = AudioDownloadsViewController()
             self.navigationController?.pushViewController(viewController, animated: true)
             break
         case self.listMenu[3]:
+            let viewController = AboutViewController()
+            self.navigationController?.pushViewController(viewController, animated: true)
             break
         case self.listMenu[4]:
+            break
+        case self.listMenu[5]:
             let viewController = DisableAdsViewController()
             self.navigationController?.pushViewController(viewController, animated: true)
             break
-        case self.listMenu[5]:
+        case self.listMenu[6]:
             break
         default:
             break

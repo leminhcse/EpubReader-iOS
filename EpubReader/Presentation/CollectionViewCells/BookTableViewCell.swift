@@ -11,6 +11,7 @@ import SnapKit
 class BookTableViewCell: UITableViewCell {
     
     private var book: Book!
+    private var audio: Audio!
     
     private lazy var image: UIImageView = {
         let image = UIImageView()
@@ -167,6 +168,31 @@ class BookTableViewCell: UITableViewCell {
         }
     }
     
+    public func configureAudio(audio: Audio) {
+        self.audio = audio
+        var thumbnail = ""
+        var composer = ""
+        for book in EpubReaderHelper.shared.books {
+            if audio.book_id == book.id {
+                thumbnail = book.thumbnail
+                composer = book.composer
+            }
+        }
+        DispatchQueue.main.async {
+            if let url = URL(string: thumbnail) {
+                self.image.kf_setImage(url: url) { _ in
+                    let imageWidth = self.image.image?.size.width ?? 0
+                    let imageHeight = self.image.image?.size.height ?? 0
+                    if imageHeight > imageWidth {
+                        self.image.backgroundColor = .clear
+                    }
+                }
+            }
+        }
+        titleLabel.text = audio.title
+        composerLabel.text = composer
+    }
+    
     @objc func moreButtonTapped() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.view.tintColor = UIColor.color(with: .darkColor)
@@ -198,6 +224,8 @@ class BookTableViewCell: UITableViewCell {
                     try? FileManager.default.removeItem(atPath: path)
                     DispatchQueue.main.async {
                         BannerNotification.downloadDeleted(title: self.book.title).present()
+                        EpubReaderHelper.shared.downloadBooks.removeAll(where: { $0.id == self.book.id})
+                        PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
                     }
                 }
                 alert.addAction(downloadAction)
@@ -215,6 +243,8 @@ class BookTableViewCell: UITableViewCell {
                             if success {
                                 DispatchQueue.main.async {
                                     BannerNotification.downloadSuccessful(title: self.book.title).present()
+                                    EpubReaderHelper.shared.downloadBooks.append(self.book)
+                                    PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
                                 }
                             } else {
                                 DispatchQueue.main.async {
@@ -230,6 +260,6 @@ class BookTableViewCell: UITableViewCell {
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addAction(cancelAction)
-        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+        UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
     }
 }

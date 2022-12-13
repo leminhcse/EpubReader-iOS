@@ -47,6 +47,8 @@
 		046C0EB428A8AE44009849B5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046C0EB328A8AE44009849B5 /* UIApplicationExtension.swift */; };
 		046C0EB628A8BAE1009849B5 /* ebook_example.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 046C0EB528A8BAE1009849B5 /* ebook_example.jpeg */; };
 		0471FA8028B3D529009656E7 /* UIScreenExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0471FA7F28B3D529009656E7 /* UIScreenExtensions.swift */; };
+		0473513A29461BA2004B9A33 /* BookDownloadsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0473513929461BA2004B9A33 /* BookDownloadsViewController.swift */; };
+		0473513C29463727004B9A33 /* AudioDownloadsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0473513B29463727004B9A33 /* AudioDownloadsViewController.swift */; };
 		04785B7328E6E456009CD72C /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04785B7228E6E456009CD72C /* UserViewModel.swift */; };
 		04856C1728E6050C00426B6C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04856C1628E6050C00426B6C /* User.swift */; };
 		048FDBB128CC9A770080509B /* CultureHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048FDBB028CC9A770080509B /* CultureHistoryViewController.swift */; };
@@ -180,6 +182,8 @@
 		046C0EB328A8AE44009849B5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		046C0EB528A8BAE1009849B5 /* ebook_example.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ebook_example.jpeg; sourceTree = "<group>"; };
 		0471FA7F28B3D529009656E7 /* UIScreenExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtensions.swift; sourceTree = "<group>"; };
+		0473513929461BA2004B9A33 /* BookDownloadsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDownloadsViewController.swift; sourceTree = "<group>"; };
+		0473513B29463727004B9A33 /* AudioDownloadsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDownloadsViewController.swift; sourceTree = "<group>"; };
 		04785B7228E6E456009CD72C /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		04856C1628E6050C00426B6C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		048FDBB028CC9A770080509B /* CultureHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CultureHistoryViewController.swift; sourceTree = "<group>"; };
@@ -500,6 +504,8 @@
 				04C79DAA28E0C4FA00593DFD /* ProfileViewController.swift */,
 				04C79DAC28E0C58400593DFD /* AboutViewController.swift */,
 				04C79DAE28E0C6D600593DFD /* DisableAdsViewController.swift */,
+				0473513929461BA2004B9A33 /* BookDownloadsViewController.swift */,
+				0473513B29463727004B9A33 /* AudioDownloadsViewController.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -994,6 +1000,7 @@
 				04C79DA928E0A24400593DFD /* MenuTableViewCell.swift in Sources */,
 				FA349DE6284B6490005047DC /* SkillsViewController.swift in Sources */,
 				04CC80D3288DAB4700D53C0C /* FileDownloadInfo.swift in Sources */,
+				0473513A29461BA2004B9A33 /* BookDownloadsViewController.swift in Sources */,
 				041457A929195653008CD627 /* Utils.swift in Sources */,
 				FAC51FCA283FC97B0016889F /* UIColorExtensions.swift in Sources */,
 				04ECD19228B7E1AC00DAA295 /* AudioViewController.swift in Sources */,
@@ -1057,6 +1064,7 @@
 				FAB7F4B6284CC90800A16974 /* UIDeviceExtensions.swift in Sources */,
 				048FDBB528CC9AE20080509B /* HealthViewController.swift in Sources */,
 				04B21A412941EADE00499FF9 /* Banner.swift in Sources */,
+				0473513C29463727004B9A33 /* AudioDownloadsViewController.swift in Sources */,
 				041457A5291951D0008CD627 /* ScrollUISegmentController.swift in Sources */,
 				FA9D0C3C28637B7800E667AD /* Constants.swift in Sources */,
 			);

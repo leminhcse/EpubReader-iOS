@@ -26,6 +26,7 @@ class BookViewModel: NSObject {
         self.listBook.removeAll()
         if let data = PersistenceHelper.loadData(key: "Books") as? [Book] {
             self.listBook = Utilities.shared.importBookList(books: data)
+            EpubReaderHelper.shared.books = self.listBook
             NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification), object: nil)
         } else {
             ApiWebService.shared.getBooks()
@@ -34,6 +35,7 @@ class BookViewModel: NSObject {
                     if bookList.count > 0 {
                         PersistenceHelper.saveData(object: bookList, key: "Books")
                         self.listBook = Utilities.shared.importBookList(books: bookList)
+                        EpubReaderHelper.shared.books = self.listBook
                         NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification), object: nil)
                     }
                 }, onError: { error in
