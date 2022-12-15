@@ -25,6 +25,13 @@
 	<string>1963913180485926</string>
 	<key>FacebookClientToken</key>
 	<string>1985ff27247b07e4813dbf54269486c5</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
