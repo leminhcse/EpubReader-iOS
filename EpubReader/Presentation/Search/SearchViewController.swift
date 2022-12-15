@@ -15,6 +15,9 @@ class SearchViewController: BaseViewController {
     private var searchResults: [Book] = []
     private var bookViewModel = BookViewModel()
     
+    var keyboardActive = false
+    var keyboardHeight: CGFloat!
+    
     // MARK: - UI Controls
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -41,6 +44,21 @@ class SearchViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self,selector: #selector(keyboardWillShow(_:)),
+                                               name:UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)),
+                                               name:UIResponder.keyboardWillHideNotification, object: nil)
+        
+        setupUI()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupConstraint()
+    }
+    
+    // MARK: Setup UI
+    private func setupUI() {
         self.title = "Tìm Kiếm".uppercased()
         self.view.backgroundColor = UIColor.white
         
@@ -50,14 +68,12 @@ class SearchViewController: BaseViewController {
         
         self.view.addSubview(searchBar)
         self.view.addSubview(bookTableView)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        setupConstraint()
-    }
-    
-    // MARK: Setup UI
     private func setupConstraint() {
         let safeAreaTop = self.view.safeAreaInsets.top
         let searchTop = safeAreaTop
@@ -75,6 +91,37 @@ class SearchViewController: BaseViewController {
             make.trailing.equalToSuperview()
             make.size.equalTo(CGSize(width: frameWidth, height: frameHeight))
         }
+    }
+    
+    @objc func dismissKeyboard() {
+        keyboardActive = false
+        self.view.endEditing(true)
+    }
+
+    @objc func keyboardWillShow(_ notification: NSNotification) {
+        guard self.view.frame.origin.y >= 0 else {
+            return
+        }
+        print("keyboard will show")
+        keyboardHeight = CGFloat(0)
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            keyboardHeight = keyboardSize.height
+            print("Keyboard height is \(String(describing: keyboardHeight))")
+        }
+        keyboardActive = true
+        self.view.setNeedsLayout()
+        self.view.layoutIfNeeded()
+    }
+
+    @objc func keyboardWillHide(_ notification: NSNotification) {
+        print("keyboard will hide")
+        keyboardActive = false
+        keyboardHeight = 0
+        self.searchBar.snp.removeConstraints()
+        self.bookTableView.snp.removeConstraints()
+        self.view.setNeedsLayout()
+        self.view.layoutIfNeeded()
+        self.bookTableView.resignFirstResponder()
     }
 }
 

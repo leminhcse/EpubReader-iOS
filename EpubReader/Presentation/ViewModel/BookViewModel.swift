@@ -22,12 +22,13 @@ class BookViewModel: NSObject {
         super.init()
     }
     
-    func getBookList() {
+    func getBookList(completion: ((Bool) -> Void)? = nil) {
         self.listBook.removeAll()
         if let data = PersistenceHelper.loadData(key: "Books") as? [Book] {
             self.listBook = Utilities.shared.importBookList(books: data)
             EpubReaderHelper.shared.books = self.listBook
             NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification), object: nil)
+            completion?(true)
         } else {
             ApiWebService.shared.getBooks()
                 .observe(on: MainScheduler.instance)
@@ -37,16 +38,21 @@ class BookViewModel: NSObject {
                         self.listBook = Utilities.shared.importBookList(books: bookList)
                         EpubReaderHelper.shared.books = self.listBook
                         NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification), object: nil)
+                        completion?(true)
                     }
                 }, onError: { error in
                     switch error {
                     case ApiError.conflict:
                         print("Conflict error")
+                        completion?(false)
                     case ApiError.forbidden:
                         print("Forbidden error")
+                        completion?(false)
                     case ApiError.notFound:
                         print("Not found error")
+                        completion?(false)
                     default:
+                        completion?(false)
                         print("Unknown error:", error)
                     }
                 })

@@ -101,7 +101,7 @@ class Utilities: NSObject {
         
             if let topController = UIApplication.topViewController() {
                 if let navigationController = topController.navigationController {
-                    let errorMessage = Reachability.shared.connectivity.status.errorMessage
+                    _ = Reachability.shared.connectivity.status.errorMessage
                     //let message = Message(title: errorMessage, backgroundColor: UIColor.lightGray.withAlphaComponent(0.9))
                     
                     self.isNoInternetDisplaying = true
@@ -145,12 +145,7 @@ class Utilities: NSObject {
             UIDevice.current.setValue(value, forKey: "orientation")
         }
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        if let tabBar = appDelegate.window?.rootViewController as? UITabBarController {
-            DispatchQueue.main.async {
-                tabBar.present(viewController, animated: true, completion: nil)
-            }
-        } else if let topController = UIApplication.topViewController() {
+        if let topController = UIApplication.topViewController() {
             DispatchQueue.main.async {
                 topController.present(viewController, animated: true, completion: nil)
             }
