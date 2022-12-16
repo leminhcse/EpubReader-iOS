@@ -49,6 +49,10 @@ class SplashViewController: UIViewController {
         
         self.activityIndicator.startAnimating()
         
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: "Books")
+        defaults.synchronize()
+        
         bookViewModel.getBookList() { success in
             if success {
                 self.setupView()
