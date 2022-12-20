@@ -15,8 +15,8 @@ class BookViewModel: NSObject {
     var resultSearch = [Book]()
     
     private let disposeBag = DisposeBag()
-    private let addFavoriteUrl = "http://minhhdmbp152019/PHP_API/addToFavorite.php"
-    private let removeFavotireUrl = "http://minhhdmbp152019/PHP_API/removeFavorite.php"
+    private let addFavoriteUrl = "https://minhdev2006.com/PHP_API/addToFavorite.php"
+    private let removeFavotireUrl = "https://minhdev2006.com/PHP_API/removeFavorite.php"
     
     override init() {
         super.init()

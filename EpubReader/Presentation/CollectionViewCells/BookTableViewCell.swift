@@ -195,67 +195,87 @@ class BookTableViewCell: UITableViewCell {
     
     @objc func moreButtonTapped() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.view.tintColor = UIColor.color(with: .darkColor)
+        if #available(iOS 13.0, *) {
+            alert.view.tintColor = UIColor.primaryTextColor(traitCollection: UITraitCollection.current)
+        } else {
+            alert.view.tintColor = UIColor.color(with: .primaryItem)
+        }
         alert.popoverPresentationController?.permittedArrowDirections = []
 
-        if Utilities.shared.isFavorited(bookId: self.book.id) {
-            let favouritesAction = UIAlertAction(title: "Xóa khỏi Yêu thích", style: .default) { action in
-                let bookViewModel = BookViewModel()
-                bookViewModel.removeFavorite(bookId: self.book.id, userId: EpubReaderHelper.shared.user.id) { success in
-                    BannerNotification.removedFromFavourites.present()
-                }
-            }
-            alert.addAction(favouritesAction)
-        } else {
-            let favouritesAction = UIAlertAction(title: "Thêm vào Yêu thích", style: .default) { action in
-                let bookViewModel = BookViewModel()
-                bookViewModel.putToFavorites(book: self.book, userId: EpubReaderHelper.shared.user.id) { success in
-                    BannerNotification.addedToFavourites.present()
-                }
-            }
-            alert.addAction(favouritesAction)
-        }
-    
-        if let bookUrl = URL(string: self.book.epub_source), pageLabel.isHidden {
-            let fileName = bookUrl.lastPathComponent
-            let path: String = Utilities.shared.getFileExist(fileName: fileName)
-            if path != "" {
-                let downloadAction = UIAlertAction(title: "Xóa sách", style: .default) { action in
-                    try? FileManager.default.removeItem(atPath: path)
-                    DispatchQueue.main.async {
-                        BannerNotification.downloadDeleted(title: self.book.title).present()
-                        EpubReaderHelper.shared.downloadBooks.removeAll(where: { $0.id == self.book.id})
-                        PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+        if self.book != nil {
+            if Utilities.shared.isFavorited(bookId: self.book.id) {
+                let favouritesAction = UIAlertAction(title: "Xóa khỏi Yêu thích", style: .default) { action in
+                    let bookViewModel = BookViewModel()
+                    bookViewModel.removeFavorite(bookId: self.book.id, userId: EpubReaderHelper.shared.user.id) { success in
+                        BannerNotification.removedFromFavourites.present()
                     }
                 }
-                alert.addAction(downloadAction)
+                alert.addAction(favouritesAction)
             } else {
-                let downloadAction = UIAlertAction(title: "Tải sách", style: .default) { action in
-                    if !Reachability.shared.isConnectedToNetwork {
-                        Utilities.shared.noConnectionAlert()
-                        return
+                let favouritesAction = UIAlertAction(title: "Thêm vào Yêu thích", style: .default) { action in
+                    let bookViewModel = BookViewModel()
+                    bookViewModel.putToFavorites(book: self.book, userId: EpubReaderHelper.shared.user.id) { success in
+                        BannerNotification.addedToFavourites.present()
                     }
-                    if !self.book.epub_source.contains("http") {
-                        Utilities.shared.showAlertDialog(title: "", message: "Không thể tải, đã xảy ra lỗi!")
-                    } else {
-                        ApiWebService.shared.downloadFile(url: bookUrl) { success in
-                            print("download")
-                            if success {
-                                DispatchQueue.main.async {
-                                    BannerNotification.downloadSuccessful(title: self.book.title).present()
-                                    EpubReaderHelper.shared.downloadBooks.append(self.book)
-                                    PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
-                                }
-                            } else {
-                                DispatchQueue.main.async {
-                                    Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
+                }
+                alert.addAction(favouritesAction)
+            }
+        
+            if let bookUrl = URL(string: self.book.epub_source), pageLabel.isHidden {
+                let fileName = bookUrl.lastPathComponent
+                let path: String = Utilities.shared.getFileExist(fileName: fileName)
+                if path != "" {
+                    let downloadAction = UIAlertAction(title: "Xóa sách", style: .default) { action in
+                        try? FileManager.default.removeItem(atPath: path)
+                        DispatchQueue.main.async {
+                            BannerNotification.downloadDeleted(title: self.book.title).present()
+                            EpubReaderHelper.shared.downloadBooks.removeAll(where: { $0.id == self.book.id})
+                            PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveBookSuccessNotification), object: nil)
+                        }
+                    }
+                    alert.addAction(downloadAction)
+                } else {
+                    let downloadAction = UIAlertAction(title: "Tải sách", style: .default) { action in
+                        if !Reachability.shared.isConnectedToNetwork {
+                            Utilities.shared.noConnectionAlert()
+                            return
+                        }
+                        if !self.book.epub_source.contains("http") {
+                            Utilities.shared.showAlertDialog(title: "", message: "Không thể tải, đã xảy ra lỗi!")
+                        } else {
+                            ApiWebService.shared.downloadFile(url: bookUrl) { success in
+                                print("download")
+                                if success {
+                                    DispatchQueue.main.async {
+                                        BannerNotification.downloadSuccessful(title: self.book.title).present()
+                                        EpubReaderHelper.shared.downloadBooks.append(self.book)
+                                        PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+                                    }
+                                } else {
+                                    DispatchQueue.main.async {
+                                        Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
+                                    }
                                 }
                             }
                         }
                     }
+                    alert.addAction(downloadAction)
                 }
-                alert.addAction(downloadAction)
             }
+        } else if self.audio != nil {
+            let deleteAction = UIAlertAction(title: "Xóa audio", style: .default) { action in
+                if let id = self.audio?.id, let itemPath = DatabaseHelper.getFilePath(id: id), FileManager.default.fileExists(atPath: itemPath) {
+                    try? FileManager.default.removeItem(atPath: itemPath)
+                    EpubReaderHelper.shared.downloadAudio.removeAll(where: {$0.id == self.audio?.id})
+                    PersistenceHelper.saveAudioData(object: EpubReaderHelper.shared.downloadAudio, key: "downloadAudio")
+                    BannerNotification.downloadDeleted(title: self.audio.title).present()
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveAudioSuccessNotification), object: nil)
+                }
+            }
+            alert.addAction(deleteAction)
+        } else {
+            return
         }
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)

@@ -22,6 +22,8 @@ class EpubReaderHelper: NSObject {
     static let RemoveFavoriteFailedNotification = "RemoveFavoriteFailedNotification"
     static let GetReadingBookSuccessNotification = "GetReadingBookSuccessNotification"
     static let GetReadingBookFailedNotification = "GetReadingBookFailedNotification"
+    static let RemoveBookSuccessNotification = "RemoveBookSuccessNotification"
+    static let RemoveAudioSuccessNotification = "RemoveAudioSuccessNotification"
     
     var user: User!
     var books = [Book]()

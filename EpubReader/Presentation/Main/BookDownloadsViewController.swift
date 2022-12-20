@@ -47,6 +47,11 @@ class BookDownloadsViewController: BaseViewController {
         super.viewDidLoad()
         self.navigationController?.navigationBar.topItem?.title = ""
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(loadData),
+                                               name: NSNotification.Name(rawValue: EpubReaderHelper.RemoveBookSuccessNotification),
+                                               object: nil)
+        
         setupUI()
         setupConstranst()
         loadData()
@@ -79,7 +84,7 @@ class BookDownloadsViewController: BaseViewController {
     }
     
     // MARK: Handle favorite data
-    private func loadData() {
+    @objc private func loadData() {
         if EpubReaderHelper.shared.user != nil {
             downloadBooks = EpubReaderHelper.shared.downloadBooks
             if downloadBooks.count > 0 {

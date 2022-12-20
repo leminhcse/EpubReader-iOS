@@ -8,7 +8,8 @@
 struct Constants {
 
     //The API's base URL
-    static let baseUrl = "http://minhhdmbp152019/PHP_API"
+    static let baseUrl = "https://minhdev2006.com/PHP_API"
+    //"http://minhhdmbp152019/PHP_API"
     //"http://minhhdmbp152019/PHP_API/getbook.php"
     //"http://192.168.64.2/PHP_API/getbook.php"
     

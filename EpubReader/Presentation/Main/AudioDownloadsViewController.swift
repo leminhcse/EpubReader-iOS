@@ -57,6 +57,11 @@ class AudioDownloadsViewController: BaseViewController {
         super.viewDidLoad()
         self.navigationController?.navigationBar.topItem?.title = ""
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(loadData),
+                                               name: NSNotification.Name(rawValue: EpubReaderHelper.RemoveAudioSuccessNotification),
+                                               object: nil)
+        
         setupUI()
         setupConstranst()
         loadData()
@@ -118,7 +123,7 @@ class AudioDownloadsViewController: BaseViewController {
     }
     
     // MARK: Handle favorite data
-    private func loadData() {
+    @objc private func loadData() {
         if EpubReaderHelper.shared.user != nil {
             downloadAudio = EpubReaderHelper.shared.downloadAudio
             if downloadAudio.count > 0 {
