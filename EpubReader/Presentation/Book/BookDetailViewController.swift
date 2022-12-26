@@ -607,6 +607,7 @@ class BookDetailViewController: UIViewController {
                 if !book.epub_source.contains("http") {
                     Utilities.shared.showAlertDialog(title: "", message: "Không thể tải, đã xảy ra lỗi!")
                 } else {
+                    downloadButton.setTitle("Đang tải ... ", for: .normal)
                     ApiWebService.shared.downloadFile(url: url) { success in
                         print("download")
                         if success {
