@@ -9,11 +9,19 @@ import UIKit
 
 extension UIColor {
     
+    enum ColorScheme:  String {
+        case Dark = "Dark"
+        case Light = "Light"
+    }
+    
     enum ColorStyle {
         case background
         case darkColor
         case hightlight
         case backgroundFullScreenAudioPlayer
+        case primaryItem
+        case primaryElevation
+        case backgroudTransparent
         
         fileprivate var lightModeColor: UIColor {
             let color: UIColor
@@ -26,6 +34,33 @@ extension UIColor {
                 color = UIColor(hex: "#2d4170")
             case .backgroundFullScreenAudioPlayer:
                 color = UIColor(hex: "#FEFEFE")
+            case .backgroudTransparent:
+                color = UIColor(hex: "#FEFEFE")
+            case .primaryItem:
+                color = UIColor(hex: "#484848")
+            case .primaryElevation:
+                color = UIColor(hex: "#FFFFFF")
+            }
+            return color
+        }
+        
+        fileprivate var darkModeColor: UIColor {
+            let color: UIColor
+            switch self {
+            case .background:
+                color = UIColor(hex: "#2d4170")
+            case .darkColor:
+                color = UIColor(hex: "#484848")
+            case .hightlight:
+                color = UIColor(hex: "#2d4170")
+            case .backgroundFullScreenAudioPlayer:
+                color = UIColor(hex: "#FEFEFE")
+            case .backgroudTransparent:
+                color = UIColor(hex: "#FEFEFE")
+            case .primaryItem:
+                color = UIColor(hex: "#484848")
+            case .primaryElevation:
+                color = UIColor(hex: "#171717")
             }
             return color
         }
@@ -70,6 +105,26 @@ extension UIColor {
         return UIGraphicsImageRenderer(size: size).image { rendererContext in
             self.setFill()
             rendererContext.fill(CGRect(origin: .zero, size: size))
+        }
+    }
+    
+    static func color(with style: ColorStyle, colorScheme: ColorScheme? = nil) -> UIColor {
+        if colorScheme == .Light || colorScheme == nil {
+            return style.lightModeColor
+        } else {
+            return style.darkModeColor
+        }
+    }
+    
+    static func primaryTextColor(traitCollection: UITraitCollection) -> UIColor {
+        if #available(iOS 12.0, *) {
+            if traitCollection.userInterfaceStyle == .light {
+                return UIColor.color(with: .primaryElevation, colorScheme: .Dark)
+            } else {
+                return UIColor.color(with: .primaryElevation, colorScheme: .Light)
+            }
+        } else {
+            return UIColor.color(with: .primaryElevation, colorScheme: .Dark)
         }
     }
 }

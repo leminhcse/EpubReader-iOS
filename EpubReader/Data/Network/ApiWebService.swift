@@ -45,13 +45,26 @@ class ApiWebService {
         
         AF.download(url, to: destination).response { response in
             print(response)
-            completion!(true)
+            if response.response == nil {
+                completion!(false)
+            } else {
+                completion!(true)
+            }
         }
     }
     
     func downloadAudio(audio: Audio, url: URL) -> Observable<Float> {
         let downloadInfo = self.genericDownload(audio: audio, url: url, completion: { success in
-            print("success")
+            print("download audio finish!")
+            if success {
+                print("download success!")
+                EpubReaderHelper.shared.downloadAudio.append(audio)
+                PersistenceHelper.saveAudioData(object: EpubReaderHelper.shared.downloadAudio, key: "downloadAudio")
+                BannerNotification.downloadSuccessful(title: audio.title).present()
+            } else {
+                print("download success!")
+                Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
+            }
         })
         return downloadInfo.downloadObs
     }
@@ -75,9 +88,14 @@ class ApiWebService {
             }
             .response { response in
                 print(response)
-                DatabaseHelper.savePath(id: audio.id, localPathComponent: filePathComponent.string)
-                completion?(true)
-                downloadInfo.downloadObs.onCompleted()
+                if response.response == nil {
+                    completion?(false)
+                    downloadInfo.downloadObs.onCompleted()
+                } else {
+                    DatabaseHelper.savePath(id: audio.id, localPathComponent: filePathComponent.string)
+                    completion?(true)
+                    downloadInfo.downloadObs.onCompleted()
+                }
             }
         return downloadInfo
     }

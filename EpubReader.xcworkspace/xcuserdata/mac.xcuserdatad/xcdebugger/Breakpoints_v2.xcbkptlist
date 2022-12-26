@@ -3,4 +3,70 @@
    uuid = "7A867275-4546-418F-A36D-1C1FC7ABEE28"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BDB71ACF-F63B-443F-ABB8-F0A07E583018"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EpubReader/Presentation/Home/SignInViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "284"
+            endingLineNumber = "284"
+            landmarkName = "gotoHome(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "BDB71ACF-F63B-443F-ABB8-F0A07E583018 - e8b27b80dd541f78"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "EpubReader.SignInViewController.closeButtonTapped() -&gt; ()"
+                  moduleName = "EpubReader"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mac/Downloads/iOS/iOS_project/MyProject/FolioReaderKit/EpubReader-iOS/EpubReader/Presentation/Home/SignInViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "284"
+                  endingLineNumber = "284"
+                  offsetFromSymbolStart = "148">
+               </Location>
+               <Location
+                  uuid = "BDB71ACF-F63B-443F-ABB8-F0A07E583018 - f89fd6ddf3a183cd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in EpubReader.SignInViewController.closeButtonTapped() -&gt; ()"
+                  moduleName = "EpubReader"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mac/Downloads/iOS/iOS_project/MyProject/FolioReaderKit/EpubReader-iOS/EpubReader/Presentation/Home/SignInViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "285"
+                  endingLineNumber = "285"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A1B35A72-B6B5-4E5C-9061-6A409FDA8345"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EpubReader/Presentation/Home/SignInViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "285"
+            endingLineNumber = "285"
+            landmarkName = "SignInViewController"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

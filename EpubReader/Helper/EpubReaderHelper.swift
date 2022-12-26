@@ -22,11 +22,16 @@ class EpubReaderHelper: NSObject {
     static let RemoveFavoriteFailedNotification = "RemoveFavoriteFailedNotification"
     static let GetReadingBookSuccessNotification = "GetReadingBookSuccessNotification"
     static let GetReadingBookFailedNotification = "GetReadingBookFailedNotification"
+    static let RemoveBookSuccessNotification = "RemoveBookSuccessNotification"
+    static let RemoveAudioSuccessNotification = "RemoveAudioSuccessNotification"
     
     var user: User!
+    var books = [Book]()
     var favoritedBooks = [Book]()
+    var downloadBooks = [Book]()
     var readingBook = [ReadingBook]()
     var listAudio = [Audio]()
+    var downloadAudio = [Audio]()
     
     private override init() {
         super.init()
@@ -37,6 +42,14 @@ class EpubReaderHelper: NSObject {
         
         if let data = PersistenceHelper.loadData(key: "favoritedBook") as? [Book] {
             favoritedBooks = Utilities.shared.importBookList(books: data)
+        }
+        
+        if let data = PersistenceHelper.loadData(key: "downloadBook") as? [Book] {
+            downloadBooks = Utilities.shared.importBookList(books: data)
+        }
+        
+        if let data = PersistenceHelper.loadAudioData(key: "downloadAudio") as? [Audio] {
+            downloadAudio = Utilities.shared.importAudioList(audioList: data)
         }
     }
 }

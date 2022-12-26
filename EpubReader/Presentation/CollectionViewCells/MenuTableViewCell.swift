@@ -10,6 +10,13 @@ import SnapKit
 
 class MenuTableViewCell: UITableViewCell {
 
+    var menuImage: UIImageView = {
+        let menuImage = UIImageView()
+        menuImage.contentMode = .scaleAspectFit
+        menuImage.tintColor = UIColor.color(with: .background)
+        return menuImage
+    }()
+    
     var title: UILabel = {
         let title = UILabel()
         title.textColor = .darkText
@@ -36,14 +43,20 @@ class MenuTableViewCell: UITableViewCell {
     private func setupUI() {
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
+        self.contentView.addSubview(menuImage)
         self.contentView.addSubview(title)
     }
     
     private func setupConstraint() {
-        title.snp.makeConstraints { (make) in
+        menuImage.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview().offset(21)
-            make.trailing.equalToSuperview().inset(21)
+            make.size.equalTo(CGSize(width: 24, height: 24))
+        }
+        
+        title.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(menuImage.snp.trailing).offset(16)
         }
     }
 }

@@ -12,7 +12,7 @@ import Alamofire
 class UserViewModel: NSObject {
     
     private let disposeBag = DisposeBag()
-    private let putUserUrl = "http://minhhdmbp152019/PHP_API/addUser.php"
+    private let putUserUrl = "https://minhdev2006.com/PHP_API/addUser.php"
     
     override init() {
         super.init()

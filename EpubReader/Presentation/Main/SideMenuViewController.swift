@@ -15,7 +15,8 @@ class SideMenuViewController: BaseViewController {
     var buttonViewCloseTouch: UIButton!
     var ratiowidth: CGFloat = 0.815
     
-    private let listMenu = ["Profile", "Về Chúng Tôi", "Đánh Gía", "Tắt Quảng Cáo"]
+    private let listMenu = ["Hồ sơ", "Sách đã tải", "Audio đã tải", "Về Chúng Tôi", "Tắt Quảng Cáo", "Hẹn Giờ"]
+    private let listIconMenu = ["profile_icon", "book_download_icon", "audio_download_icon", "us_icon", "disable_ads_icon", "clock_icon"]
     
     // MARK: UIViewController - LIFE CYCLE
     override func viewDidLoad() {
@@ -120,6 +121,7 @@ extension SideMenuViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = menuTableView.dequeueReusableCell(withIdentifier: "MenuTableViewCell", for: indexPath) as! MenuTableViewCell
         let title = self.listMenu[indexPath.row]
         cell.title.text = title
+        cell.menuImage.image = UIImage.init(named: self.listIconMenu[indexPath.row])
         return cell
     }
     
@@ -131,14 +133,22 @@ extension SideMenuViewController: UITableViewDelegate, UITableViewDataSource {
             self.navigationController?.pushViewController(viewController, animated: true)
             break
         case self.listMenu[1]:
-            let viewController = AboutViewController()
+            let viewController = BookDownloadsViewController()
             self.navigationController?.pushViewController(viewController, animated: true)
             break
         case self.listMenu[2]:
+            let viewController = AudioDownloadsViewController()
+            self.navigationController?.pushViewController(viewController, animated: true)
             break
         case self.listMenu[3]:
+            let viewController = AboutViewController()
+            self.navigationController?.pushViewController(viewController, animated: true)
+            break
+        case self.listMenu[4]:
             let viewController = DisableAdsViewController()
             self.navigationController?.pushViewController(viewController, animated: true)
+            break
+        case self.listMenu[5]:
             break
         default:
             break

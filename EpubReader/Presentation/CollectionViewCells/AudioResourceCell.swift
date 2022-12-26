@@ -60,7 +60,7 @@ class AudioResourceCell: UICollectionViewCell {
         titleLabel.sizeToFit()
         titleLabel.font = UIFont.font(with: .h5)
         
-        progressDownloadView = ProgressBarView(frame: CGRect(x: 250, y: 0, width: 24, height: 24))
+        progressDownloadView = ProgressBarView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         progressDownloadView.tintColor = UIColor.color(with: .darkColor)
         let gesture = UITapGestureRecognizer(target: self, action: #selector(downloadAudioClick))
         progressDownloadView.addGestureRecognizer(gesture)
@@ -142,6 +142,11 @@ class AudioResourceCell: UICollectionViewCell {
             return
         }
         
+        if EpubReaderHelper.shared.user == nil {
+            Utilities.shared.showLoginDialog()
+            return
+        }
+        
         if Reachability.shared.isConnectedViaCellular {
             let alert = UIAlertController(title: "Download Wifi Only",
                                           message: "Please update your settings in the profile screen to download using mobile data",
@@ -170,6 +175,9 @@ class AudioResourceCell: UICollectionViewCell {
                 let deleteAction = UIAlertAction(title: "Có", style: .default, handler: { (action) in
                     try? FileManager.default.removeItem(atPath: itemPath)
                     self.progressDownloadView.status = .notDownloaded
+                    EpubReaderHelper.shared.downloadAudio.removeAll(where: {$0.id == self.audio?.id})
+                    PersistenceHelper.saveAudioData(object: EpubReaderHelper.shared.downloadAudio, key: "downloadAudio")
+                    BannerNotification.downloadDeleted(title: title).present()
                 })
                 let cancelAction = UIAlertAction(title: "Không", style: .cancel)
                 

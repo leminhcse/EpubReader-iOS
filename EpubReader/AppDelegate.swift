@@ -14,31 +14,22 @@ import FBSDKCoreKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    var mainTabBarController = MainTabBarViewController()
+    private var splashVC: SplashViewController?
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+        PermissionManager.shared.checkAndRequestPermission()
+
         self.window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
+        _ = Reachability.shared
         
-        if GIDSignIn.sharedInstance.hasPreviousSignIn() {
-            GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
-              if error != nil || user == nil {
-                  let signInViewController = SignInViewController()
-                  self.window?.rootViewController = signInViewController
-              } else {
-                  self.setupMainTab()
-              }
-            }
-            setupMainTab()
-        } else if Utilities.shared.isFacebookSignedIn() {
-            setupMainTab()
-        } else {
-            let signInViewController = SignInViewController()
-            window?.rootViewController = signInViewController
-        }
-        
+        splashVC = SplashViewController(splashScreenDismissed: {
+            print("show splash")
+        })
+        window?.rootViewController = splashVC
+
         MusicPlayerHelper.setupAppAudioSession()
         
         return true
@@ -74,13 +65,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: FullScreenAudioPlayerViewController.UpdatePlayPauseNotification), object: nil)
         }
     }
-    
-    private func setupMainTab() {
-        let controller = MainTabBarViewController()
-        window?.rootViewController = controller
-        AppAppearanceDesigner.updateNavigationBarAppearance()
-        AppAppearanceDesigner.updateTabBarAppearance()
-        AppAppearanceDesigner.updateScrollableSegmentedControl()
-    }
 }
-

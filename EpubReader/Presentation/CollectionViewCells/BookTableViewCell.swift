@@ -10,6 +10,9 @@ import SnapKit
 
 class BookTableViewCell: UITableViewCell {
     
+    private var book: Book!
+    private var audio: Audio!
+    
     private lazy var image: UIImageView = {
         let image = UIImageView()
         image.clipsToBounds = true
@@ -63,6 +66,15 @@ class BookTableViewCell: UITableViewCell {
         pageLabel.isHidden = true
         return pageLabel
     }()
+    
+    private lazy var moreButton: UIButton = {
+        let moreButton = UIButton()
+        moreButton.style(with: .more)
+        moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
+        moreButton.tintColor = UIColor.darkText
+        moreButton.isHidden = false
+        return moreButton
+    }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -83,6 +95,7 @@ class BookTableViewCell: UITableViewCell {
         self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(composerLabel)
         self.contentView.addSubview(pageLabel)
+        self.contentView.addSubview(moreButton)
     }
     
     private func setupConstraints() {
@@ -126,9 +139,15 @@ class BookTableViewCell: UITableViewCell {
             make.size.equalTo(CGSize(width: titleWidth/2, height: titleHeight + 8))
         }
         
+        moreButton.snp.makeConstraints { (make) in
+            make.trailing.equalToSuperview().inset(24)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(CGSize(width: 32, height: titleHeight + 12))
+        }
     }
     
-    public func configure(book: Book) {
+    public func configure(book: Book, pageNumber: Int? = nil) {
+        self.book = book
         DispatchQueue.main.async {
             if let url = URL(string: book.thumbnail) {
                 self.image.kf_setImage(url: url) { _ in
@@ -142,11 +161,25 @@ class BookTableViewCell: UITableViewCell {
         }
         titleLabel.text = book.title
         composerLabel.text = book.composer
+        
+        if pageNumber != nil {
+            pageLabel.isHidden = false
+            pageLabel.text = "Đã đọc \(pageNumber ?? 1) trang"
+        }
     }
     
-    public func configure(book: Book, pageNumber: Int) {
+    public func configureAudio(audio: Audio) {
+        self.audio = audio
+        var thumbnail = ""
+        var composer = ""
+        for book in EpubReaderHelper.shared.books {
+            if audio.book_id == book.id {
+                thumbnail = book.thumbnail
+                composer = book.composer
+            }
+        }
         DispatchQueue.main.async {
-            if let url = URL(string: book.thumbnail) {
+            if let url = URL(string: thumbnail) {
                 self.image.kf_setImage(url: url) { _ in
                     let imageWidth = self.image.image?.size.width ?? 0
                     let imageHeight = self.image.image?.size.height ?? 0
@@ -156,9 +189,105 @@ class BookTableViewCell: UITableViewCell {
                 }
             }
         }
-        titleLabel.text = book.title
-        composerLabel.text = book.composer
-        pageLabel.isHidden = false
-        pageLabel.text = "Đã đọc \(pageNumber) trang"
+        titleLabel.text = audio.title
+        composerLabel.text = composer
+    }
+    
+    @objc func moreButtonTapped() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        if #available(iOS 13.0, *) {
+            alert.view.tintColor = UIColor.primaryTextColor(traitCollection: UITraitCollection.current)
+        } else {
+            alert.view.tintColor = UIColor.color(with: .primaryItem)
+        }
+        alert.popoverPresentationController?.permittedArrowDirections = []
+
+        if self.book != nil {
+            if Utilities.shared.isFavorited(bookId: self.book.id) {
+                let favouritesAction = UIAlertAction(title: "Xóa khỏi Yêu thích", style: .default) { action in
+                    if EpubReaderHelper.shared.user == nil {
+                        Utilities.shared.showLoginDialog()
+                        return
+                    }
+                    let bookViewModel = BookViewModel()
+                    bookViewModel.removeFavorite(bookId: self.book.id, userId: EpubReaderHelper.shared.user.id) { success in
+                        BannerNotification.removedFromFavourites.present()
+                    }
+                }
+                alert.addAction(favouritesAction)
+            } else {
+                let favouritesAction = UIAlertAction(title: "Thêm vào Yêu thích", style: .default) { action in
+                    if EpubReaderHelper.shared.user == nil {
+                        Utilities.shared.showLoginDialog()
+                        return
+                    }
+                    let bookViewModel = BookViewModel()
+                    bookViewModel.putToFavorites(book: self.book, userId: EpubReaderHelper.shared.user.id) { success in
+                        BannerNotification.addedToFavourites.present()
+                    }
+                }
+                alert.addAction(favouritesAction)
+            }
+        
+            if let bookUrl = URL(string: self.book.epub_source), pageLabel.isHidden {
+                let fileName = bookUrl.lastPathComponent
+                let path: String = Utilities.shared.getFileExist(fileName: fileName)
+                if path != "" {
+                    let downloadAction = UIAlertAction(title: "Xóa sách", style: .default) { action in
+                        try? FileManager.default.removeItem(atPath: path)
+                        DispatchQueue.main.async {
+                            BannerNotification.downloadDeleted(title: self.book.title).present()
+                            EpubReaderHelper.shared.downloadBooks.removeAll(where: { $0.id == self.book.id})
+                            PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveBookSuccessNotification), object: nil)
+                        }
+                    }
+                    alert.addAction(downloadAction)
+                } else {
+                    let downloadAction = UIAlertAction(title: "Tải sách", style: .default) { action in
+                        if !Reachability.shared.isConnectedToNetwork {
+                            Utilities.shared.noConnectionAlert()
+                            return
+                        }
+                        if !self.book.epub_source.contains("http") {
+                            Utilities.shared.showAlertDialog(title: "", message: "Không thể tải, đã xảy ra lỗi!")
+                        } else {
+                            ApiWebService.shared.downloadFile(url: bookUrl) { success in
+                                print("download")
+                                if success {
+                                    DispatchQueue.main.async {
+                                        BannerNotification.downloadSuccessful(title: self.book.title).present()
+                                        EpubReaderHelper.shared.downloadBooks.append(self.book)
+                                        PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+                                    }
+                                } else {
+                                    DispatchQueue.main.async {
+                                        Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    alert.addAction(downloadAction)
+                }
+            }
+        } else if self.audio != nil {
+            let deleteAction = UIAlertAction(title: "Xóa audio", style: .default) { action in
+                if let id = self.audio?.id, let itemPath = DatabaseHelper.getFilePath(id: id), FileManager.default.fileExists(atPath: itemPath) {
+                    try? FileManager.default.removeItem(atPath: itemPath)
+                    EpubReaderHelper.shared.downloadAudio.removeAll(where: {$0.id == self.audio?.id})
+                    PersistenceHelper.saveAudioData(object: EpubReaderHelper.shared.downloadAudio, key: "downloadAudio")
+                    BannerNotification.downloadDeleted(title: self.audio.title).present()
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveAudioSuccessNotification), object: nil)
+                }
+            }
+            alert.addAction(deleteAction)
+        } else {
+            return
+        }
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(cancelAction)
+        UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
     }
 }

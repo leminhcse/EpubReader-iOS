@@ -56,6 +56,7 @@ PODS:
   - SnapKit (5.6.0)
   - SSZipArchive (2.1.1)
   - SwiftyJSON (4.0.0)
+  - VisualEffectView (4.1.3)
   - Whisper (6.1.0)
   - ZFDragableModalTransition (0.6)
 
@@ -75,6 +76,7 @@ DEPENDENCIES:
   - SDWebImage
   - SnapKit (= 5.6.0)
   - SwiftyJSON (= 4.0)
+  - VisualEffectView (= 4.1.3)
   - Whisper
 
 SPEC REPOS:
@@ -105,6 +107,7 @@ SPEC REPOS:
     - SnapKit
     - SSZipArchive
     - SwiftyJSON
+    - VisualEffectView
     - Whisper
     - ZFDragableModalTransition
 
@@ -140,9 +143,10 @@ SPEC CHECKSUMS:
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SSZipArchive: 14401ade5f8e82aba1ff03e9f88e9de60937ae60
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+  VisualEffectView: 172fce132b8208da6c0b7c572e7f3987ad54546d
   Whisper: 6869ae85284ae2ba0aa4c7d8a826be6436409fed
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: 11a5668ce44f72c39cd98dbfdb9cf289d5cb2ac3
+PODFILE CHECKSUM: 22bb43b1a91de99299a758a22ac6d36e47c65460
 
 COCOAPODS: 1.11.3

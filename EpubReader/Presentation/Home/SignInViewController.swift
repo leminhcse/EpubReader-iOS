@@ -39,7 +39,7 @@ class SignInViewController: UIViewController {
         title2.textAlignment = .center
         title2.sizeToFit()
         title2.numberOfLines = 2
-        title2.text = "Make a login using with social network accounts"
+        title2.text = "Chào mừng bạn đến với iSach"
         title2.font = UIFont.font(with: .h2)
         if UIDevice.current.userInterfaceIdiom == .pad {
             title2.font = UIFont.font(with: .h1)
@@ -51,7 +51,7 @@ class SignInViewController: UIViewController {
         let googleSignButton = UIButton()
         googleSignButton.layer.borderWidth = 2
         googleSignButton.addTarget(self, action: #selector(googleAuthLogin), for: .touchUpInside)
-        googleSignButton.setTitle("Sign in with Google", for: .normal)
+        googleSignButton.setTitle("Tiếp tục bằng Google", for: .normal)
         googleSignButton.setTitleColor(UIColor.color(with: .background), for: .normal)
         googleSignButton.titleLabel?.font = UIFont.font(with: .h3)
         googleSignButton.layer.cornerRadius = 24
@@ -68,7 +68,7 @@ class SignInViewController: UIViewController {
         let facebookSignInButton = UIButton()
         facebookSignInButton.layer.borderWidth = 2
         facebookSignInButton.addTarget(self, action: #selector(facebookAuthLogin), for: .touchUpInside)
-        facebookSignInButton.setTitle("Sign in with Facbook", for: .normal)
+        facebookSignInButton.setTitle("Tiếp tục với Facbook", for: .normal)
         facebookSignInButton.setTitleColor(UIColor.color(with: .background), for: .normal)
         facebookSignInButton.titleLabel?.font = UIFont.font(with: .h3)
         facebookSignInButton.layer.cornerRadius = 24
@@ -79,6 +79,21 @@ class SignInViewController: UIViewController {
         facebookSignInButton.setImage(UIImage(named: "facebook_icon"), for: .normal)
         facebookSignInButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 18)
         return facebookSignInButton
+    }()
+    
+    private lazy var closeButton: UIButton = {
+        let closeButton = UIButton()
+        closeButton.style(with: .close)
+        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        closeButton.tintColor = UIColor.color(with: .background)
+        return closeButton
+    }()
+    
+    private lazy var closeButtonView: UIView = {
+        let closeButtonView = UIView()
+        closeButtonView.backgroundColor = UIColor.init(hex: "#ECECEC")
+        closeButtonView.layer.cornerRadius = 16
+        return closeButtonView
     }()
 
     // MARK: UIViewController Life Cycle
@@ -103,6 +118,9 @@ class SignInViewController: UIViewController {
         self.view.addSubview(title2)
         self.view.addSubview(googleSignButton)
         self.view.addSubview(facebookSignInButton)
+        
+        closeButtonView.addSubview(closeButton)
+        self.view.addSubview(closeButtonView)
     }
     
     private func setupConstraints() {
@@ -116,6 +134,18 @@ class SignInViewController: UIViewController {
         
         if UIDevice.current.userInterfaceIdiom == .pad {
             buttonHeight = 64
+        }
+        
+        closeButtonView.snp.makeConstraints{ (make) in
+            make.top.equalToSuperview().inset(64)
+            make.leading.equalTo(width - 64)
+            make.size.equalTo(CGSize(width: 32, height: 32))
+        }
+
+        closeButton.snp.makeConstraints{ (make) in
+            make.size.equalToSuperview().inset(4)
+            make.leading.equalToSuperview().inset(4)
+            make.top.equalToSuperview().inset(4)
         }
         
         title1.snp.makeConstraints { (make) in
@@ -248,5 +278,11 @@ class SignInViewController: UIViewController {
     
     @objc func gotoHome(_ notification: NSNotification) {
         gotoHomeScreen()
+    }
+    
+    @objc func closeButtonTapped() {
+        DispatchQueue.main.async {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }
