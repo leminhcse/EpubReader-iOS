@@ -36,7 +36,7 @@ struct AppAppearanceDesigner {
     
     static func updateScrollableSegmentedControl() {
         let segmentedControlAppearance = ScrollableSegmentedControl.appearance()
-        segmentedControlAppearance.segmentContentColor = UIColor.black
+        segmentedControlAppearance.segmentContentColor = UIColor.gray
         segmentedControlAppearance.selectedSegmentContentColor = UIColor.color(with: .background)
         segmentedControlAppearance.backgroundColor = UIColor.white
     }

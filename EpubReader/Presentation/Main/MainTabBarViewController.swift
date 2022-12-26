@@ -38,25 +38,25 @@ class MainTabBarViewController: UITabBarController {
     
     private func setupTabBarController() {
         let homeVC = HomeViewController()
-        let homeImage = UIImage(named: "home.png")
+        let homeImage = UIImage(named: "home_icon.png")
         let homeBarItem = UITabBarItem(title: "Trang chủ", image: homeImage, tag: 0)
         homeVC.tabBarItem = homeBarItem
         let homeViewController = UINavigationController(rootViewController: homeVC)
         
         let searchVC = SearchViewController()
-        let searchImage = UIImage(named: "search.png")
+        let searchImage = UIImage(named: "search_icon.png")
         let searchBarItem = UITabBarItem(title: "Tìm kiếm", image: searchImage, tag: 1)
         searchVC.tabBarItem = searchBarItem
         let searchViewController = UINavigationController(rootViewController: searchVC)
         
         let favoritesVC = FavoritesViewController()
-        let favoriteImage = UIImage(named: "favorite.png")
+        let favoriteImage = UIImage(named: "favorite_icon.png")
         let favoriteBarItem = UITabBarItem(title: "Yêu thích", image: favoriteImage, tag: 2)
         favoritesVC.tabBarItem = favoriteBarItem
         let favoritesViewController = UINavigationController(rootViewController: favoritesVC)
         
         let bookmarkVC = BookmarkViewController()
-        let bookMarkImage = UIImage(named: "bookmark.png")
+        let bookMarkImage = UIImage(named: "reading_icon.png")
         let bookmarkBarItem = UITabBarItem(title: "Đang đọc", image: bookMarkImage, tag: 3)
         bookmarkVC.tabBarItem = bookmarkBarItem
         let bookmarkViewController = UINavigationController(rootViewController: bookmarkVC)

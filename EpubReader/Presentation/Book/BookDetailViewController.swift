@@ -572,6 +572,11 @@ class BookDetailViewController: UIViewController {
     }
     
     @objc func favoriteButtonTapped() {
+        if EpubReaderHelper.shared.user == nil {
+            Utilities.shared.showLoginDialog()
+            return
+        }
+        
         let id = EpubReaderHelper.shared.user.id
         if Utilities.shared.isFavorited(bookId: book.id) {
             bookViewModel.removeFavorite(bookId: book.id, userId: id) { success in

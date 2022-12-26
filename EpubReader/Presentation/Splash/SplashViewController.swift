@@ -92,8 +92,7 @@ class SplashViewController: UIViewController {
             setupMainTab()
         } else {
             self.activityIndicator.stopAnimating()
-            let signInViewController = SignInViewController()
-            appDelegate.window?.rootViewController = signInViewController
+            self.setupMainTab()
         }
     }
     

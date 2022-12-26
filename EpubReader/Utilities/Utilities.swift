@@ -98,7 +98,6 @@ class Utilities: NSObject {
         }
         
         DispatchQueue.main.async {
-        
             if let topController = UIApplication.topViewController() {
                 if let navigationController = topController.navigationController {
                     _ = Reachability.shared.connectivity.status.errorMessage
@@ -127,6 +126,28 @@ class Utilities: NSObject {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel)
         alert.addAction(action)
+        DispatchQueue.main.async {
+            UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func showLoginDialog() {
+        let alert = UIAlertController(title: "Yêu cầu Đăng Nhập",
+                                      message: "Bạn phải đăng nhập để có thể sử dụng tính năng này!",
+                                      preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Đồng ý", style: .default) { action in
+            let viewController = SignInViewController()
+            viewController.modalPresentationStyle = .overCurrentContext
+            if let topController = UIApplication.topViewController() {
+                DispatchQueue.main.async {
+                    topController.present(viewController, animated: true, completion: nil)
+                }
+            }
+        }
+        alert.addAction(okAction)
+        let cancelAction = UIAlertAction(title: "Hủy bỏ", style: .cancel)
+        alert.addAction(cancelAction)
+        
         DispatchQueue.main.async {
             UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
         }

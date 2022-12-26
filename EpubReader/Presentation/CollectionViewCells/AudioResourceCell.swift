@@ -142,6 +142,11 @@ class AudioResourceCell: UICollectionViewCell {
             return
         }
         
+        if EpubReaderHelper.shared.user == nil {
+            Utilities.shared.showLoginDialog()
+            return
+        }
+        
         if Reachability.shared.isConnectedViaCellular {
             let alert = UIAlertController(title: "Download Wifi Only",
                                           message: "Please update your settings in the profile screen to download using mobile data",

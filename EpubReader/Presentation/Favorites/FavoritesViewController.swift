@@ -21,7 +21,7 @@ class FavoritesViewController: BaseViewController {
         label.center = CGPoint(x: 160, y: 285)
         label.textColor = UIColor.color(with: .background)
         label.textAlignment = .center
-        label.text = "You haven't any favorite books yet"
+        label.text = "Bạn chưa có cuốn sách yêu thích nào"
         label.isHidden = false
         if UIDevice.current.userInterfaceIdiom == .pad {
             label.font = UIFont.font(with: .h1)
