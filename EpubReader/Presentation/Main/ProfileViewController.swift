@@ -85,7 +85,7 @@ class ProfileViewController: UIViewController {
         let autoPlayLabel = UILabel()
         autoPlayLabel.textColor = .darkGray
         autoPlayLabel.backgroundColor = .clear
-        autoPlayLabel.text = "Auto play next audio"
+        autoPlayLabel.text = "Tự động phát audio tiếp theo"
         autoPlayLabel.font = UIFont.font(with: .h5)
         if UIDevice.current.userInterfaceIdiom == .pad {
             autoPlayLabel.font = UIFont.font(with: .h2)
@@ -97,7 +97,7 @@ class ProfileViewController: UIViewController {
         let continuePlayLabel = UILabel()
         continuePlayLabel.textColor = .darkGray
         continuePlayLabel.backgroundColor = .clear
-        continuePlayLabel.text = "Continue audio in background"
+        continuePlayLabel.text = "Tiếp tục phát audio khi rời khỏi ứng dụng"
         continuePlayLabel.font = UIFont.font(with: .h5)
         if UIDevice.current.userInterfaceIdiom == .pad {
             continuePlayLabel.font = UIFont.font(with: .h2)
@@ -109,7 +109,7 @@ class ProfileViewController: UIViewController {
         let allowBackgroundLabel = UILabel()
         allowBackgroundLabel.textColor = .darkGray
         allowBackgroundLabel.backgroundColor = .clear
-        allowBackgroundLabel.text = "Allow background audio from other apps"
+        allowBackgroundLabel.text = "Cho phép audio từ các ứng dụng khác được phát"
         allowBackgroundLabel.font = UIFont.font(with: .h5)
         if UIDevice.current.userInterfaceIdiom == .pad {
             allowBackgroundLabel.font = UIFont.font(with: .h2)
@@ -121,7 +121,7 @@ class ProfileViewController: UIViewController {
         let onlyDownloadLabel = UILabel()
         onlyDownloadLabel.textColor = .darkGray
         onlyDownloadLabel.backgroundColor = .clear
-        onlyDownloadLabel.text = "Only download via wifi"
+        onlyDownloadLabel.text = "Chỉ tải thông qua wifi"
         onlyDownloadLabel.font = UIFont.font(with: .h5)
         if UIDevice.current.userInterfaceIdiom == .pad {
             onlyDownloadLabel.font = UIFont.font(with: .h2)
@@ -133,7 +133,7 @@ class ProfileViewController: UIViewController {
         let darkModeLabel = UILabel()
         darkModeLabel.textColor = .darkGray
         darkModeLabel.backgroundColor = .clear
-        darkModeLabel.text = "Dark mode"
+        darkModeLabel.text = "Chế độ tối"
         darkModeLabel.font = UIFont.font(with: .h5)
         if UIDevice.current.userInterfaceIdiom == .pad {
             darkModeLabel.font = UIFont.font(with: .h2)
@@ -197,7 +197,7 @@ class ProfileViewController: UIViewController {
         downloadButton.tintColor = UIColor.color(with: .background)
         downloadButton.contentHorizontalAlignment = .left
         downloadButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -32, bottom: 0, right: 0)
-        downloadButton.customButton(title: "Delete all downloads")
+        downloadButton.customButton(title: "Xóa tất cả tệp đã tải")
         downloadButton.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
         return downloadButton
     }()
@@ -208,7 +208,7 @@ class ProfileViewController: UIViewController {
         shareButton.tintColor = UIColor.color(with: .background)
         shareButton.contentHorizontalAlignment = .left
         shareButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -32, bottom: 0, right: 0)
-        shareButton.customButton(title: "Share this app to your friends")
+        shareButton.customButton(title: "Chia sẻ ứng dụng tới người khác")
         shareButton.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
         return shareButton
     }()
@@ -226,7 +226,7 @@ class ProfileViewController: UIViewController {
     private func setupUI() {
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.topItem?.title = ""
-        self.title = "Profile".uppercased()
+        self.title = "Hồ sơ".uppercased()
         
         profileImage.image = profileIcon
         profileView.addSubview(profileImage)

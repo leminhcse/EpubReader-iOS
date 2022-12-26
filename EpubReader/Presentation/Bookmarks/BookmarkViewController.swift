@@ -19,7 +19,7 @@ class BookmarkViewController: BaseViewController {
         label.center = CGPoint(x: 160, y: 285)
         label.textColor = UIColor.color(with: .background)
         label.textAlignment = .center
-        label.text = "You are not currently reading any books"
+        label.text = "Bạn hiện chưa đọc bất kỳ cuốn sách nào"
         label.isHidden = false
         if UIDevice.current.userInterfaceIdiom == .pad {
             label.font = UIFont.font(with: .h1)
@@ -93,9 +93,7 @@ class BookmarkViewController: BaseViewController {
     }
     
     private func loadData() {
-        if let user = EpubReaderHelper.shared.user {
-            bookViewModel.getReadingBook()
-        }
+        bookViewModel.getReadingBook()
     }
     
     @objc func reloadData() {

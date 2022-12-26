@@ -62,7 +62,7 @@ class HomeViewController: BaseViewController {
     
     // MARK: SETUP UI
     private func setupView() {
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.color(with: .background)
         
         title = "TRANG CHỦ"
         navigationItem.leftBarButtonItem = menuButton()
@@ -102,7 +102,7 @@ class HomeViewController: BaseViewController {
         }
         
         pageViewController.view.snp.makeConstraints { (make) in
-            make.top.equalTo(segmentedControl.snp.bottom).offset(4)
+            make.top.equalTo(segmentedControl.snp.bottom).offset(1)
             make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading)
             make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)

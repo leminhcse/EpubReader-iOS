@@ -81,7 +81,7 @@ class AudioDownloadsViewController: BaseViewController {
     
     // MARK: Setup UI
     private func setupUI() {
-        self.title = "Downloads".uppercased()
+        self.title = "Audio đã tải".uppercased()
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(label)
         self.view.addSubview(bookTableView)

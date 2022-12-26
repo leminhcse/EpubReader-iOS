@@ -64,7 +64,7 @@ class BookDownloadsViewController: BaseViewController {
     
     // MARK: Setup UI
     private func setupUI() {
-        self.title = "Downloads".uppercased()
+        self.title = "Sách đã tải".uppercased()
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(label)
         self.view.addSubview(bookTableView)
@@ -85,15 +85,13 @@ class BookDownloadsViewController: BaseViewController {
     
     // MARK: Handle favorite data
     @objc private func loadData() {
-        if EpubReaderHelper.shared.user != nil {
-            downloadBooks = EpubReaderHelper.shared.downloadBooks
-            if downloadBooks.count > 0 {
-                self.bookTableView.isHidden = false
-                self.label.isHidden = true
-            } else {
-                self.bookTableView.isHidden = true
-                self.label.isHidden = false
-            }
+        downloadBooks = EpubReaderHelper.shared.downloadBooks
+        if downloadBooks.count > 0 {
+            self.bookTableView.isHidden = false
+            self.label.isHidden = true
+        } else {
+            self.bookTableView.isHidden = true
+            self.label.isHidden = false
         }
     }
 }

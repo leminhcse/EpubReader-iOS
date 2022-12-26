@@ -205,6 +205,10 @@ class BookTableViewCell: UITableViewCell {
         if self.book != nil {
             if Utilities.shared.isFavorited(bookId: self.book.id) {
                 let favouritesAction = UIAlertAction(title: "Xóa khỏi Yêu thích", style: .default) { action in
+                    if EpubReaderHelper.shared.user == nil {
+                        Utilities.shared.showLoginDialog()
+                        return
+                    }
                     let bookViewModel = BookViewModel()
                     bookViewModel.removeFavorite(bookId: self.book.id, userId: EpubReaderHelper.shared.user.id) { success in
                         BannerNotification.removedFromFavourites.present()
@@ -213,6 +217,10 @@ class BookTableViewCell: UITableViewCell {
                 alert.addAction(favouritesAction)
             } else {
                 let favouritesAction = UIAlertAction(title: "Thêm vào Yêu thích", style: .default) { action in
+                    if EpubReaderHelper.shared.user == nil {
+                        Utilities.shared.showLoginDialog()
+                        return
+                    }
                     let bookViewModel = BookViewModel()
                     bookViewModel.putToFavorites(book: self.book, userId: EpubReaderHelper.shared.user.id) { success in
                         BannerNotification.addedToFavourites.present()
