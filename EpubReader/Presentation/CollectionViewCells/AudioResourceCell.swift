@@ -60,7 +60,7 @@ class AudioResourceCell: UICollectionViewCell {
         titleLabel.sizeToFit()
         titleLabel.font = UIFont.font(with: .h5)
         
-        progressDownloadView = ProgressBarView(frame: CGRect(x: 250, y: 0, width: 24, height: 24))
+        progressDownloadView = ProgressBarView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         progressDownloadView.tintColor = UIColor.color(with: .darkColor)
         let gesture = UITapGestureRecognizer(target: self, action: #selector(downloadAudioClick))
         progressDownloadView.addGestureRecognizer(gesture)

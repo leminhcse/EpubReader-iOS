@@ -88,9 +88,11 @@ class BookDownloadsViewController: BaseViewController {
         downloadBooks = EpubReaderHelper.shared.downloadBooks
         if downloadBooks.count > 0 {
             self.bookTableView.isHidden = false
+            self.bookTableView.reloadData()
             self.label.isHidden = true
         } else {
             self.bookTableView.isHidden = true
+            self.bookTableView.reloadData()
             self.label.isHidden = false
         }
     }
