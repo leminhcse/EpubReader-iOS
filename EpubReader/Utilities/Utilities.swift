@@ -133,7 +133,7 @@ class Utilities: NSObject {
     
     func showLoginDialog() {
         let alert = UIAlertController(title: "Yêu cầu Đăng Nhập",
-                                      message: "Bạn phải đăng nhập để có thể sử dụng tính năng này!",
+                                      message: "Bạn phải đăng nhập để có thể sử dụng tính năng này.",
                                       preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Đồng ý", style: .default) { action in
             let viewController = SignInViewController()

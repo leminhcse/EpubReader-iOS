@@ -7,6 +7,7 @@
 
 import UIKit
 import RxSwift
+import Alamofire
 
 class FileDownloadInfo: NSObject {
     public typealias ProgessViewUpdate = (_ to: Float) -> Void
@@ -14,6 +15,5 @@ class FileDownloadInfo: NSObject {
     var downloadObs = BehaviorSubject<Float>(value: 0)
     var isDownloadCompleted = false
     var progress: Float = 0.0
-        
-    var downloadRequest: DownloadTask?
+    var downloadRequest: DownloadRequest?
 }

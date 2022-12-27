@@ -7,12 +7,17 @@
 
 import UIKit
 import SnapKit
+import GoogleSignIn
+import FBSDKLoginKit
 
 class SideMenuViewController: BaseViewController {
 
     var viewMenu: UIView!
     var menuTableView = UITableView()
     var buttonViewCloseTouch: UIButton!
+    var logoutButtonView: UIView!
+    var logoutButton: UIButton!
+    
     var ratiowidth: CGFloat = 0.815
     
     private let listMenu = ["Hồ sơ", "Sách đã tải", "Audio đã tải", "Về Chúng Tôi", "Tắt Quảng Cáo", "Hẹn Giờ"]
@@ -58,6 +63,21 @@ class SideMenuViewController: BaseViewController {
         menuTableView.separatorInset = .zero
         menuTableView.backgroundColor = .clear
         self.view.addSubview(menuTableView)
+        
+        logoutButton = UIButton()
+        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        logoutButton.tintColor = UIColor.color(with: .background)
+        logoutButton.titleLabel?.font = UIFont.font(with: .h4)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            logoutButton.titleLabel?.font = UIFont.font(with: .h2)
+        }
+        updateStatusButton()
+        
+        logoutButtonView = UIView()
+        logoutButtonView.backgroundColor = UIColor.color(with: .background)
+        logoutButtonView.layer.cornerRadius = 4
+        logoutButtonView.addSubview(logoutButton)
+        self.view.addSubview(logoutButtonView)
     }
     
     private func setupConstraint() {
@@ -76,6 +96,20 @@ class SideMenuViewController: BaseViewController {
             make.top.equalToSuperview().offset(14)
             make.size.equalTo(CGSize(width: frameWidth*ratiowidth, height: frameHeight))
         }
+        
+        let safeAreaTop = self.view.safeAreaInsets.bottom
+        let logoutX = frameWidth*ratiowidth - frameWidth*ratiowidth/2
+        logoutButtonView.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview().inset(safeAreaTop+24)
+            make.leading.equalTo(logoutX/2)
+            make.size.equalTo(CGSize(width: frameWidth*ratiowidth/2, height: 48))
+        }
+        
+        logoutButton.snp.makeConstraints{ (make) in
+            make.size.equalToSuperview().inset(4)
+            make.leading.equalToSuperview().inset(4)
+            make.top.equalToSuperview().inset(4)
+        }
     }
     
     // MARK: Action Methods
@@ -93,6 +127,37 @@ class SideMenuViewController: BaseViewController {
                 }
             })
         })
+    }
+    
+    @objc private func logoutButtonTapped() {
+        if GIDSignIn.sharedInstance.currentUser != nil && EpubReaderHelper.shared.user != nil {
+            GIDSignIn.sharedInstance.signOut()
+            EpubReaderHelper.shared.user = nil
+            PersistenceHelper.removeObj(key: "User")
+            updateStatusButton()
+        } else if let token = AccessToken.current, !token.isExpired, EpubReaderHelper.shared.user != nil {
+            let loginManager = LoginManager()
+            loginManager.logOut()
+            EpubReaderHelper.shared.user = nil
+            PersistenceHelper.removeObj(key: "User")
+            updateStatusButton()
+        } else {
+            let viewController = SignInViewController()
+            viewController.modalPresentationStyle = .overCurrentContext
+            if let topController = UIApplication.topViewController() {
+                DispatchQueue.main.async {
+                    topController.present(viewController, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+    
+    private func updateStatusButton() {
+        if EpubReaderHelper.shared.user == nil {
+            logoutButton.setTitle("Đăng nhập", for: .normal)
+        } else {
+            logoutButton.setTitle("Đăng xuất", for: .normal)
+        }
     }
     
     func HandleAnimationTapperMenu(){
