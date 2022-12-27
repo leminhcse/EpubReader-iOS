@@ -13,6 +13,22 @@ class ApiWebService {
 
     static let shared = ApiWebService()
     
+    private let lockQueue = DispatchQueue(label: "ApiWebService.activeDownloads.queue")
+    private var _activeDownloads: [String: FileDownloadInfo] = [String: FileDownloadInfo]()
+    
+    // All current active downloads
+    private var activeDownloads: [String: FileDownloadInfo] {
+        get {
+            return lockQueue.sync {
+                return _activeDownloads
+            }
+        } set {
+            lockQueue.sync {
+                _activeDownloads = newValue
+            }
+        }
+    }
+    
     func getUser(email: String, name: String) -> Observable<[User]> {
         return request(ApiRouter.getUser(email: email, name: name))
     }
@@ -55,15 +71,13 @@ class ApiWebService {
     
     func downloadAudio(audio: Audio, url: URL) -> Observable<Float> {
         let downloadInfo = self.genericDownload(audio: audio, url: url, completion: { success in
-            print("download audio finish!")
             if success {
                 print("download success!")
                 EpubReaderHelper.shared.downloadAudio.append(audio)
                 PersistenceHelper.saveAudioData(object: EpubReaderHelper.shared.downloadAudio, key: "downloadAudio")
                 BannerNotification.downloadSuccessful(title: audio.title).present()
             } else {
-                print("download success!")
-                Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
+                print("download fail!")
             }
         })
         return downloadInfo.downloadObs
@@ -80,24 +94,40 @@ class ApiWebService {
         }
         
         let downloadInfo = FileDownloadInfo()
-        AF.download(url, to: destination)
+        let downloadRequest = AF.download(url, to: destination)
             .downloadProgress { progress in
-                print("downloadProgress \(progress.fractionCompleted)")
-                downloadInfo.progress = Float(progress.fractionCompleted)
-                downloadInfo.downloadObs.onNext(Float(progress.fractionCompleted))
-            }
-            .response { response in
-                print(response)
-                if response.response == nil {
-                    completion?(false)
-                    downloadInfo.downloadObs.onCompleted()
-                } else {
-                    DatabaseHelper.savePath(id: audio.id, localPathComponent: filePathComponent.string)
-                    completion?(true)
-                    downloadInfo.downloadObs.onCompleted()
+                if let downloadInfo = self.activeDownloads[audio.id] {
+                    print("downloadProgress \(progress.fractionCompleted)")
+                    downloadInfo.progress = Float(progress.fractionCompleted)
+                    downloadInfo.downloadObs.onNext(Float(progress.fractionCompleted))
                 }
             }
+            .response { response in
+                switch response.result {
+                    case .success(_):
+                        self.activeDownloads[audio.id] = nil
+                        downloadInfo.isDownloadCompleted = true
+                        DatabaseHelper.savePath(id: audio.id, localPathComponent: filePathComponent.string)
+                        completion?(true)
+                        downloadInfo.downloadObs.onCompleted()
+                    case .failure(let error):
+                        self.activeDownloads[audio.id] = nil
+                        downloadInfo.isDownloadCompleted = true
+                        completion?(false)
+                        downloadInfo.downloadObs.onError(error)
+                    }
+            }
+        downloadInfo.downloadRequest = downloadRequest
+        self.activeDownloads[audio.id] = downloadInfo
         return downloadInfo
+    }
+    
+    func cancelDownload(audioId: String) {
+        if let fdi = activeDownloads[audioId] {
+            print("FDI exists, cancel task")
+            fdi.downloadRequest?.cancel()
+            self.activeDownloads[audioId] = nil
+        }
     }
     
     //MARK: - The request function to get results in an Observable
@@ -111,13 +141,6 @@ class ApiWebService {
                 switch response.result {
                 case .success(let value):
                     //Everything is fine, return the value in onNext
-                    if let data = response.data {
-                        let myjson = JSON(data)
-                        for i in 0..<myjson.count {
-                            let composer = myjson[i]["composer"].stringValue
-                            print("my composer with  = \(composer)\n")
-                        }
-                    }
                     observer.onNext(value)
                     observer.onCompleted()
                 case .failure(let error):

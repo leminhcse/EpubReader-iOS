@@ -73,19 +73,23 @@ class UserViewModel: NSObject {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { list in
                 print("Get user success")
-                let user = User()
-                for item in list {
-                    user.id = item.id
-                    user.email = item.email
-                    user.name = item.name
-                    user.access_token = item.access_token
-                    user.avatar = item.avatar
-                    user.isPurchased = item.isPurchased
-                    user.type = item.type
+                if list.count > 0 {
+                    let user = User()
+                    for item in list {
+                        user.id = item.id
+                        user.email = item.email
+                        user.name = item.name
+                        user.access_token = item.access_token
+                        user.avatar = item.avatar
+                        user.isPurchased = item.isPurchased
+                        user.type = item.type
+                    }
+                    PersistenceHelper.saveUser(object: user, key: "User")
+                    EpubReaderHelper.shared.user = user
+                    completion?(true)
+                } else {
+                    completion?(false)
                 }
-                PersistenceHelper.saveUser(object: user, key: "User")
-                EpubReaderHelper.shared.user = user
-                completion?(true)
             }, onError: { error in
                 switch error {
                 case ApiError.conflict:
