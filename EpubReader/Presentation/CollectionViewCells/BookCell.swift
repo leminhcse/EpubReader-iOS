@@ -35,7 +35,7 @@ class BookCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = imageCornerRadius
-        imageView.backgroundColor = .clear
+        imageView.backgroundColor = UIColor.color(with: .background).withAlphaComponent(0.2)
         
         titleLabel = UILabel()
         titleLabel.textColor = UIColor.black
