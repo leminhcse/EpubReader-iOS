@@ -186,10 +186,24 @@ class BookDetailViewController: UIViewController {
         overviewView.isHidden = false
         overviewView.textColor = UIColor.color(with: .darkColor)
         overviewView.font = UIFont.font(with: .h5)
+        overviewView.isEditable = false
         if UIDevice.current.userInterfaceIdiom == .pad {
             overviewView.font = UIFont.font(with: .h4)
         }
         return overviewView
+    }()
+    
+    private lazy var textLabel: UILabel = {
+        let textLabel = UILabel()
+        textLabel.textColor = UIColor.darkText
+        textLabel.backgroundColor = .clear
+        textLabel.numberOfLines = 1
+        textLabel.textAlignment = .center
+        textLabel.sizeToFit()
+        textLabel.font = UIFont.font(with: .h4)
+        textLabel.text = "Sách này hiện không hỗ trợ audio"
+        textLabel.isHidden = false
+        return textLabel
     }()
     
     // MARK: - Local variables
@@ -273,6 +287,8 @@ class BookDetailViewController: UIViewController {
         largeContainerView.addSubview(audioCollectionView)
         largeContainerView.addSubview(overviewView)
         largeContainerView.addSubview(playerView)
+        
+        audioCollectionView.addSubview(textLabel)
         
         view.addSubview(largeContainerView)
     }
@@ -446,6 +462,11 @@ class BookDetailViewController: UIViewController {
                 make.size.equalTo(CGSize(width: miniPlayerWidth, height: height))
             }
         }
+        
+        textLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
     }
     
     private func resetContrainst() {
@@ -480,7 +501,7 @@ class BookDetailViewController: UIViewController {
     private func loadAudioData() {
         audioViewModel.getAudioList(bookId: book.id)
     }
-    
+     
     private func loadDescription() {
         overviewView.text = book.description
     }
@@ -546,6 +567,9 @@ class BookDetailViewController: UIViewController {
             self.listAudio.removeAll()
             self.listAudio = EpubReaderHelper.shared.listAudio
             self.audioCollectionView.reloadData()
+            self.textLabel.isHidden = true
+        } else {
+            self.textLabel.isHidden = false
         }
     }
     
