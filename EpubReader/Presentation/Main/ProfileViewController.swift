@@ -490,7 +490,19 @@ class ProfileViewController: UIViewController {
     }
     
     @objc private func deleteTapped() {
-        print("deleteTapped")
+        let title = "Xóa tất cả sách đã tải"
+        let msg = "Bạn có chắc chắn muốn xóa tất cả các nội dung đã tải không?"
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Đồng ý", style: .default) { action in
+
+        }
+        alert.addAction(okAction)
+        let cancelAction = UIAlertAction(title: "Hủy bỏ", style: .cancel)
+        alert.addAction(cancelAction)
+        
+        DispatchQueue.main.async {
+            UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
+        }
     }
     
     @objc private func shareTapped() {
