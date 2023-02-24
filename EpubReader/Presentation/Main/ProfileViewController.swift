@@ -464,10 +464,26 @@ class ProfileViewController: UIViewController {
     
     @objc private func handleSwitchAction2() {
         print("Allow audio from another apps click")
+        var value = false
         if switchControl2.isOn {
+            value = true
             UserDefs.userSetting["allowBackgroundAudio"] = true
+            let msg = "When turned on you will not be able to use the audio controller when your screen is locked."
+            let alert = UIAlertController(title: nil, message: msg, preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "OK", style: .cancel)
+            alert.addAction(cancelAction)
+            DispatchQueue.main.async {
+                UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
+            }
         } else {
+            value = false
             UserDefs.userSetting["allowBackgroundAudio"] = false
+        }
+        
+        if value {
+            MusicPlayerHelper.setupMixWitOthers()
+        } else {
+            MusicPlayerHelper.setupInterruptSpokenAudioAndMixWithOthers()
         }
     }
     
