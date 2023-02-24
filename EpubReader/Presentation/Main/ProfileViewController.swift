@@ -494,7 +494,7 @@ class ProfileViewController: UIViewController {
         let msg = "Bạn có chắc chắn muốn xóa tất cả các nội dung đã tải không?"
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Đồng ý", style: .default) { action in
-
+            Utilities.shared.deteleAllDownloads()
         }
         alert.addAction(okAction)
         let cancelAction = UIAlertAction(title: "Hủy bỏ", style: .cancel)

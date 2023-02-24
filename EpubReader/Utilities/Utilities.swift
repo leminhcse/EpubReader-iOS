@@ -91,6 +91,33 @@ class Utilities: NSObject {
         return false
     }
     
+    func deteleAllDownloads() {
+        if EpubReaderHelper.shared.downloadBooks.count > 0 {
+            for book in EpubReaderHelper.shared.downloadBooks {
+                if let bookUrl = URL(string: book.epub_source) {
+                    let fileName = bookUrl.lastPathComponent
+                    let path: String = Utilities.shared.getFileExist(fileName: fileName)
+                    if path != "" {
+                        try? FileManager.default.removeItem(atPath: path)
+                        EpubReaderHelper.shared.downloadBooks.removeAll(where: { $0.id == book.id})
+                        PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+                    }
+                }
+            }
+        }
+        if EpubReaderHelper.shared.downloadAudio.count > 0 {
+            for audio in EpubReaderHelper.shared.downloadAudio {
+                if let itemPath = DatabaseHelper.getFilePath(id: audio.id), FileManager.default.fileExists(atPath: itemPath) {
+                    try? FileManager.default.removeItem(atPath: itemPath)
+                    EpubReaderHelper.shared.downloadAudio.removeAll(where: {$0.id == audio.id})
+                    PersistenceHelper.saveAudioData(object: EpubReaderHelper.shared.downloadAudio, key: "downloadAudio")
+                }
+            }
+        }
+        NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveBookSuccessNotification), object: nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveAudioSuccessNotification), object: nil)
+    }
+    
     func noConnectionAlert() {
         guard self.isNoInternetDisplaying == false else {
             print("No Internet Connection is showing")
