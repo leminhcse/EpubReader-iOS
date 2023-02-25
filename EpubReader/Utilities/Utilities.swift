@@ -180,6 +180,89 @@ class Utilities: NSObject {
         }
     }
     
+    func showMoreOptions(book: Book) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        if #available(iOS 13.0, *) {
+            alert.view.tintColor = UIColor.primaryTextColor(traitCollection: UITraitCollection.current)
+        } else {
+            alert.view.tintColor = UIColor.color(with: .primaryItem)
+        }
+        alert.popoverPresentationController?.permittedArrowDirections = []
+
+        if Utilities.shared.isFavorited(bookId: book.id) {
+            let favouritesAction = UIAlertAction(title: "Xóa khỏi Yêu thích", style: .default) { action in
+                if EpubReaderHelper.shared.user == nil {
+                    Utilities.shared.showLoginDialog()
+                    return
+                }
+                let bookViewModel = BookViewModel()
+                bookViewModel.removeFavorite(bookId: book.id, userId: EpubReaderHelper.shared.user.id) { success in
+                    BannerNotification.removedFromFavourites.present()
+                }
+            }
+            alert.addAction(favouritesAction)
+        } else {
+            let favouritesAction = UIAlertAction(title: "Thêm vào Yêu thích", style: .default) { action in
+                if EpubReaderHelper.shared.user == nil {
+                    Utilities.shared.showLoginDialog()
+                    return
+                }
+                let bookViewModel = BookViewModel()
+                bookViewModel.putToFavorites(book: book, userId: EpubReaderHelper.shared.user.id) { success in
+                    BannerNotification.addedToFavourites.present()
+                }
+            }
+            alert.addAction(favouritesAction)
+        }
+    
+        if let bookUrl = URL(string: book.epub_source) {
+            let fileName = bookUrl.lastPathComponent
+            let path: String = Utilities.shared.getFileExist(fileName: fileName)
+            if path != "" {
+                let downloadAction = UIAlertAction(title: "Xóa sách", style: .default) { action in
+                    try? FileManager.default.removeItem(atPath: path)
+                    DispatchQueue.main.async {
+                        BannerNotification.downloadDeleted(title: book.title).present()
+                        EpubReaderHelper.shared.downloadBooks.removeAll(where: { $0.id == book.id})
+                        PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveBookSuccessNotification), object: nil)
+                    }
+                }
+                alert.addAction(downloadAction)
+            } else {
+                let downloadAction = UIAlertAction(title: "Tải sách", style: .default) { action in
+                    if !Reachability.shared.isConnectedToNetwork {
+                        Utilities.shared.noConnectionAlert()
+                        return
+                    }
+                    if !book.epub_source.contains("http") {
+                        Utilities.shared.showAlertDialog(title: "", message: "Không thể tải, đã xảy ra lỗi!")
+                    } else {
+                        ApiWebService.shared.downloadFile(url: bookUrl) { success in
+                            print("download")
+                            if success {
+                                DispatchQueue.main.async {
+                                    BannerNotification.downloadSuccessful(title: book.title).present()
+                                    EpubReaderHelper.shared.downloadBooks.append(book)
+                                    PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+                                }
+                            } else {
+                                DispatchQueue.main.async {
+                                    Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
+                                }
+                            }
+                        }
+                    }
+                }
+                alert.addAction(downloadAction)
+            }
+        }
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(cancelAction)
+        UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
+    }
+    
     func openAudioPlayer(audio: Audio, thumbnail: String) {
         AudioPlayer.shared.sound = nil
         AudioPlayer.shared.play(audio: audio, thumbnail: thumbnail)

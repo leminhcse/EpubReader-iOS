@@ -72,21 +72,7 @@ extension LiteraryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BookCell", for: indexPath) as! BookCell
         let book = self.listSkillBook[indexPath.row]
-
-        DispatchQueue.main.async {
-            if let url = URL(string: book.thumbnail) {
-                cell.imageView.kf_setImage(url: url) {_ in
-                    let imageWidth = cell.imageView.image?.size.width ?? 0
-                    let imageHeight = cell.imageView.image?.size.height ?? 0
-                    if imageHeight > imageWidth {
-                        cell.imageView.backgroundColor = .clear
-                    }
-                }
-            }
-        }
-        cell.titleLabel.text = book.title
-        cell.subtitleLabel.text = book.composer
-        
+        cell.configure(book: book)
         return cell
     }
     

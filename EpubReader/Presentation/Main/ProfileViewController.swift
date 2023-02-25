@@ -61,7 +61,7 @@ class ProfileViewController: UIViewController {
         profileNameLabel.backgroundColor = .clear
         profileNameLabel.numberOfLines = 1
         profileNameLabel.textAlignment = .center
-        profileNameLabel.text = "You're not logged in"
+        profileNameLabel.text = "Bạn hiện chưa đăng nhập"
         profileNameLabel.font = UIFont.font(with: .h5)
         if UIDevice.current.userInterfaceIdiom == .pad {
             profileNameLabel.font = UIFont.font(with: .h2)
@@ -97,7 +97,7 @@ class ProfileViewController: UIViewController {
         let continuePlayLabel = UILabel()
         continuePlayLabel.textColor = .darkGray
         continuePlayLabel.backgroundColor = .clear
-        continuePlayLabel.text = "Tiếp tục phát audio khi rời khỏi ứng dụng"
+        continuePlayLabel.text = "Cho phép phát audio ở background"
         continuePlayLabel.font = UIFont.font(with: .h5)
         if UIDevice.current.userInterfaceIdiom == .pad {
             continuePlayLabel.font = UIFont.font(with: .h2)
@@ -210,6 +210,7 @@ class ProfileViewController: UIViewController {
         shareButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -32, bottom: 0, right: 0)
         shareButton.customButton(title: "Chia sẻ ứng dụng tới người khác")
         shareButton.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
+        shareButton.isHidden = true
         return shareButton
     }()
 
@@ -247,7 +248,7 @@ class ProfileViewController: UIViewController {
         settingsView.addSubview(switchControl4)
         
         settingsView.addSubview(downloadButton)
-        settingsView.addSubview(shareButton)
+        //settingsView.addSubview(shareButton)
         
         scrollView.addSubview(profileView)
         scrollView.addSubview(settingsView)
@@ -390,14 +391,14 @@ class ProfileViewController: UIViewController {
             make.leading.equalToSuperview()
         }
         
-        shareButton.snp.makeConstraints { (make) in
-            make.top.equalTo(downloadButton.snp.bottom).offset(switchTop)
-            make.size.equalTo(CGSize(width: width, height: switchTitleHeight + paddingTop))
-            make.leading.equalToSuperview()
-        }
+//        shareButton.snp.makeConstraints { (make) in
+//            make.top.equalTo(downloadButton.snp.bottom).offset(switchTop)
+//            make.size.equalTo(CGSize(width: width, height: switchTitleHeight + paddingTop))
+//            make.leading.equalToSuperview()
+//        }
         
         downloadButton.imageEdgeInsets = UIEdgeInsets(top: 4, left: width - padding, bottom: 4, right: 0)
-        shareButton.imageEdgeInsets = UIEdgeInsets(top: 4, left: width - padding, bottom: 4, right: 0)
+        //shareButton.imageEdgeInsets = UIEdgeInsets(top: 4, left: width - padding, bottom: 4, right: 0)
     }
     
     private func loadData() {

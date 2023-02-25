@@ -207,7 +207,7 @@ class BookDetailViewController: UIViewController {
     }()
     
     // MARK: - Local variables
-    private let listTopic = ["Giới Thiệu", "File Audio"]
+    private let listTopic = ["Lời Tựa", "File Audio"]
     private let playerView = UIView()
     private let playerViewController = PlayerViewController()
     
