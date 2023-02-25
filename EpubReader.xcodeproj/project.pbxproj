@@ -75,6 +75,7 @@
 		04B719D629597CFB005E3C09 /* tick_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B719D329597CFB005E3C09 /* tick_icon.png */; };
 		04B719D729597CFB005E3C09 /* cross_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B719D429597CFB005E3C09 /* cross_icon.png */; };
 		04BC25AD2870B018007ECAEE /* chevron_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 04BC25AC2870B018007ECAEE /* chevron_down.png */; };
+		04C6045329AA4A26008EADA7 /* BaseGestureRecognizerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C6045229AA4A26008EADA7 /* BaseGestureRecognizerProtocol.swift */; };
 		04C79DA528E08EF000593DFD /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C79DA428E08EF000593DFD /* SideMenuViewController.swift */; };
 		04C79DA928E0A24400593DFD /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C79DA828E0A24400593DFD /* MenuTableViewCell.swift */; };
 		04C79DAB28E0C4FA00593DFD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C79DAA28E0C4FA00593DFD /* ProfileViewController.swift */; };
@@ -224,6 +225,7 @@
 		04B719D329597CFB005E3C09 /* tick_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tick_icon.png; sourceTree = "<group>"; };
 		04B719D429597CFB005E3C09 /* cross_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cross_icon.png; sourceTree = "<group>"; };
 		04BC25AC2870B018007ECAEE /* chevron_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron_down.png; sourceTree = "<group>"; };
+		04C6045229AA4A26008EADA7 /* BaseGestureRecognizerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGestureRecognizerProtocol.swift; sourceTree = "<group>"; };
 		04C79DA428E08EF000593DFD /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
 		04C79DA828E0A24400593DFD /* MenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
 		04C79DAA28E0C4FA00593DFD /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -414,6 +416,14 @@
 			path = DataFiles;
 			sourceTree = "<group>";
 		};
+		04C6045129AA4A03008EADA7 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				04C6045229AA4A26008EADA7 /* BaseGestureRecognizerProtocol.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
 		04FA55DB286C64CC00724CF9 /* Book */ = {
 			isa = PBXGroup;
 			children = (
@@ -589,6 +599,7 @@
 		FA3D8E9C283BD6F8004C186E /* EpubReader */ = {
 			isa = PBXGroup;
 			children = (
+				04C6045129AA4A03008EADA7 /* Protocol */,
 				04640E9A29156EFB001FA655 /* DataFiles */,
 				FADA96B32868BC850075627C /* Helper */,
 				FAC51FC6283FC5630016889F /* Utilities */,
@@ -1098,6 +1109,7 @@
 				04490EB228D61BD8004820CD /* UIFont.swift in Sources */,
 				FA3D8E9E283BD6F8004C186E /* AppDelegate.swift in Sources */,
 				045C43E528C7ABDB000A83E4 /* DatabaseHelper.swift in Sources */,
+				04C6045329AA4A26008EADA7 /* BaseGestureRecognizerProtocol.swift in Sources */,
 				0401C1F528BE7463008A686B /* AudioViewModel.swift in Sources */,
 				FAC51FCC283FCE590016889F /* BaseViewController.swift in Sources */,
 				FAB7F4B9284CD43800A16974 /* Book.swift in Sources */,
