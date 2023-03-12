@@ -38,7 +38,7 @@ extension UIFont {
             
             switch self {
             case .h0, .h1, .h2, .h3, .h4, .h5:
-                weight = .bold
+                weight = .semibold//.bold
             case .subtitle:
                 weight = .semibold
             }
