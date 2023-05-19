@@ -19,6 +19,16 @@ class Utils {
         return label.frame.width
     }
     
+    class func estimatedHeightOfLabel(text: String, font: UIFont, width: CGFloat) -> CGFloat {
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        return label.frame.height
+    }
+    
     class func getLengthMaxOfTextArray(arrStr: [String], font: UIFont, height: CGFloat) -> CGFloat {
         var stringMax = String()
         var count : Int = 0

@@ -53,16 +53,6 @@ class BookDetailViewController: UIViewController {
         return favoriteButton
     }()
     
-    private lazy var bookDetailsLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.black
-        label.backgroundColor = .clear
-        label.numberOfLines = 1
-        label.sizeToFit()
-        label.text = "Detail Books"
-        return label
-    }()
-    
     private lazy var previewImage: UIImageView = {
         let previewImage = UIImageView()
         previewImage.clipsToBounds = true
@@ -104,7 +94,7 @@ class BookDetailViewController: UIViewController {
         let label = UILabel()
         label.textColor = UIColor.black
         label.backgroundColor = .clear
-        label.numberOfLines = 1
+        label.numberOfLines = 3
         label.textAlignment = .center
         label.sizeToFit()
         label.font = UIFont.font(with: .h3)
@@ -125,7 +115,7 @@ class BookDetailViewController: UIViewController {
     private lazy var downloadButtonView: UIView = {
         let downloadButtonView = UIView()
         downloadButtonView.backgroundColor = UIColor.color(with: .background)
-        downloadButtonView.layer.cornerRadius = 24
+        downloadButtonView.layer.cornerRadius = padding
         return downloadButtonView
     }()
     
@@ -263,7 +253,6 @@ class BookDetailViewController: UIViewController {
         
         closeButtonView.addSubview(closeButton)
         topButtonView.addSubview(closeButtonView)
-        topButtonView.addSubview(bookDetailsLabel)
         topButtonView.addSubview(favoriteButton)
         
         previewImage.layer.addSublayer(gradiantLayer)
@@ -306,7 +295,7 @@ class BookDetailViewController: UIViewController {
         let top = safeAreaTop
         let frameWidth = self.view.frame.size.width
         let frameHeight = self.view.frame.size.height
-        var bookViewHeight = frameHeight/2 + 128
+        var bookViewHeight = frameHeight/2 + 192
         
         if UIDevice.current.userInterfaceIdiom == .pad {
             bookViewHeight = frameHeight / 1.5 + 40
@@ -339,12 +328,6 @@ class BookDetailViewController: UIViewController {
             make.top.equalToSuperview().inset(4)
         }
         
-        bookDetailsLabel.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.size.equalTo(CGSize(width: 120, height: 32))
-        }
-        
         favoriteButton.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(24)
@@ -369,16 +352,14 @@ class BookDetailViewController: UIViewController {
         
         var bookImageWidth = bookDescWidth - 72
         var bookImageHeight = bookDescHeight - 70
-        let downloadButtonViewWidth = frameWidth / 2 - 32
+        let downloadButtonViewWidth = frameWidth / 2
         var downloadButtonViewHeight: CGFloat = 48
         var downloadButtonY: CGFloat = 24
         var titleTop: CGFloat = 16
-        var composerTop: CGFloat = 0
         if UIDevice.current.userInterfaceIdiom == .pad {
             bookImageWidth = bookDescWidth - 72 * 3
             bookImageHeight = bookDescHeight - 70 * 3
             titleTop = 32
-            composerTop = 32
             downloadButtonViewHeight = 80
             downloadButtonY = 42
             bookTitle.font = UIFont.systemFont(ofSize: 32.0)
@@ -390,20 +371,22 @@ class BookDetailViewController: UIViewController {
             make.size.equalTo(CGSize(width: bookImageWidth, height: bookImageHeight))
         }
         
+        let bookHeight: CGFloat = Utils.estimatedHeightOfLabel(text: bookTitle.text!, font: bookTitle.font, width: bookDescWidth)
         bookTitle.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.top.equalTo(bookImage.snp.bottom).offset(titleTop)
-            make.size.equalTo(CGSize(width: bookDescWidth, height: 28))
+            make.size.equalTo(CGSize(width: bookDescWidth, height: bookHeight))
         }
         
+        let bookTop: CGFloat = bookHeight/2 - padding
         bookComposer.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.top.equalTo(bookTitle.snp.bottom).offset(composerTop)
+            make.top.equalTo(bookTitle.snp.bottom).offset(bookTop)
             make.size.equalTo(CGSize(width: bookDescWidth, height: 28))
         }
         
         downloadButtonView.snp.makeConstraints { (make) in
-            make.top.equalTo(bookDescription.snp.bottom).offset(padding)
+            make.top.equalTo(bookComposer.snp.bottom).offset(padding)
             make.bottom.equalTo(booksDetailsView.snp.bottom).inset(downloadButtonY)
             make.centerX.equalToSuperview()
             make.size.equalTo(CGSize(width: downloadButtonViewWidth, height: downloadButtonViewHeight))
