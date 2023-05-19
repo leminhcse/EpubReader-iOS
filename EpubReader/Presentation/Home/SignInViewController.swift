@@ -228,23 +228,22 @@ class SignInViewController: UIViewController {
     
     // MARK: SignIn Action Events
     @objc func googleAuthLogin() {
-        let signInConfig = GIDConfiguration.init(clientID: SignInViewController.CLIENT_ID)
-        GIDSignIn.sharedInstance.signIn(with: signInConfig, presenting: self) { user, error in
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { GIDSignInResult, error in
             if error == nil {
-                guard let user = user else {
+                guard let user = GIDSignInResult?.user else {
                     print("Uh oh. The user cancelled the Google login.")
                     return
                 }
-                //let userId = user.userID ?? ""
-                let userIdToken = user.authentication.idToken ?? ""
+                let userIdToken = user.idToken
                 let userEmail = user.profile?.email ?? ""
-                let googleProfilePicURL = user.profile?.imageURL(withDimension: 150)?.absoluteString ?? ""
-
+                let userThumbnail = user.profile?.imageURL(withDimension: 150)?.absoluteString ?? ""
+                let userName = user.profile?.name ?? ""
+                
                 let userInfo = User()
                 userInfo.email = userEmail
-                userInfo.name = user.profile?.name ?? ""
-                userInfo.avatar = googleProfilePicURL
-                userInfo.access_token = userIdToken
+                userInfo.name = userName
+                userInfo.avatar = userThumbnail
+                userInfo.access_token = userIdToken?.tokenString ?? ""
                 userInfo.type = "0"
                 userInfo.isPurchased = "0"
                 

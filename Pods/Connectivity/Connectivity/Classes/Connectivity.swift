@@ -28,82 +28,87 @@ public class Connectivity: NSObject {
     @available(OSX 10.15, iOS 13.0, tvOS 13.0, *)
     public typealias Publisher = ConnectivityPublisher
 #endif
-
+    
     // MARK: State
-
-    /// % successful connections required to be deemed to have connectivity
-    public var successThreshold = Connectivity.Percentage(50.0)
-
-    /// URLs to contact in order to check connectivity
-    public var connectivityURLs: [URL] = Connectivity
-        .defaultConnectivityURLs(shouldUseHTTPS: Connectivity.isHTTPSOnly) {
-        didSet {
-            if Connectivity.isHTTPSOnly { // if HTTPS only set only allow HTTPS URLs
-                connectivityURLs = connectivityURLs.filter { url in
-                    return url.absoluteString.lowercased().starts(with: "https")
-                }
-            }
-        }
-    }
-
+    
     /// Optionally configure a bearer token to be sent as part of an Authorization header.
     public var bearerToken: String?
-
+    
+    /// Optionally configure the Authorization header manually.
+    /// Note: `bearerToken` has a higher priority
+    public var authorizationHeader: String?
+    
     /// Available network interfaces as of most recent connectivity check.
     public private(set) var availableInterfaces: [Interface] = []
-
+    
 #if canImport(UIKit)
     /// Whether or not the connectivity should be checked when the application becomes active.
     public var checkWhenApplicationDidBecomeActive: Bool = true
 #endif
-
+    
     /// There can be a delay between being informed of a network interface change and the
     /// network actually being available.
     public var connectivityCheckLatency: Double = 0.5
-
+    
+    /// URLs to contact in order to check connectivity
+    public var connectivityURLs: [URL] = Connectivity
+        .defaultConnectivityURLs(shouldUseHTTPS: Connectivity.isHTTPSOnly) {
+            didSet {
+                if Connectivity.isHTTPSOnly { // if HTTPS only set only allow HTTPS URLs
+                    connectivityURLs = connectivityURLs.filter { url in
+                        return url.absoluteString.lowercased().starts(with: "https")
+                    }
+                }
+            }
+        }
+    
     /// Current network interface as of most recent connectivity check.
     public private(set) var currentInterface: Interface = .other
-
+    
     /// Regex expected to match connectivity URL response
     public var expectedResponseRegEx = ".*?<BODY>.*?Success.*?</BODY>.*" {
         didSet {
             updateValidator(for: validationMode)
         }
     }
-
+    
     /// Response expected from connectivity URLs
     public var expectedResponseString = "Success" {
         didSet {
             updateValidator(for: validationMode)
         }
     }
-
+    
+    /// Queue to callback on
+    private (set) var externalQueue = DispatchQueue.main
+    
     /// Whether or not to use System Configuration or Network (on iOS 12+) framework.
     public var framework: Connectivity.Framework = .systemConfiguration
-
+    
     /// Used to for checks using NWPathMonitor
-    private var internalQueue: DispatchQueue = DispatchQueue.global(qos: .background)
-
+    private (set) var internalQueue = DispatchQueue.global(qos: .default)
+    
     /// Whether or not we are currently deemed to have connectivity
     public private(set) var isConnected: Bool = false
-
+    
     /// Whether or not only HTTPS URLs should be used to check connectivity
     public static var isHTTPSOnly: Bool = true {
         didSet {
             // Only set true if `allow arbitrary loads` is set
             guard let bundleInfo = Bundle.main.infoDictionary,
-                let appTransportSecurity = bundleInfo["NSAppTransportSecurity"] as? [String: Any],
-                let allowsArbitraryLoads = appTransportSecurity["NSAllowsArbitraryLoads"] as? Bool,
-                allowsArbitraryLoads else {
+                  let appTransportSecurity = bundleInfo["NSAppTransportSecurity"] as? [String: Any],
+                  let allowsArbitraryLoads = appTransportSecurity["NSAllowsArbitraryLoads"] as? Bool,
+                  allowsArbitraryLoads
+            else {
                 isHTTPSOnly = true
                 return
             }
         }
     }
-
+    
     /// Whether we are listening for changes in reachability (otherwise performing a one-off connectivity check)
     fileprivate var isObservingInterfaceChanges = false
-
+    
     /// Whether connectivity checks should be performed without waiting for reachability changes
     public var isPollingEnabled: Bool = false {
         didSet {
@@ -112,29 +117,26 @@ public class Connectivity: NSObject {
             }
         }
     }
-
+    
     // Stores a NWPathMonitor reference - erase type information where Network framework unavailable.
     private var pathMonitor: Any?
-
+    
     /// Where polling is enabled, the interval at which connectivity checks will be performed.
     public var pollingInterval: Double = 10.0
-
+    
     /// When polling is enabled, only polls if the result of the last check indicated connectivity not present.
     public var pollWhileOfflineOnly: Bool = false
-
+    
     /// Status last time a check was performed
     private var previousStatus: ConnectivityStatus = .determining
-
-    /// Queue to callback on
-    private var externalQueue: DispatchQueue = DispatchQueue.main
-
+    
     /// Reachability instance for checking network adapter status
     private let reachability: Reachability
-
+    
     /// Can be used to set a custom validator conforming to `ConnectivityResponseValidator`
     public var responseValidator: ConnectivityResponseValidator =
-        ConnectivityResponseContainsStringValidator()
-
+    ConnectivityResponseContainsStringValidator()
+    
     /// Returns the appropriate validator for the current validation mode.
     private var responseValidatorFactory: ResponseValidatorFactory {
         return ResponseValidatorFactory(
@@ -144,42 +146,48 @@ public class Connectivity: NSObject {
             customValidator: responseValidator
         )
     }
-
+    
     /// Status of the current connection
     public var status: ConnectivityStatus = .determining
-
+    
+    /// % successful connections required to be deemed to have connectivity
+    public var successThreshold = Connectivity.Percentage(50.0)
+    
     /// Timer for polling connectivity endpoints when not awaiting changes in reachability
     private var timer: Timer?
-
+    
     /// URL session configuration ignoring cache
-    public static var urlSessionConfiguration: URLSessionConfiguration = {
-        let sessionConfiguration = URLSessionConfiguration.default
-        sessionConfiguration.requestCachePolicy = .reloadIgnoringCacheData
-        sessionConfiguration.timeoutIntervalForRequest = 5.0
-        sessionConfiguration.timeoutIntervalForResource = 5.0
-        return sessionConfiguration
-    }()
-
+    public static var urlSessionConfiguration: URLSessionConfiguration = defaultURLSessionConfiguration()
+    
+    /// URL session used to check connectivity
+    private lazy var urlSession = defaultURLSession()
+    
     /// Method used to determine whether response content is valid
     public var validationMode: ValidationMode = .containsExpectedResponseString {
         didSet {
             updateValidator(for: validationMode)
         }
     }
-
+    
     /// Callback to invoke when connected
     public var whenConnected: NetworkConnected?
-
+    
     /// Callback to invoke when disconnected
     public var whenDisconnected: NetworkDisconnected?
-
+    
     // MARK: Life cycle
-
+    
     public init(shouldUseHTTPS: Bool = true) {
         type(of: self).isHTTPSOnly = shouldUseHTTPS
         self.reachability = Reachability.forInternetConnection()
     }
-
+    
+    public init(configuration: ConnectivityConfiguration) {
+        self.reachability = Reachability.forInternetConnection()
+        super.init()
+        configure(with: configuration)
+    }
+    
     deinit {
         stopNotifier()
     }
@@ -191,32 +199,40 @@ public extension Connectivity {
     override var description: String {
         return "\(status)"
     }
-
+    
     var isConnectedViaCellular: Bool {
         return isConnected(with: ReachableViaWWAN)
     }
-
+    
+    var isConnectedViaEthernet: Bool {
+        return isConnectedUsingEthernet()
+    }
+    
     var isConnectedViaWiFi: Bool {
         return isConnected(with: ReachableViaWiFi)
     }
-
+    
     var isConnectedViaCellularWithoutInternet: Bool {
         return isDisconnected(with: ReachableViaWWAN)
     }
-
+    
+    var isConnectedViaEthernetWithoutInternet: Bool {
+        return isDisconnectedUsingEthernet()
+    }
+    
     var isConnectedViaWiFiWithoutInternet: Bool {
         return isDisconnected(with: ReachableViaWiFi)
     }
-
+    
     func checkConnectivity(completion: ((Connectivity) -> Void)? = nil) {
         let deadline: DispatchTime = (previousStatus == .notConnected)
-            ? DispatchTime.now() + connectivityCheckLatency
-            : DispatchTime.now()
+        ? DispatchTime.now() + connectivityCheckLatency
+        : DispatchTime.now()
         internalQueue.asyncAfter(deadline: deadline) { [weak self] in
             self?.checkConnectivityOnInternalQueue(completion: completion)
         }
     }
-
+    
     /// Listen for changes in Reachability
     func startNotifier(queue: DispatchQueue = DispatchQueue.main) {
         if isObservingInterfaceChanges { stopNotifier() } // Perform cleanup in event this method called twice
@@ -232,7 +248,7 @@ public extension Connectivity {
             startReachabilityNotifier()
         }
     }
-
+    
     @available(OSX 10.14, iOS 12.0, tvOS 12.0, *)
     private func startPathMonitorNotifier() {
         let monitor = NWPathMonitor()
@@ -242,7 +258,7 @@ public extension Connectivity {
         }
         monitor.start(queue: internalQueue)
     }
-
+    
     private func startReachabilityNotifier() {
         checkConnectivity()
         reachability.connectionRequired()
@@ -255,7 +271,7 @@ public extension Connectivity {
             object: nil
         )
     }
-
+    
     /// Stop listening for Reachability changes
     func stopNotifier() {
         timer?.invalidate()
@@ -267,7 +283,7 @@ public extension Connectivity {
         }
         isObservingInterfaceChanges = false
     }
-
+    
     @available(OSX 10.14, iOS 12.0, tvOS 12.0, *)
     private func stopPathMonitorNotifier() {
         if isObservingInterfaceChanges, let monitor = pathMonitor as? NWPathMonitor {
@@ -275,7 +291,7 @@ public extension Connectivity {
             pathMonitor = nil
         }
     }
-
+    
     private func stopReachabilityNotifier() {
         if isObservingInterfaceChanges {
             reachability.stopNotifier()
@@ -293,16 +309,23 @@ private extension Connectivity {
         }
     }
 #endif
-
-    /// Returns a URL request for an Authorization header if the `bearerToken` property is set,
+    
+    /// Returns a URL request for an Authorization header if `authorizationHeader` or `bearerToken` property is set,
+    /// `authorizationHeader` is prefered over `bearerToken`
     /// otherwise `nil` is returned.
     func authorizedURLRequest(with url: URL) -> URLRequest? {
-        guard let bearerToken = self.bearerToken else { return nil }
+        var authHeader: String? = authorizationHeader
+        if let bearerToken {
+            authHeader = authHeader ?? "Bearer \(bearerToken)"
+        }
+        guard let authHeader else {
+            return nil
+        }
         var request = URLRequest(url: url)
-        request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(authHeader, forHTTPHeaderField: "Authorization")
         return request
     }
-
+    
     /// Check whether enough tasks have successfully completed to be considered connected.
     private func cancelConnectivityCheck(
         pendingTasks: [URLSessionDataTask],
@@ -313,24 +336,26 @@ private extension Connectivity {
         guard isConnected else { return }
         cancelPendingTasks(pendingTasks)
     }
-
+    
     /// Cancels tasks in the specified array which haven't yet completed.
     private func cancelPendingTasks(_ tasks: [URLSessionDataTask]) {
         for task in tasks where [.running, .suspended].contains(task.state) {
             task.cancel()
         }
     }
-
+    
     /// Checks specified URLs for the expected response to determine whether Internet connectivity exists. It is
     /// intended that this function should be called only from `checkConnectivity` to ensure that it is executed
     /// on  `internalQueue`.
     private func checkConnectivityOnInternalQueue(completion: ((Connectivity) -> Void)? = nil) {
         let dispatchGroup = DispatchGroup()
         var tasks: [URLSessionDataTask] = []
-        let session: URLSession = urlSession()
         var successfulChecks: UInt = 0, failedChecks: UInt = 0
-        let totalChecks: UInt = UInt(connectivityURLs.count)
-
+        let totalChecks = UInt(connectivityURLs.count)
+        
+        // Ensure that we are using the latest session configuration.
+        urlSession = defaultURLSession()
+        
         // Connectivity check callback
         let completionHandlerForUrl: (URL) -> ((Data?, URLResponse?, Error?) -> Void) = { url in
             return { [weak self] data, response, _ in
@@ -349,15 +374,15 @@ private extension Connectivity {
                 )
             }
         }
-
+        
         // Check each of the specified URLs in turn
         tasks = connectivityURLs.map {
             guard let urlRequest = authorizedURLRequest(with: $0) else {
-                return session.dataTask(with: $0, completionHandler: completionHandlerForUrl($0))
+                return urlSession.dataTask(with: $0, completionHandler: completionHandlerForUrl($0))
             }
-            return session.dataTask(with: urlRequest, completionHandler: completionHandlerForUrl($0))
+            return urlSession.dataTask(with: urlRequest, completionHandler: completionHandlerForUrl($0))
         }
-
+        
         tasks.forEach { task in
             dispatchGroup.enter()
             internalQueue.async {
@@ -376,27 +401,49 @@ private extension Connectivity {
             }
         }
     }
-
+    
+    /// Applies the settings specified by the `ConnectivityConfiguration` object.
+    private func configure(with configuration: ConnectivityConfiguration) {
+        authorizationHeader = configuration.authorizationHeader
+        bearerToken = configuration.bearerToken
+#if canImport(UIKit)
+        checkWhenApplicationDidBecomeActive = configuration.checkWhenApplicationDidBecomeActive
+#endif
+        connectivityURLs = configuration.connectivityURLs
+        externalQueue = configuration.callbackQueue
+        framework = configuration.framework
+        internalQueue = configuration.connectivityQueue
+        isPollingEnabled = configuration.pollingIsEnabled
+        pollingInterval = configuration.pollingInterval
+        pollWhileOfflineOnly = configuration.pollWhileOfflineOnly
+        responseValidator = configuration.responseValidator
+        successThreshold = configuration.successThreshold
+        Self.urlSessionConfiguration = configuration.urlSessionConfiguration
+        if let validationMode = configuration.validationMode {
+            self.validationMode = validationMode
+        }
+    }
+    
     /// Determines whether or not the connectivity check was successful.
     private func connectivityCheckSucceeded(for url: URL, response: URLResponse?, data: Data?) -> Bool {
         let validator = responseValidatorFactory.manufacture()
         return validator.isResponseValid(url: url, response: response, data: data)
     }
-
+    
     /// Set of connectivity URLs used by default if none are otherwise specified.
     static func defaultConnectivityURLs(shouldUseHTTPS: Bool) -> [URL] {
         var result: [URL] = []
         let connectivityURLs: [String] = shouldUseHTTPS
-            ? ["https://www.apple.com/library/test/success.html",
-               "https://captive.apple.com/hotspot-detect.html"] // Replace with custom URLs
-            : ["http://www.apple.com/library/test/success.html",
-               "http://apple.com/library/test/success.html",
-               "http://www.appleiphonecell.com/library/test/success.html",
-               "http://www.itools.info/library/test/success.html",
-               "http://www.ibook.info/library/test/success.html",
-               "http://www.airport.us/library/test/success.html",
-               "http://www.thinkdifferent.us/library/test/success.html",
-               "http://captive.apple.com/hotspot-detect.html"]
+        ? ["https://www.apple.com/library/test/success.html",
+           "https://captive.apple.com/hotspot-detect.html"] // Replace with custom URLs
+        : ["http://www.apple.com/library/test/success.html",
+           "http://apple.com/library/test/success.html",
+           "http://www.appleiphonecell.com/library/test/success.html",
+           "http://www.itools.info/library/test/success.html",
+           "http://www.ibook.info/library/test/success.html",
+           "http://www.airport.us/library/test/success.html",
+           "http://www.thinkdifferent.us/library/test/success.html",
+           "http://captive.apple.com/hotspot-detect.html"]
         for connectivityURLStr in connectivityURLs {
             if let connectivityURL = URL(string: connectivityURLStr) {
                 result.append(connectivityURL)
@@ -404,7 +451,21 @@ private extension Connectivity {
         }
         return result
     }
-
+    
+    /// Ensures that the instance var `urlSessionConfiguration` is used to create a session.
+    func defaultURLSession() -> URLSession {
+        URLSession(configuration: type(of: self).urlSessionConfiguration)
+    }
+    
+    /// Returns a default `URLSessionConfiguration`.
+    static func defaultURLSessionConfiguration() -> URLSessionConfiguration {
+        let sessionConfiguration = URLSessionConfiguration.default
+        sessionConfiguration.requestCachePolicy = .reloadIgnoringCacheData
+        sessionConfiguration.timeoutIntervalForRequest = 5.0
+        sessionConfiguration.timeoutIntervalForResource = 5.0
+        return sessionConfiguration
+    }
+    
     func interface(with networkStatus: NetworkStatus) -> ConnectivityInterface {
         switch networkStatus {
         case ReachableViaWiFi:
@@ -415,20 +476,22 @@ private extension Connectivity {
             return .other
         }
     }
-
+    
     @available(OSX 10.14, iOS 12.0, tvOS 12.0, *)
-    func interface(with path: NWPath) -> ConnectivityInterface {
+    func interface(from path: NWPath) -> ConnectivityInterface {
         if path.usesInterfaceType(.wifi) {
             return .wifi
+        } else if path.usesInterfaceType(.wiredEthernet) {
+            return .ethernet
         } else if path.usesInterfaceType(.cellular) {
             return .cellular
         } else {
             return .other
         }
     }
-
+    
     @available(OSX 10.14, iOS 12.0, tvOS 12.0, *)
-    func interfaces(with path: NWPath) -> [ConnectivityInterface] {
+    func interfaces(from path: NWPath) -> [ConnectivityInterface] {
         return path.availableInterfaces.map { interface in
             switch interface.type {
             case .cellular:
@@ -446,7 +509,7 @@ private extension Connectivity {
             }
         }
     }
-
+    
     /// Determines whether connected with the given method.
     func isConnected(with networkStatus: NetworkStatus) -> Bool {
         if #available(OSX 10.14, iOS 12.0, tvOS 12.0, watchOS 5.0, *), isNetworkFramework() {
@@ -460,7 +523,20 @@ private extension Connectivity {
             return isConnected && reachability.currentReachabilityStatus() == networkStatus
         }
     }
-
+    
+    func isConnectedUsingEthernet() -> Bool {
+        if #available(OSX 10.14, iOS 12.0, tvOS 12.0, watchOS 5.0, *), isNetworkFramework() {
+            guard let monitor = self.pathMonitor as? NWPathMonitor else {
+                return false
+            }
+            let usingEthernet = monitor.currentPath.availableInterfaces.map { interface in
+                interface.type
+            }.contains(.wiredEthernet)
+            return isConnected && usingEthernet
+        }
+        return false
+    }
+    
     /// Determines whether connected with the given method without Internet access (no connectivity).
     func isDisconnected(with networkStatus: NetworkStatus) -> Bool {
         if #available(OSX 10.14, iOS 12.0, tvOS 12.0, watchOS 5.0, *), isNetworkFramework() {
@@ -474,7 +550,20 @@ private extension Connectivity {
             return !isConnected && reachability.currentReachabilityStatus() == networkStatus
         }
     }
-
+    
+    func isDisconnectedUsingEthernet() -> Bool {
+        if #available(OSX 10.14, iOS 12.0, tvOS 12.0, watchOS 5.0, *), isNetworkFramework() {
+            guard let monitor = self.pathMonitor as? NWPathMonitor else {
+                return false
+            }
+            let usingEthernet = monitor.currentPath.availableInterfaces.map { interface in
+                interface.type
+            }.contains(.wiredEthernet)
+            return !isConnected && usingEthernet
+        }
+        return false
+    }
+    
     /// Maps a NetworkStatus to a NWInterface.InterfaceType, if possible.
     @available(OSX 10.14, iOS 12.0, tvOS 12.0, *)
     private func interfaceType(from networkStatus: NetworkStatus) -> NWInterface.InterfaceType? {
@@ -487,17 +576,17 @@ private extension Connectivity {
             return nil
         }
     }
-
+    
     /// Determines whether enough connectivity checks have succeeded to be considered connected.
     private func isThresholdMet(_ successfulChecks: UInt, outOf totalChecks: UInt) -> Bool {
         return Percentage(successfulChecks, outOf: totalChecks) >= successThreshold
     }
-
+    
     /// Whether or not the we should use the Network framework on iOS 12+.
     func isNetworkFramework() -> Bool {
         return framework == .network
     }
-
+    
     /// Posts notification and invokes the appropriate callback when a change in connectivity has occurred.
     private func notifyConnectivityDidChange() {
         let callback = isConnected ? whenConnected : whenDisconnected
@@ -509,7 +598,7 @@ private extension Connectivity {
         }
         previousStatus = currentStatus // Update for the next connectivity check
     }
-
+    
 #if canImport(UIKit)
     // Registers Connectivity as an observer of the `UIApplication.didBecomeActiveNotification` notification.
     private func observeApplicationDidBecomeActive() {
@@ -522,23 +611,23 @@ private extension Connectivity {
         )
     }
 #endif
-
+    
     /// Checks connectivity when the polling timer fires.
     @objc private func pollingTimerDidFire() {
         if shouldPoll() {
             checkConnectivity()
         }
     }
-
+    
     private func shouldPoll() -> Bool {
         return isPollingEnabled && (!pollWhileOfflineOnly || (pollWhileOfflineOnly && !isConnected))
     }
-
+    
     /// Checks connectivity when change in reachability observed
     @objc func reachabilityDidChange(_: NSNotification) {
         checkConnectivity()
     }
-
+    
     /// Checks connectivity every <polling interval> seconds rather than waiting for changes in Reachability status
     func setPollingEnabled(_ enabled: Bool) {
         timer?.invalidate()
@@ -551,7 +640,7 @@ private extension Connectivity {
             repeats: true
         )
     }
-
+    
     /// Determines the connectivity status using info provided by `NetworkStatus`.
     func status(from networkStatus: NetworkStatus, isConnected: Bool) -> ConnectivityStatus {
         let currentStatus: ConnectivityStatus
@@ -565,22 +654,22 @@ private extension Connectivity {
         }
         return currentStatus
     }
-
+    
     /// Determines the connectivity status using network interface info provided by `NWPath`.
     @available(OSX 10.14, iOS 12.0, tvOS 12.0, *)
     func status(from path: NWPath, isConnected: Bool) -> ConnectivityStatus {
-        let currentInterface = interface(with: path)
-        let currentStatus: ConnectivityStatus
-        if currentInterface == .wifi {
-            currentStatus = isConnected ? .connectedViaWiFi : .connectedViaWiFiWithoutInternet
-        } else if currentInterface == .cellular {
-            currentStatus = isConnected ? .connectedViaCellular : .connectedViaCellularWithoutInternet
-        } else {
-            currentStatus = isConnected ? .connected : .notConnected
+        switch interface(from: path) {
+        case .cellular:
+            return isConnected ? .connectedViaCellular : .connectedViaCellularWithoutInternet
+        case .ethernet:
+            return isConnected ? .connectedViaEthernet : .connectedViaEthernetWithoutInternet
+        case .loopback, .other:
+            return isConnected ? .connected : .notConnected
+        case .wifi:
+            return isConnected ? .connectedViaWiFi : .connectedViaWiFiWithoutInternet
         }
-        return currentStatus
     }
-
+    
     /// Determines whether a change in connectivity has taken place.
     private func statusHasChanged(previousStatus: ConnectivityStatus?, currentStatus: ConnectivityStatus) -> Bool {
         guard let previousStatus = previousStatus else {
@@ -588,16 +677,16 @@ private extension Connectivity {
         }
         return previousStatus != currentStatus
     }
-
+    
     /// Updates the connectivity status using network interface info provided by `NWPath`.
     @available(OSX 10.14, iOS 12.0, tvOS 12.0, *)
     func updateStatus(from path: NWPath, isConnected: Bool) {
-        availableInterfaces = interfaces(with: path)
-        currentInterface = interface(with: path)
+        availableInterfaces = interfaces(from: path)
+        currentInterface = interface(from: path)
         self.isConnected = isConnected
         status = status(from: path, isConnected: isConnected)
     }
-
+    
     /// Updates the connectivity status using info provided by `NetworkStatus`.
     func updateStatus(from networkStatus: NetworkStatus, isConnected: Bool) {
         let currentInterface = interface(with: networkStatus)
@@ -606,7 +695,7 @@ private extension Connectivity {
         self.isConnected = isConnected
         status = status(from: networkStatus, isConnected: isConnected)
     }
-
+    
     /// Convenience method - updates the connectivity status using info provided by `NetworkStatus`.
     func updateStatus(isConnected: Bool) {
         switch framework {
@@ -630,15 +719,10 @@ private extension Connectivity {
             }
         }
     }
-
+    
     /// Updates the validator when the validation mode changes.
     func updateValidator(for _: ValidationMode) {
         let validator = responseValidatorFactory.manufacture()
         responseValidator = validator
-    }
-
-    /// Returns URLSession configured with the urlSessionConfiguration property.
-    func urlSession() -> URLSession {
-        return URLSession(configuration: type(of: self).urlSessionConfiguration)
     }
 }
