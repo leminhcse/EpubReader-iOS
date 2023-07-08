@@ -59,7 +59,7 @@ class SearchViewController: BaseViewController {
     
     // MARK: Setup UI
     private func setupUI() {
-        self.title = "Tìm Kiếm".uppercased()
+        self.title = "Search"
         self.view.backgroundColor = UIColor.white
         
         bookTableView.delegate = self

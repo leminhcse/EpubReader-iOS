@@ -181,10 +181,6 @@ class SignInViewController: UIViewController {
         let controller = MainTabBarViewController()
         appDelegate.window?.rootViewController = controller
         appDelegate.window?.makeKeyAndVisible()
-
-        AppAppearanceDesigner.updateNavigationBarAppearance()
-        AppAppearanceDesigner.updateTabBarAppearance()
-        AppAppearanceDesigner.updateScrollableSegmentedControl()
     }
     
     private func getUserProfile(token: AccessToken?, userId: String?) {

@@ -18,7 +18,8 @@ class MainTabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(hideShowAudioPlayer(note:)), name: NSNotification.Name(rawValue: MainTabBarViewController.HideShowAudioPlayer), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideShowAudioPlayer(note:)),
+                                               name: NSNotification.Name(rawValue: MainTabBarViewController.HideShowAudioPlayer), object: nil)
         
         setupView()
         setupTabBarController()
@@ -38,30 +39,30 @@ class MainTabBarViewController: UITabBarController {
     
     private func setupTabBarController() {
         let homeVC = HomeViewController()
-        let homeImage = UIImage(named: "home_icon.png")
-        let homeBarItem = UITabBarItem(title: "Trang chủ", image: homeImage, tag: 0)
+        let homeImage = UIImage(named: "home_icon.png")?.withRenderingMode(.alwaysTemplate)
+        let homeBarItem = UITabBarItem(title: "Home", image: homeImage, tag: 0)
         homeVC.tabBarItem = homeBarItem
         let homeViewController = UINavigationController(rootViewController: homeVC)
         
+        let bookmarkVC = BookmarkViewController()
+        let bookMarkImage = UIImage(named: "book_icon.png")?.withRenderingMode(.alwaysTemplate)
+        let bookmarkBarItem = UITabBarItem(title: "Reading", image: bookMarkImage, tag: 1)
+        bookmarkVC.tabBarItem = bookmarkBarItem
+        let bookmarkViewController = UINavigationController(rootViewController: bookmarkVC)
+        
         let searchVC = SearchViewController()
-        let searchImage = UIImage(named: "search_icon.png")
-        let searchBarItem = UITabBarItem(title: "Tìm kiếm", image: searchImage, tag: 1)
+        let searchImage = UIImage(named: "search_icon.png")?.withRenderingMode(.alwaysTemplate)
+        let searchBarItem = UITabBarItem(title: "Search", image: searchImage, tag: 2)
         searchVC.tabBarItem = searchBarItem
         let searchViewController = UINavigationController(rootViewController: searchVC)
         
         let favoritesVC = FavoritesViewController()
-        let favoriteImage = UIImage(named: "favorite_icon.png")
-        let favoriteBarItem = UITabBarItem(title: "Yêu thích", image: favoriteImage, tag: 2)
+        let favoriteImage = UIImage(named: "favorite_icon.png")?.withRenderingMode(.alwaysTemplate)
+        let favoriteBarItem = UITabBarItem(title: "Favorite", image: favoriteImage, tag: 3)
         favoritesVC.tabBarItem = favoriteBarItem
         let favoritesViewController = UINavigationController(rootViewController: favoritesVC)
         
-        let bookmarkVC = BookmarkViewController()
-        let bookMarkImage = UIImage(named: "reading_icon.png")
-        let bookmarkBarItem = UITabBarItem(title: "Đang đọc", image: bookMarkImage, tag: 3)
-        bookmarkVC.tabBarItem = bookmarkBarItem
-        let bookmarkViewController = UINavigationController(rootViewController: bookmarkVC)
-        
-        self.viewControllers = [homeViewController, searchViewController, favoritesViewController, bookmarkViewController]
+        self.viewControllers = [homeViewController, bookmarkViewController, searchViewController, favoritesViewController]
     }
     
     // MARK: Audio Player Events
@@ -91,5 +92,6 @@ class MainTabBarViewController: UITabBarController {
 extension MainTabBarViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         print("Selected \(String(describing: viewController.title))")
+        tabBarController.tabBar.tintColor = UIColor.color(with: .background)
     }
 }

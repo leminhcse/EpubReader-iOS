@@ -71,7 +71,7 @@ class BookmarkViewController: BaseViewController {
     
     // MARK: Setup UI
     private func setupUI() {
-        self.title = "Đang Đọc".uppercased()
+        self.title = "Reading"
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(label)
         self.view.addSubview(bookTableView)
