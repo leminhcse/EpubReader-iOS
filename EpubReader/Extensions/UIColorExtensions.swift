@@ -26,12 +26,10 @@ extension UIColor {
         fileprivate var lightModeColor: UIColor {
             let color: UIColor
             switch self {
-            case .background:
-                color = UIColor(hex: "#2d4170")
+            case .background, .hightlight:
+                color = UIColor(hex: "#03976b")
             case .darkColor:
                 color = UIColor(hex: "#484848")
-            case .hightlight:
-                color = UIColor(hex: "#2d4170")
             case .backgroundFullScreenAudioPlayer:
                 color = UIColor(hex: "#FEFEFE")
             case .backgroudTransparent:
@@ -47,8 +45,8 @@ extension UIColor {
         fileprivate var darkModeColor: UIColor {
             let color: UIColor
             switch self {
-            case .background:
-                color = UIColor(hex: "#2d4170")
+            case .background, .hightlight:
+                color = UIColor(hex: "#03976b")
             case .darkColor:
                 color = UIColor(hex: "#484848")
             case .hightlight:

@@ -32,7 +32,8 @@ class SplashViewController: UIViewController {
         self.view.backgroundColor = .white
         
         imageView = UIImageView()
-        imageView.image = UIImage(named: "ic_book.png")
+        imageView.image = UIImage(named: "ic_book.png")?.withRenderingMode(.alwaysTemplate)
+        imageView.tintColor = UIColor.color(with: .background)
         imageView.contentMode = .scaleAspectFill
         self.view.addSubview(imageView)
 

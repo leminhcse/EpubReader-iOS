@@ -1,6 +1,6 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.5.1 (swiftlang-1300.0.31.4 clang-1300.0.29.6)
-// swift-module-flags: -target x86_64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name FBSDKLoginKit
+// swift-compiler-version: Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)
+// swift-module-flags: -target x86_64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name FBSDKLoginKit
 import CommonCrypto
 import FBSDKCoreKit
 import FBSDKCoreKit_Basics
@@ -10,8 +10,6 @@ import Security
 import Swift
 import UIKit
 import _Concurrency
-extension FBSDKCoreKit.AppEvents : FBSDKLoginKit._LoginEventLogging {
-}
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers @objc(FBSDKCodeVerifier) final public class CodeVerifier : ObjectiveC.NSObject {
   @objc final public let value: Swift.String
   @objc final public var challenge: Swift.String {
@@ -207,10 +205,6 @@ extension FBSDKLoginKit.DeviceLoginManager : Foundation.NetServiceDelegate {
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func draw(_ rect: CoreGraphics.CGRect)
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func layoutSubviews()
 }
-extension FBSDKCoreKit.InternalUtility : FBSDKLoginKit._UserInterfaceElementProviding {
-}
-extension FBSDKCoreKit.InternalUtility : FBSDKLoginKit._UserInterfaceStringProviding {
-}
 @objc(FBSDKLoginButtonDelegate) public protocol LoginButtonDelegate : ObjectiveC.NSObjectProtocol {
   @objc(loginButton:didCompleteWithResult:error:) func loginButton(_ loginButton: FBSDKLoginKit.FBLoginButton, didCompleteWith result: FBSDKLoginKit.LoginManagerLoginResult?, error: Swift.Error?)
   @objc func loginButtonDidLogOut(_ loginButton: FBSDKLoginKit.FBLoginButton)
@@ -315,6 +309,7 @@ public let LoginErrorDomain: Swift.String
   @objc deinit
 }
 extension FBSDKLoginKit.LoginManager : FBSDKCoreKit.URLOpening {
+  @objc public static func makeOpener() -> FBSDKLoginKit.LoginManager
   @objc final public func application(_ application: UIKit.UIApplication?, open url: Foundation.URL?, sourceApplication: Swift.String?, annotation: Any?) -> Swift.Bool
   @objc final public func canOpen(_ url: Foundation.URL, for application: UIKit.UIApplication?, sourceApplication: Swift.String?, annotation: Any?) -> Swift.Bool
   @objc final public func applicationDidBecomeActive(_ application: UIKit.UIApplication)
@@ -350,31 +345,6 @@ public typealias LoginResultBlock = (FBSDKLoginKit.LoginResult) -> Swift.Void
     get
   }
 }
-extension FBSDKCoreKit.ServerConfigurationProvider : FBSDKLoginKit._ServerConfigurationProviding {
-}
-@_inheritsConvenienceInitializers @objcMembers @objc(FBSDKDevicePoller) final public class _DevicePoller : ObjectiveC.NSObject {
-  @objc final public func schedule(interval: Swift.UInt, block: @escaping () -> Swift.Void)
-  @objc override dynamic public init()
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @objcMembers @objc(FBSDKDeviceRequestsHelper) final public class _DeviceRequestsHelper : ObjectiveC.NSObject {
-  @objc public static func getDeviceInfo() -> Swift.String
-  @objc @discardableResult
-  public static func startAdvertisementService(loginCode: Swift.String, delegate: Foundation.NetServiceDelegate) -> Swift.Bool
-  @objc public static func isDelegate(_ delegate: Foundation.NetServiceDelegate, forAdvertisementService service: Foundation.NetService) -> Swift.Bool
-  @objc public static func cleanUpAdvertisementService(for delegate: Foundation.NetServiceDelegate)
-  @objc override dynamic public init()
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @objcMembers @objc(FBSDKLoginCompleterFactory) final public class _LoginCompleterFactory : ObjectiveC.NSObject {
-  @objc final public func createLoginCompleter(urlParameters parameters: [Swift.String : Any], appID: Swift.String) -> FBSDKLoginKit._LoginCompleting
-  @objc override dynamic public init()
-  @objc deinit
-}
-@objc(FBSDKLoginCompleting) public protocol _LoginCompleting {
-  @objc(completeLoginWithHandler:) func completeLogin(handler: @escaping FBSDKLoginKit.LoginCompletionParametersBlock)
-  @objc(completeLoginWithNonce:codeVerifier:handler:) func completeLogin(nonce: Swift.String?, codeVerifier: Swift.String?, handler: @escaping FBSDKLoginKit.LoginCompletionParametersBlock)
-}
 @_inheritsConvenienceInitializers @objcMembers @objc(FBSDKLoginCompletionParameters) final public class _LoginCompletionParameters : ObjectiveC.NSObject {
   @objc final public var authenticationToken: FBSDKCoreKit.AuthenticationToken?
   @objc final public var profile: FBSDKCoreKit.Profile?
@@ -394,66 +364,6 @@ extension FBSDKCoreKit.ServerConfigurationProvider : FBSDKLoginKit._ServerConfig
   @objc final public var graphDomain: Swift.String?
   @objc override dynamic public init()
   @objc deinit
-}
-@objc(_FBSDKLoginEventLogging) public protocol _LoginEventLogging {
-  @objc var flushBehavior: FBSDKCoreKit.AppEvents.FlushBehavior { get }
-  @objc func logInternalEvent(_ eventName: FBSDKCoreKit.AppEvents.Name, parameters: [FBSDKCoreKit.AppEvents.ParameterName : Any]?, isImplicitlyLogged: Swift.Bool)
-  @objc func flush()
-}
-@objcMembers @objc(FBSDKLoginManagerLogger) final public class _LoginManagerLogger : ObjectiveC.NSObject {
-  @objc(initWithParameters:tracking:) convenience public init?(parameters: [Swift.String : Any]?, tracking: FBSDKLoginKit.LoginTracking)
-  @objc(initWithLoggingToken:tracking:) public init?(loggingToken: Swift.String?, tracking: FBSDKLoginKit.LoginTracking)
-  @objc(startSessionForLoginManager:) final public func startSession(for loginManager: FBSDKLoginKit.LoginManager)
-  @objc final public func endSession()
-  @objc(startAuthMethod:) final public func startWith(authMethod: Swift.String)
-  @objc(endLoginWithResult:error:) final public func endLogin(with result: FBSDKLoginKit.LoginManagerLoginResult?, error: Foundation.NSError?)
-  @objc final public func postLoginHeartbeat()
-  @objc final public func willAttemptAppSwitchingBehaviorWith(urlScheme: Swift.String)
-  @objc public static func clientStateFor(authMethod: Swift.String?, andExistingState existingState: [Swift.String : Any]?, logger: FBSDKLoginKit._LoginManagerLogger?) -> Swift.String?
-  @objc deinit
-}
-@objc(FBSDKLoginManagerState) public enum _LoginManagerState : Swift.Int {
-  case idle
-  case start
-  case performingLogin
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@_inheritsConvenienceInitializers @objc(FBSDKLoginRecoveryAttempter) final public class _LoginRecoveryAttempter : ObjectiveC.NSObject, FBSDKCoreKit.ErrorRecoveryAttempting {
-  @objc(attemptRecoveryFromError:completionHandler:) final public func attemptRecovery(fromError error: Swift.Error, completionHandler: @escaping (Swift.Bool) -> Swift.Void)
-  @objc override dynamic public init()
-  @objc deinit
-}
-@objc final public class _LoginURLCompleter : ObjectiveC.NSObject, FBSDKLoginKit._LoginCompleting {
-  public init(urlParameters: [Swift.String : Any], appID: Swift.String)
-  @objc final public func completeLogin(handler: @escaping FBSDKLoginKit.LoginCompletionParametersBlock)
-  @objc final public func completeLogin(nonce: Swift.String?, codeVerifier: Swift.String?, handler: @escaping FBSDKLoginKit.LoginCompletionParametersBlock)
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @objcMembers @objc(FBSDKLoginUtility) final public class _LoginUtility : ObjectiveC.NSObject {
-  @objc public static func string(forAudience audience: FBSDKLoginKit.DefaultAudience) -> Swift.String
-  @objc public static func queryParams(fromLoginURL url: Foundation.URL) -> [Swift.String : Any]?
-  @objc public static func userID(fromSignedRequest signedRequest: Swift.String?) -> Swift.String?
-  @objc override dynamic public init()
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @objcMembers @objc(FBSDKProfileFactory) final public class _ProfileFactory : ObjectiveC.NSObject {
-  @objc final public func createProfile(userID: FBSDKCoreKit.UserIdentifier, firstName: Swift.String?, middleName: Swift.String?, lastName: Swift.String?, name: Swift.String?, linkURL: Foundation.URL?, refreshDate: Foundation.Date?, imageURL: Foundation.URL?, email: Swift.String?, friendIDs: [Swift.String]?, birthday: Foundation.Date?, ageRange: FBSDKCoreKit.UserAgeRange?, hometown: FBSDKCoreKit.Location?, location: FBSDKCoreKit.Location?, gender: Swift.String?, isLimited: Swift.Bool) -> FBSDKCoreKit.Profile
-  @objc override dynamic public init()
-  @objc deinit
-}
-@objc(_FBSDKServerConfigurationProviding) public protocol _ServerConfigurationProviding {
-  @objc(loadServerConfigurationWithCompletionBlock:) func loadServerConfiguration(completion: FBSDKCoreKit.LoginTooltipBlock?)
-}
-@objc(_FBSDKUserInterfaceElementProviding) public protocol _UserInterfaceElementProviding {
-  @objc func topMostViewController() -> UIKit.UIViewController?
-  @objc(viewControllerForView:) func viewController(for view: UIKit.UIView) -> UIKit.UIViewController?
-}
-@objc(_FBSDKUserInterfaceStringProviding) public protocol _UserInterfaceStringProviding {
-  @objc var bundleForStrings: Foundation.Bundle { get }
 }
 extension FBSDKLoginKit.DefaultAudience : Swift.Equatable {}
 extension FBSDKLoginKit.DefaultAudience : Swift.Hashable {}
@@ -476,6 +386,3 @@ extension FBSDKLoginKit.LoginErrorCode : Swift.RawRepresentable {}
 extension FBSDKLoginKit.LoginTracking : Swift.Equatable {}
 extension FBSDKLoginKit.LoginTracking : Swift.Hashable {}
 extension FBSDKLoginKit.LoginTracking : Swift.RawRepresentable {}
-extension FBSDKLoginKit._LoginManagerState : Swift.Equatable {}
-extension FBSDKLoginKit._LoginManagerState : Swift.Hashable {}
-extension FBSDKLoginKit._LoginManagerState : Swift.RawRepresentable {}

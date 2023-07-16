@@ -27,7 +27,8 @@ class HomeViewController: BaseViewController {
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(segmentedValueChanged(_:)), for: .valueChanged)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: boldFont as Any], for: .normal)
-        segmentedControl.layer.masksToBounds = false
+        segmentedControl.tintColor = UIColor.color(with: .background).withAlphaComponent(0.4)
+        segmentedControl.layer.masksToBounds = true
         segmentedControl.layer.shadowOpacity = 0.8
         segmentedControl.layer.shadowOffset = CGSize(width: 0, height: 2)
         segmentedControl.layer.shadowColor = UIColor.gray.cgColor
@@ -63,6 +64,7 @@ class HomeViewController: BaseViewController {
     // MARK: SETUP UI
     private func setupView() {
         view.backgroundColor = UIColor.color(with: .background)
+        self.tabBarController?.tabBar.tintColor = UIColor.color(with: .background)
         
         title = "TRANG CHỦ"
         navigationItem.leftBarButtonItem = menuButton()

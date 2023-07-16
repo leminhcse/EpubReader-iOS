@@ -216,7 +216,7 @@ public struct BlendImageProcessor: ImageProcessor {
         self.backgroundColor = backgroundColor
         var identifier = "com.onevcat.Kingfisher.BlendImageProcessor(\(blendMode.rawValue),\(alpha))"
         if let color = backgroundColor {
-            identifier.append("_\(color.hex)")
+            identifier.append("_\(color.rgbaDescription)")
         }
         self.identifier = identifier
     }
@@ -275,7 +275,7 @@ public struct CompositingImageProcessor: ImageProcessor {
         self.backgroundColor = backgroundColor
         var identifier = "com.onevcat.Kingfisher.CompositingImageProcessor(\(compositingOperation.rawValue),\(alpha))"
         if let color = backgroundColor {
-            identifier.append("_\(color.hex)")
+            identifier.append("_\(color.rgbaDescription)")
         }
         self.identifier = identifier
     }
@@ -352,9 +352,6 @@ public enum Radius {
 /// case.
 ///
 public struct RoundCornerImageProcessor: ImageProcessor {
-
-    /// Represents a radius specified in a `RoundCornerImageProcessor`.
-    public typealias Radius = Kingfisher.Radius
 
     /// Identifier of the processor.
     /// - Note: See documentation of `ImageProcessor` protocol for more.
@@ -489,7 +486,7 @@ public struct Border {
     }
     
     var identifier: String {
-        "\(color.hex)_\(lineWidth)_\(radius.radiusIdentifier)_\(roundingCorners.cornerIdentifier)"
+        "\(color.rgbaDescription)_\(lineWidth)_\(radius.radiusIdentifier)_\(roundingCorners.cornerIdentifier)"
     }
 }
 
@@ -650,7 +647,7 @@ public struct OverlayImageProcessor: ImageProcessor {
     public init(overlay: KFCrossPlatformColor, fraction: CGFloat = 0.5) {
         self.overlay = overlay
         self.fraction = fraction
-        self.identifier = "com.onevcat.Kingfisher.OverlayImageProcessor(\(overlay.hex)_\(fraction))"
+        self.identifier = "com.onevcat.Kingfisher.OverlayImageProcessor(\(overlay.rgbaDescription)_\(fraction))"
     }
     
     /// Processes the input `ImageProcessItem` with this processor.
@@ -687,7 +684,7 @@ public struct TintImageProcessor: ImageProcessor {
     /// - parameter tint: Tint color will be used to tint the input image.
     public init(tint: KFCrossPlatformColor) {
         self.tint = tint
-        self.identifier = "com.onevcat.Kingfisher.TintImageProcessor(\(tint.hex))"
+        self.identifier = "com.onevcat.Kingfisher.TintImageProcessor(\(tint.rgbaDescription))"
     }
     
     /// Processes the input `ImageProcessItem` with this processor.
@@ -908,7 +905,7 @@ extension KFCrossPlatformColor {
         var a: CGFloat = 0
 
         #if os(macOS)
-        (usingColorSpace(.sRGB) ?? self).getRed(&r, green: &g, blue: &b, alpha: &a)
+        (usingColorSpace(.extendedSRGB) ?? self).getRed(&r, green: &g, blue: &b, alpha: &a)
         #else
         getRed(&r, green: &g, blue: &b, alpha: &a)
         #endif
@@ -916,17 +913,8 @@ extension KFCrossPlatformColor {
         return (r, g, b, a)
     }
     
-    var hex: String {
-        
-        let (r, g, b, a) = rgba
-
-        let rInt = Int(r * 255) << 24
-        let gInt = Int(g * 255) << 16
-        let bInt = Int(b * 255) << 8
-        let aInt = Int(a * 255)
-        
-        let rgba = rInt | gInt | bInt | aInt
-        
-        return String(format:"#%08x", rgba)
+    var rgbaDescription: String {
+        let components = self.rgba
+        return String(format: "(%.2f,%.2f,%.2f,%.2f)", components.r, components.g, components.b, components.a)
     }
 }

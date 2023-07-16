@@ -55,6 +55,9 @@ typedef NS_OPTIONS(NSUInteger, SDImageCacheOptions) {
     SDImageCacheMatchAnimatedImageClass = 1 << 7,
 };
 
+/**
+ *  A token associated with each cache query. Can be used to cancel a cache query
+ */
 @interface SDImageCacheToken : NSObject <SDWebImageOperation>
 
 /**
@@ -220,6 +223,28 @@ typedef NS_OPTIONS(NSUInteger, SDImageCacheOptions) {
          imageData:(nullable NSData *)imageData
             forKey:(nullable NSString *)key
             toDisk:(BOOL)toDisk
+        completion:(nullable SDWebImageNoParamsBlock)completionBlock;
+
+/**
+ * Asynchronously store an image into memory and disk cache at the given key.
+ *
+ * @param image           The image to store
+ * @param imageData       The image data as returned by the server, this representation will be used for disk storage
+ *                        instead of converting the given image object into a storable/compressed image format in order
+ *                        to save quality and CPU
+ * @param key             The unique image cache key, usually it's image absolute URL
+ * @param options A mask to specify options to use for this store
+ * @param context The context options to use. Pass `.callbackQueue` to control callback queue
+ * @param cacheType The image store op cache type
+ * @param completionBlock A block executed after the operation is finished
+ * @note If no image data is provided and encode to disk, we will try to detect the image format (using either `sd_imageFormat` or `SDAnimatedImage` protocol method) and animation status, to choose the best matched format, including GIF, JPEG or PNG.
+ */
+- (void)storeImage:(nullable UIImage *)image
+         imageData:(nullable NSData *)imageData
+            forKey:(nullable NSString *)key
+           options:(SDWebImageOptions)options
+           context:(nullable SDWebImageContext *)context
+         cacheType:(SDImageCacheType)cacheType
         completion:(nullable SDWebImageNoParamsBlock)completionBlock;
 
 /**

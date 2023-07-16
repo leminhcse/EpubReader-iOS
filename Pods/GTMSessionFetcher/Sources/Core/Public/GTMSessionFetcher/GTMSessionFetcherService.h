@@ -80,10 +80,15 @@ extern NSString *const kGTMSessionFetcherServiceSessionKey;
 // To use the configuration's default user agent, set this property to nil.
 @property(atomic, copy, nullable) NSString *userAgent;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 // The authorizer to attach to the created fetchers. If a specific fetcher should
 // not authorize its requests, the fetcher's authorizer property may be set to nil
 // before the fetch begins.
 @property(atomic, strong, nullable) id<GTMFetcherAuthorizationProtocol> authorizer;
+#pragma clang diagnostic pop
+
+@property(atomic, readonly, strong, nullable) NSOperationQueue *delegateQueue;
 
 // Delegate queue used by the session when calling back to the fetcher.  The default
 // is the main queue.  Changing this does not affect the queue used to call back to the
@@ -154,6 +159,9 @@ extern NSString *const kGTMSessionFetcherServiceSessionKey;
 
 - (void)stopAllFetchers;
 
+// All decorators added to the service.
+@property(atomic, readonly, strong, nullable) NSArray<id<GTMFetcherDecoratorProtocol>> *decorators;
+
 // Holds a weak reference to `decorator`. When creating a fetcher via
 // `-fetcherWithRequest:fetcherClass:`, each registered `decorator` can inspect and potentially
 // change the fetcher's request before it starts. Decorators are invoked in the order in which
@@ -163,16 +171,21 @@ extern NSString *const kGTMSessionFetcherServiceSessionKey;
 // Removes a `decorator` previously passed to `-removeDecorator:`.
 - (void)removeDecorator:(id<GTMFetcherDecoratorProtocol>)decorator;
 
-// Methods for use by the fetcher class only.
-- (nullable NSURLSession *)session;
-- (nullable NSURLSession *)sessionForFetcherCreation;
-- (nullable id<NSURLSessionDelegate>)sessionDelegate;
-- (nullable NSDate *)stoppedAllFetchersDate;
-
 // The testBlock can inspect its fetcher parameter's request property to
 // determine which fetcher is being faked.
 @property(atomic, copy, nullable) GTMSessionFetcherTestBlock testBlock;
 
+@end
+
+@interface GTMSessionFetcherService (FetcherCallbacks)
+// Checks whether the fetcher should delay starting to avoid overloading the host.
+- (BOOL)fetcherShouldBeginFetching:(nonnull GTMSessionFetcher *)fetcher;
+
+// Notifies the service that the fetcher did begin fetching.
+- (void)fetcherDidBeginFetching:(nonnull GTMSessionFetcher *)fetcher;
+
+// Notifies the service that the fetcher has stopped fetching.
+- (void)fetcherDidStop:(nonnull GTMSessionFetcher *)fetcher;
 @end
 
 @interface GTMSessionFetcherService (TestingSupport)

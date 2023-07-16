@@ -118,9 +118,9 @@ public struct DataTask<Value> {
         get async {
             if shouldAutomaticallyCancel {
                 return await withTaskCancellationHandler {
-                    self.cancel()
-                } operation: {
                     await task.value
+                } onCancel: {
+                    cancel()
                 }
             } else {
                 return await task.value
@@ -287,13 +287,13 @@ extension DataRequest {
         -> DataTask<Value> {
         let task = Task {
             await withTaskCancellationHandler {
-                self.cancel()
-            } operation: {
                 await withCheckedContinuation { continuation in
                     onResponse {
                         continuation.resume(returning: $0)
                     }
                 }
+            } onCancel: {
+                self.cancel()
             }
         }
 
@@ -311,9 +311,9 @@ public struct DownloadTask<Value> {
         get async {
             if shouldAutomaticallyCancel {
                 return await withTaskCancellationHandler {
-                    self.cancel()
-                } operation: {
                     await task.value
+                } onCancel: {
+                    cancel()
                 }
             } else {
                 return await task.value
@@ -496,13 +496,13 @@ extension DownloadRequest {
         -> DownloadTask<Value> {
         let task = Task {
             await withTaskCancellationHandler {
-                self.cancel()
-            } operation: {
                 await withCheckedContinuation { continuation in
                     onResponse {
                         continuation.resume(returning: $0)
                     }
                 }
+            } onCancel: {
+                self.cancel()
             }
         }
 
@@ -533,7 +533,7 @@ public struct DataStreamTask {
     /// - Returns:                   The `Stream`.
     public func streamingData(automaticallyCancelling shouldAutomaticallyCancel: Bool = true, bufferingPolicy: Stream<Data, Never>.BufferingPolicy = .unbounded) -> Stream<Data, Never> {
         createStream(automaticallyCancelling: shouldAutomaticallyCancel, bufferingPolicy: bufferingPolicy) { onStream in
-            self.request.responseStream(on: .streamCompletionQueue(forRequestID: request.id), stream: onStream)
+            request.responseStream(on: .streamCompletionQueue(forRequestID: request.id), stream: onStream)
         }
     }
 
@@ -546,7 +546,7 @@ public struct DataStreamTask {
     /// - Returns:
     public func streamingStrings(automaticallyCancelling shouldAutomaticallyCancel: Bool = true, bufferingPolicy: Stream<String, Never>.BufferingPolicy = .unbounded) -> Stream<String, Never> {
         createStream(automaticallyCancelling: shouldAutomaticallyCancel, bufferingPolicy: bufferingPolicy) { onStream in
-            self.request.responseStreamString(on: .streamCompletionQueue(forRequestID: request.id), stream: onStream)
+            request.responseStreamString(on: .streamCompletionQueue(forRequestID: request.id), stream: onStream)
         }
     }
 
@@ -582,9 +582,9 @@ public struct DataStreamTask {
                                                                      bufferingPolicy: Stream<Serializer.SerializedObject, AFError>.BufferingPolicy = .unbounded)
         -> Stream<Serializer.SerializedObject, AFError> {
         createStream(automaticallyCancelling: shouldAutomaticallyCancel, bufferingPolicy: bufferingPolicy) { onStream in
-            self.request.responseStream(using: serializer,
-                                        on: .streamCompletionQueue(forRequestID: request.id),
-                                        stream: onStream)
+            request.responseStream(using: serializer,
+                                   on: .streamCompletionQueue(forRequestID: request.id),
+                                   stream: onStream)
         }
     }
 
@@ -663,14 +663,14 @@ public struct StreamOf<Element>: AsyncSequence {
 
     public func makeAsyncIterator() -> Iterator {
         var continuation: AsyncStream<Element>.Continuation?
-        let stream = AsyncStream<Element> { innerContinuation in
+        let stream = AsyncStream<Element>(bufferingPolicy: bufferingPolicy) { innerContinuation in
             continuation = innerContinuation
             builder(innerContinuation)
         }
 
         return Iterator(iterator: stream.makeAsyncIterator()) {
             continuation?.finish()
-            self.onTermination?()
+            onTermination?()
         }
     }
 
