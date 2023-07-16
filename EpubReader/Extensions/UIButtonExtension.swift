@@ -14,6 +14,7 @@ enum ButtonStyle {
     case profile
     case more
     case close
+    case share
 }
 
 extension UIButton {
@@ -50,6 +51,12 @@ extension UIButton {
             let nextIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
             setImage(nextIcon, for: .normal)
             imageEdgeInsets = UIEdgeInsets(top: inset, left: 0, bottom: inset, right: inset)
+        case .share:
+            let inset: CGFloat = 10
+            let imageName = "ic_share.png"
+            let nextIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            setImage(nextIcon, for: .normal)
+            imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         }
     }
     

@@ -30,7 +30,6 @@ NS_SWIFT_NAME(_AppEventsUtilityProtocol)
                       loggingOverrideAppID:(nullable NSString *)loggingOverrideAppID;
 - (NSString *)flushReasonToString:(FBSDKAppEventsFlushReason)flushReason;
 - (void)saveCampaignIDs:(NSURL *)url;
-- (nullable NSString *)getCampaignIDs;
 
 @end
 

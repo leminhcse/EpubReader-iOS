@@ -12,16 +12,40 @@ import Kingfisher
 class BookDetailViewController: UIViewController {
     
     // MARK: - Private Controls
-    private lazy var largeContainerView: UIView = {
-        let largeContainerView = UIView()
-        largeContainerView.backgroundColor = .clear
-        return largeContainerView
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = true
+        scrollView.backgroundColor = .clear
+        return scrollView
     }()
     
-    private lazy var booksDetailsView: UIView = {
-        let booksDetailsView = UIView()
-        booksDetailsView.backgroundColor = .clear
-        return booksDetailsView
+    private lazy var mainStackView: UIStackView = {
+        let mainStackView = UIStackView()
+        mainStackView.translatesAutoresizingMaskIntoConstraints = false
+        mainStackView.alignment = .fill
+        mainStackView.axis = .vertical
+        mainStackView.distribution = .equalSpacing
+        return mainStackView
+    }()
+    
+    private lazy var contentView: UIView = {
+        let contentView = UIView()
+        contentView.backgroundColor = .clear
+        return contentView
+    }()
+    
+    private lazy var bookThumbnailView: UIView = {
+        let bookThumbnailView = UIView()
+        bookThumbnailView.backgroundColor = .clear
+        return bookThumbnailView
+    }()
+    
+    private lazy var previewBookImage: UIImageView = {
+        let previewBookImage = UIImageView()
+        previewBookImage.clipsToBounds = true
+        previewBookImage.contentMode = .scaleAspectFill
+        previewBookImage.backgroundColor = UIColor.red.withAlphaComponent(0.1)
+        return previewBookImage
     }()
     
     private lazy var topButtonView: UIView = {
@@ -45,25 +69,9 @@ class BookDetailViewController: UIViewController {
         return closeButtonView
     }()
     
-    private lazy var favoriteButton: UIButton = {
-        let favoriteButton = UIButton()
-        favoriteButton.style(with: .favorite)
-        favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
-        favoriteButton.tintColor = UIColor.color(with: .background)
-        return favoriteButton
-    }()
-    
-    private lazy var previewImage: UIImageView = {
-        let previewImage = UIImageView()
-        previewImage.clipsToBounds = true
-        previewImage.contentMode = .scaleAspectFill
-        previewImage.backgroundColor = UIColor.red.withAlphaComponent(0.1)
-        return previewImage
-    }()
-    
     private lazy var gradiantLayer: CAGradientLayer = {
-        let gradiantLayer = CAGradientLayer(layer: previewImage.layer)
-        gradiantLayer.frame = previewImage.bounds
+        let gradiantLayer = CAGradientLayer(layer: previewBookImage.layer)
+        gradiantLayer.frame = previewBookImage.bounds
         let gradientColour = UIColor.black
         gradiantLayer.colors = [gradientColour.withAlphaComponent(0.8).cgColor,
                                 gradientColour.withAlphaComponent(0.4).cgColor,
@@ -76,10 +84,10 @@ class BookDetailViewController: UIViewController {
         return gradiantLayer
     }()
     
-    private lazy var bookDescription: UIView = {
-        let bookDescription = UIView()
-        bookDescription.backgroundColor = .clear
-        return bookDescription
+    private lazy var bookDescView: UIView = {
+        let bookDescView = UIView()
+        bookDescView.backgroundColor = .clear
+        return bookDescView
     }()
     
     private lazy var bookImage : UIImageView = {
@@ -112,23 +120,74 @@ class BookDetailViewController: UIViewController {
         return label
     }()
     
-    private lazy var downloadButtonView: UIView = {
-        let downloadButtonView = UIView()
-        downloadButtonView.backgroundColor = UIColor.color(with: .background)
-        downloadButtonView.layer.cornerRadius = padding
-        return downloadButtonView
+    fileprivate lazy var menuBookView: MenuBookView = {
+        [unowned self] in
+        let menuViewX = CGFloat(16)
+        let width = self.view.bounds.size.width-2*16
+        let menuView: MenuBookView = MenuBookView(frame: CGRect(x: menuViewX, y: 0, width: width, height: 72))
+        menuView.backgroundColor = UIColor.init(hex: "#f8f8fc").withAlphaComponent(0.2)
+        menuView.layer.borderWidth = 0.2
+        menuView.layer.cornerRadius = 12.0
+
+        menuView.setInFavourite(hasIn: false, text: "Chọn yêu thích")
+        menuView.btnFavorite.btnAction.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
+        menuView.setChapters(chapters: "12")
+        menuView.setPages(pages: "321")
+        return menuView
+    }()
+    
+    private lazy var summaryLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.black
+        label.backgroundColor = .clear
+        label.numberOfLines = 1
+        label.sizeToFit()
+        label.font = UIFont.font(with: .h4)
+        label.text = "Summary"
+        return label
+    }()
+    
+    private lazy var summaryText: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.numberOfLines = 0
+        label.sizeToFit()
+        label.font = UIFont.font(with: .h5)
+        return label
+    }()
+    
+    private lazy var bottomView: UIView = {
+        let bottomView = UIView()
+        bottomView.backgroundColor = .white
+        return bottomView
     }()
     
     private lazy var downloadButton: UIButton = {
         let downloadButton = UIButton()
         downloadButton.addTarget(self, action: #selector(downloadButtonTapped), for: .touchUpInside)
         downloadButton.tintColor = UIColor.color(with: .background)
+        downloadButton.backgroundColor = UIColor.color(with: .background)
         downloadButton.setTitle("Tải Sách", for: .normal)
         downloadButton.titleLabel?.font = UIFont.font(with: .h4)
+        downloadButton.layer.cornerRadius = padding
         if UIDevice.current.userInterfaceIdiom == .pad {
             downloadButton.titleLabel?.font = UIFont.font(with: .h2)
         }
         return downloadButton
+    }()
+    
+    private lazy var shareButton: UIButton = {
+        let shareButton = UIButton()
+        shareButton.tintColor = UIColor.color(with: .background)
+        shareButton.style(with: .share)
+        shareButton.titleLabel?.font = UIFont.font(with: .h4)
+        shareButton.layer.cornerRadius = padding
+        shareButton.layer.borderWidth = 1
+        shareButton.layer.borderColor = UIColor.gray.cgColor
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            shareButton.titleLabel?.font = UIFont.font(with: .h2)
+        }
+        return shareButton
     }()
     
     private lazy var downloadAudioView: UIView = {
@@ -160,27 +219,6 @@ class BookDetailViewController: UIViewController {
         audioCollectionView.clipsToBounds = false
         audioCollectionView.backgroundColor = .white
         return audioCollectionView
-    }()
-    
-    private lazy var segmentedControl: ScrollUISegmentController = {
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 42)
-        let segmentedControl = ScrollUISegmentController(frame: frame)
-        segmentedControl.segmentDelegate = self
-        return segmentedControl
-    }()
-    
-    private lazy var overviewView: UITextView = {
-        let overviewView = UITextView(frame: .zero)
-        overviewView.isScrollEnabled = true
-        overviewView.backgroundColor = .white
-        overviewView.isHidden = false
-        overviewView.textColor = UIColor.color(with: .darkColor)
-        overviewView.font = UIFont.font(with: .h5)
-        overviewView.isEditable = false
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            overviewView.font = UIFont.font(with: .h4)
-        }
-        return overviewView
     }()
     
     private lazy var textLabel: UILabel = {
@@ -249,76 +287,75 @@ class BookDetailViewController: UIViewController {
     
     // MARK: - Private Methods
     private func setupViews() {
-        view.backgroundColor = UIColor.white
+        self.view.backgroundColor = UIColor.white
+        mainStackView.addArrangedSubview(contentView)
         
         closeButtonView.addSubview(closeButton)
         topButtonView.addSubview(closeButtonView)
-        topButtonView.addSubview(favoriteButton)
+
+        previewBookImage.layer.addSublayer(gradiantLayer)
+        bookThumbnailView.addSubview(topButtonView)
+        bookThumbnailView.addSubview(previewBookImage)
+        bookThumbnailView.addSubview(bookImage)
+
+        bookDescView.addSubview(bookTitle)
+        bookDescView.addSubview(bookComposer)
+        bookDescView.addSubview(menuBookView)
+
+        contentView.addSubview(bookThumbnailView)
+        contentView.addSubview(bookDescView)
         
-        previewImage.layer.addSublayer(gradiantLayer)
+        contentView.addSubview(summaryLabel)
+        contentView.addSubview(summaryText)
         
-        bookDescription.addSubview(bookImage)
-        bookDescription.addSubview(bookTitle)
-        bookDescription.addSubview(bookComposer)
+        scrollView.addSubview(mainStackView)
+        bottomView.addSubview(downloadButton)
+        bottomView.addSubview(shareButton)
         
-        downloadButtonView.addSubview(downloadButton)
-        
-        booksDetailsView.addSubview(previewImage)
-        booksDetailsView.addSubview(topButtonView)
-        booksDetailsView.addSubview(bookDescription)
-        booksDetailsView.addSubview(downloadButtonView)
-        
-        playerView.addSubview(miniAudioPlayerView)
-        playerView.isHidden = true
-        
-        largeContainerView.addSubview(booksDetailsView)
-        largeContainerView.addSubview(segmentedControl)
-        largeContainerView.addSubview(audioCollectionView)
-        largeContainerView.addSubview(overviewView)
-        largeContainerView.addSubview(playerView)
-        
-        audioCollectionView.addSubview(textLabel)
-        
-        view.addSubview(largeContainerView)
-    }
-    
-    private func setUpSegmentControls() {
-        segmentedControl.itemWidth = Utils.getLengthMaxOfTextArray(arrStr: self.listTopic,
-                                                                   font: UIFont.font(with: .h3),
-                                                                   height: segmentHeight) + 20
-        segmentedControl.segmentItems = self.listTopic
-        segmentedControl.segmentedControl.selectedSegmentIndex = selectedSegmentIndex
+        self.view.addSubview(scrollView)
+        self.view.addSubview(bottomView)
     }
     
     private func setupConstraint() {
         let safeAreaTop = self.view.safeAreaInsets.top
-        let top = safeAreaTop
+        let top = safeAreaTop > 48 ? safeAreaTop : 48
         let frameWidth = self.view.frame.size.width
         let frameHeight = self.view.frame.size.height
-        var bookViewHeight = frameHeight/2 + 192
+        let bookViewHeight = frameHeight/2
+        let marginTop: CGFloat = 16
+        let padding: CGFloat = 24
         
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            bookViewHeight = frameHeight / 1.5 + 40
+        if book.description != nil && book.description != "" {
+            scrollView.snp.makeConstraints { (make) in
+                make.edges.equalToSuperview()
+                make.top.bottom.equalToSuperview().offset(-top)
+            }
+        } else {
+            scrollView.snp.makeConstraints { (make) in
+                make.edges.equalToSuperview()
+                make.top.bottom.equalToSuperview().offset(top)
+            }
         }
         
-        largeContainerView.frame = self.view.frame
-        resetContrainst()
-        
-        booksDetailsView.snp.makeConstraints { (make) in
-            make.size.equalTo(CGSize(width: frameWidth, height: bookViewHeight))
+        mainStackView.snp.makeConstraints { (make) in
+            make.top.bottom.equalToSuperview()
+            make.left.right.equalTo(self.view)
         }
         
-        previewImage.snp.makeConstraints { (make) in
-            make.size.equalToSuperview()
+        contentView.snp.makeConstraints { (make) in
+            make.top.bottom.equalToSuperview()
+            make.left.right.equalTo(self.view)
         }
         
+        // Close button
         topButtonView.snp.makeConstraints { (make) in
-            make.top.equalTo(top)
+            make.top.equalToSuperview().offset(top)
             make.size.equalTo(CGSize(width: frameWidth, height: segmentHeight))
         }
+
         closeButtonView.snp.makeConstraints{ (make) in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(24)
+            make.leading.equalTo(padding)
             make.size.equalTo(CGSize(width: 32, height: 32))
         }
 
@@ -327,141 +364,87 @@ class BookDetailViewController: UIViewController {
             make.leading.equalToSuperview().inset(4)
             make.top.equalToSuperview().inset(4)
         }
-        
-        favoriteButton.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(24)
-            make.size.equalTo(CGSize(width: 32, height: 32))
-        }
-        
-        let bookDescWidth = frameWidth / 2 + 64
-        var bookDescHeight = bookViewHeight / 2 + 72
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            bookDescHeight = bookViewHeight / 1.5 + 100
-            bookDescription.snp.makeConstraints { (make) in
-                make.centerX.equalToSuperview()
-                make.centerY.equalToSuperview().offset(padding)
-                make.size.equalTo(CGSize(width: bookDescWidth, height: bookDescHeight))
-            }
-        } else {
-            bookDescription.snp.makeConstraints { (make) in
-                make.centerX.equalToSuperview()
-                make.size.equalTo(CGSize(width: bookDescWidth, height: bookDescHeight))
-            }
-        }
-        
-        var bookImageWidth = bookDescWidth - 72
-        var bookImageHeight = bookDescHeight - 70
-        let downloadButtonViewWidth = frameWidth / 2
-        var downloadButtonViewHeight: CGFloat = 48
-        var downloadButtonY: CGFloat = 24
-        var titleTop: CGFloat = 16
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            bookImageWidth = bookDescWidth - 72 * 3
-            bookImageHeight = bookDescHeight - 70 * 3
-            titleTop = 32
-            downloadButtonViewHeight = 80
-            downloadButtonY = 42
-            bookTitle.font = UIFont.systemFont(ofSize: 32.0)
-            bookComposer.font = UIFont.systemFont(ofSize: 28.0)
-        }
-        
-        bookImage.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.size.equalTo(CGSize(width: bookImageWidth, height: bookImageHeight))
-        }
-        
-        let bookHeight: CGFloat = Utils.estimatedHeightOfLabel(text: bookTitle.text!, font: bookTitle.font, width: bookDescWidth)
-        bookTitle.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(bookImage.snp.bottom).offset(titleTop)
-            make.size.equalTo(CGSize(width: bookDescWidth, height: bookHeight))
-        }
-        
-        let bookTop: CGFloat = bookHeight/2 - padding
-        bookComposer.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(bookTitle.snp.bottom).offset(bookTop)
-            make.size.equalTo(CGSize(width: bookDescWidth, height: 28))
-        }
-        
-        downloadButtonView.snp.makeConstraints { (make) in
-            make.top.equalTo(bookComposer.snp.bottom).offset(padding)
-            make.bottom.equalTo(booksDetailsView.snp.bottom).inset(downloadButtonY)
-            make.centerX.equalToSuperview()
-            make.size.equalTo(CGSize(width: downloadButtonViewWidth, height: downloadButtonViewHeight))
-        }
-        
-        downloadButton.snp.makeConstraints{ (make) in
-            make.size.equalToSuperview().inset(4)
-            make.leading.equalToSuperview().inset(4)
-            make.top.equalToSuperview().inset(4)
-        }
-        
-        segmentedControl.snp.makeConstraints { (make) in
-            make.top.equalTo(bookViewHeight)
-            make.height.equalTo(segmentHeight)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-        }
-        
-        let descHeight = frameHeight - bookViewHeight
-        var inset: CGFloat = 24
-        if !playerView.isHidden {
-            inset = 24 + 60 + (UIApplication.shared.keyWindow?.safeAreaInsets.bottom)!
+
+        // Book thumbnail
+        bookThumbnailView.snp.makeConstraints { (make) in
+            make.size.equalTo(CGSize(width: frameWidth, height: bookViewHeight))
         }
 
-        audioCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(segmentedControl.snp.bottom).offset(padding + 6)
-            make.bottom.equalToSuperview().inset(inset)
-            make.height.equalTo(descHeight)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+        previewBookImage.snp.makeConstraints { (make) in
+            make.size.equalToSuperview()
         }
-        
-        overviewView.snp.makeConstraints { (make) in
-            make.top.equalTo(segmentedControl.snp.bottom).offset(8)
-            make.bottom.equalToSuperview().inset(inset)
-            make.height.equalTo(descHeight)
-            make.leading.equalToSuperview().offset(padding)
-            make.trailing.equalToSuperview().inset(padding)
-        }
-        overviewView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let miniPlayerWidth = UIScreen.main.bounds.width
-        miniAudioPlayerView.snp.makeConstraints { (make) in
-            make.leading.equalTo(0)
-            make.trailing.equalTo(0)
-            make.size.equalTo(CGSize(width: miniPlayerWidth, height: 60))
-        }
-        
-        handleShowMiniPlayer()
-        if !playerView.isHidden {
-            let top = UIScreen.main.bounds.height - 60 - (UIApplication.shared.keyWindow?.safeAreaInsets.bottom)!
-            let height = 60 + (UIApplication.shared.keyWindow?.safeAreaInsets.bottom)!
-            playerView.snp.makeConstraints { (make) in
-                make.leading.equalTo(0)
-                make.top.equalTo(top)
-                make.size.equalTo(CGSize(width: miniPlayerWidth, height: height))
-            }
-        }
-        
-        textLabel.snp.makeConstraints { (make) in
+
+        bookImage.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
+            make.top.equalTo(topButtonView.snp.bottom).offset(8)
+            make.size.equalTo(CGSize(width: frameWidth/3 + padding*3, height: bookViewHeight/2 + 80))
+        }
+
+        // Book Description
+        let bookHeight: CGFloat = Utils.estimatedHeightOfLabel(text: bookTitle.text!, font: bookTitle.font, width: frameWidth - 64)
+        bookTitle.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.size.equalTo(CGSize(width: frameWidth - 64, height: bookHeight))
+        }
+
+        let bookCompose: CGFloat = Utils.estimatedHeightOfLabel(text: bookComposer.text!, font: bookComposer.font, width: frameWidth - 64)
+        bookComposer.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(bookTitle.snp.bottom).offset(marginTop/2)
+            make.size.equalTo(CGSize(width: frameWidth/2, height: bookCompose))
+        }
+
+        let bookDescHeight = bookCompose + bookHeight + padding
+        bookDescView.snp.makeConstraints { (make) in
+            make.top.equalTo(bookViewHeight)
+            make.size.equalTo(CGSize(width: frameWidth, height: bookDescHeight))
+        }
+
+        menuBookView.snp.makeConstraints { (make) in
+            make.top.equalTo(bookDescView.snp.bottom).offset(marginTop/2)
+            make.size.equalTo(CGSize(width: frameWidth - padding, height: padding*3))
+            make.leading.equalToSuperview().offset(16)
+        }
+
+        // Summary View
+        summaryLabel.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview().inset(padding)
+            make.top.equalTo(menuBookView.snp.bottom).offset(marginTop)
+        }
+
+        summaryText.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview().inset(padding)
+            make.top.equalTo(summaryLabel.snp.bottom).offset(marginTop)
+            make.bottom.equalToSuperview()
+        }
+        
+        bottomView.snp.makeConstraints { (make) in
+            make.size.equalTo(CGSize(width: frameWidth, height: padding*5))
+            make.bottom.equalToSuperview()
+        }
+        
+        downloadButton.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().offset(padding)
+            make.size.equalTo(CGSize(width: frameWidth - padding*5, height: padding*2))
+            make.leading.equalTo(padding)
+        }
+        
+        shareButton.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().offset(padding+4)
+            make.leading.equalTo(downloadButton.snp.trailing).offset(24)
+            make.size.equalTo(CGSize(width: padding*2-8, height: padding*2-8))
         }
     }
     
     private func resetContrainst() {
         audioCollectionView.snp.removeConstraints()
-        overviewView.snp.removeConstraints()
     }
     
     // MARK: - Setup and Load data
     private func setupData() {
         if let thumbnailUrl = URL(string: self.book.thumbnail) {
-            previewImage.kf_setImage(url: thumbnailUrl) {_ in
-                self.previewImage.alpha = 0.1
+            previewBookImage.kf_setImage(url: thumbnailUrl) {_ in
+                self.previewBookImage.alpha = 0.1
             }
         }
         
@@ -474,19 +457,11 @@ class BookDetailViewController: UIViewController {
         
         bookTitle.text = self.book.title
         bookComposer.text = self.book.composer
-
-        setStatusButton()
-        loadAudioData()
-        loadDescription()
-        setUpSegmentControls()
-    }
-    
-    private func loadAudioData() {
+        
+//        setStatusButton()
+//        loadAudioData()
         audioViewModel.getAudioList(bookId: book.id)
-    }
-     
-    private func loadDescription() {
-        overviewView.text = book.description
+        summaryText.text = book.description
     }
     
     private func setStatusButton() {
@@ -504,8 +479,6 @@ class BookDetailViewController: UIViewController {
         if Utilities.shared.isFavorited(bookId: book.id) {
             imageName = "fi_heart_fill.png"
         }
-        let downArrowIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
-        favoriteButton.setImage(downArrowIcon, for: .normal)
     }
     
     private func readerConfiguration(forEpub epub: Epub) -> FolioReaderConfig {
@@ -532,16 +505,6 @@ class BookDetailViewController: UIViewController {
         let config = FolioReaderConfig()
         let folioReader = FolioReader()
         folioReader.presentReader(parentViewController: self, withEpubPath: path, andConfig: config)
-    }
-    
-    private func segmentChanged(segmentControl: UISegmentedControl) {
-        if segmentControl.selectedSegmentIndex == 0 {
-            self.audioCollectionView.isHidden = true
-            self.overviewView.isHidden = false
-        } else if segmentControl.selectedSegmentIndex == 1 {
-            self.audioCollectionView.isHidden = false
-            self.overviewView.isHidden = true
-        }
     }
     
     //MARK: - @objc Attributes
@@ -701,12 +664,5 @@ extension BookDetailViewController: UICollectionViewDataSource, UICollectionView
         return AudioResourceCell.sizeForResource(audio: self.listAudio[indexPath.row],
                                             cellWidth: collectionView.bounds.width,
                                             cell: audioCollectionView.cellForItem(at: indexPath) as? AudioResourceCell)
-    }
-}
-
-// MARK: - ScrollUISegmentControllerDelegate
-extension BookDetailViewController: ScrollUISegmentControllerDelegate{
-    func selectItemAt(_ sender: SegmentedControl) {
-        self.segmentChanged(segmentControl: sender)
     }
 }

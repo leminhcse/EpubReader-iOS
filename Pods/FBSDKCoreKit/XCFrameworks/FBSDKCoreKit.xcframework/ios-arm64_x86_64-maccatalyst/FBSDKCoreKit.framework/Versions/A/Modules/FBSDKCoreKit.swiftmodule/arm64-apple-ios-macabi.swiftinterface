@@ -1,7 +1,6 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)
+// swift-compiler-version: Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)
 // swift-module-flags: -target arm64-apple-ios13.1-macabi -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name FBSDKCoreKit
-// swift-module-flags-ignorable: -enable-bare-slash-regex
 import AdSupport
 import AuthenticationServices
 import FBAEMKit
@@ -13,7 +12,6 @@ import StoreKit
 import Swift
 import UIKit
 import _Concurrency
-import _StringProcessing
 extension FBSDKCoreKit.AccessToken {
   public var permissions: Swift.Set<FBSDKCoreKit.Permission> {
     get
@@ -135,20 +133,22 @@ extension FBSDKCoreKit.AccessToken {
   @objc func configure(factory: FBSDKCoreKit.GraphRequestFactoryProtocol, settings: FBSDKCoreKit.SettingsProtocol)
   @objc func recordEvent(_ parameters: [Swift.String : Any])
 }
-@_inheritsConvenienceInitializers @objcMembers @objc final public class CoreUIApplication : ObjectiveC.NSObject {
+@_inheritsConvenienceInitializers @available(tvOS, unavailable)
+@objcMembers @objc final public class CoreUIApplication : ObjectiveC.NSObject {
   @objc public static let shared: FBSDKCoreKit._InternalURLOpener
   @objc override dynamic public init()
   @objc deinit
 }
 @_inheritsConvenienceInitializers @objcMembers @objc(FBSDKIcon) open class FBIcon : ObjectiveC.NSObject {
-  @objc open func path(with size: CoreFoundation.CGSize) -> CoreGraphics.CGPath?
-  @objc public func image(size: CoreFoundation.CGSize) -> UIKit.UIImage?
-  @objc public func image(size: CoreFoundation.CGSize, color: UIKit.UIColor) -> UIKit.UIImage?
-  @objc public func image(size: CoreFoundation.CGSize, scale: CoreFoundation.CGFloat, color: UIKit.UIColor) -> UIKit.UIImage?
+  @objc open func path(with size: CoreGraphics.CGSize) -> CoreGraphics.CGPath?
+  @objc public func image(size: CoreGraphics.CGSize) -> UIKit.UIImage?
+  @objc public func image(size: CoreGraphics.CGSize, color: UIKit.UIColor) -> UIKit.UIImage?
+  @objc public func image(size: CoreGraphics.CGSize, scale: CoreGraphics.CGFloat, color: UIKit.UIColor) -> UIKit.UIImage?
   @objc override dynamic public init()
   @objc deinit
 }
-@_inheritsConvenienceInitializers @objcMembers @objc(FBSDKProfilePictureView) @_Concurrency.MainActor(unsafe) final public class FBProfilePictureView : UIKit.UIView {
+@_inheritsConvenienceInitializers @available(tvOS, unavailable)
+@objcMembers @objc(FBSDKProfilePictureView) @_Concurrency.MainActor(unsafe) final public class FBProfilePictureView : UIKit.UIView {
   @objc @_Concurrency.MainActor(unsafe) final public var pictureMode: FBSDKCoreKit.Profile.PictureMode {
     @objc get
     @objc set
@@ -157,23 +157,22 @@ extension FBSDKCoreKit.AccessToken {
     @objc get
     @objc set
   }
-  @_Concurrency.MainActor(unsafe) @objc override final public var bounds: CoreFoundation.CGRect {
-    @objc get
-    @objc set
+  @_Concurrency.MainActor(unsafe) @objc override final public var bounds: CoreGraphics.CGRect {
+    @_Concurrency.MainActor(unsafe) @objc get
+    @_Concurrency.MainActor(unsafe) @objc set
   }
   @_Concurrency.MainActor(unsafe) @objc override final public var contentMode: UIKit.UIView.ContentMode {
-    @objc get
-    @objc set
+    @_Concurrency.MainActor(unsafe) @objc get
+    @_Concurrency.MainActor(unsafe) @objc set
   }
-  @objc(initWith:profile:) @_Concurrency.MainActor(unsafe) public init(frame: CoreFoundation.CGRect, profile: FBSDKCoreKit.Profile? = nil)
+  @objc(initWith:profile:) @_Concurrency.MainActor(unsafe) public init(frame: CoreGraphics.CGRect, profile: FBSDKCoreKit.Profile? = nil)
   @objc(initWithProfile:) @_Concurrency.MainActor(unsafe) convenience public init(profile: FBSDKCoreKit.Profile? = nil)
-  @objc(initWithFrame:) @_Concurrency.MainActor(unsafe) override dynamic public init(frame: CoreFoundation.CGRect)
+  @objc(initWithFrame:) @_Concurrency.MainActor(unsafe) override dynamic public init(frame: CoreGraphics.CGRect)
   @objc(initWithCoder:) @_Concurrency.MainActor(unsafe) required dynamic public init?(coder: Foundation.NSCoder)
   @objc @_Concurrency.MainActor(unsafe) final public func setNeedsImageUpdate()
   @objc deinit
 }
 public typealias AppEventsCAPIManager = FBSDKCoreKit.FBSDKAppEventsCAPIManager
-public typealias CAPIGBlock = (Swift.Bool) -> Swift.Void
 @objc @_inheritsConvenienceInitializers @objcMembers final public class FBSDKAppEventsCAPIManager : ObjectiveC.NSObject, FBSDKCoreKit.CAPIReporter {
   @objc public static let shared: FBSDKCoreKit.FBSDKAppEventsCAPIManager
   @objc override dynamic public init()
@@ -194,7 +193,7 @@ public typealias CAPIGBlock = (Swift.Bool) -> Swift.Void
   }
   @objc override dynamic public init()
   @objc public func configure(datasetID: Swift.String, url: Swift.String, accessKey: Swift.String)
-  @objc public func callCapiGatewayAPI(with parameters: [Swift.String : Any], userAgent: Swift.String)
+  @objc public func callCapiGatewayAPI(with parameters: [Swift.String : Any])
   @objc deinit
 }
 final public class KeychainStoreFactory : FBSDKCoreKit.KeychainStoreProviding {
@@ -267,7 +266,7 @@ extension FBSDKCoreKit.Profile {
       get
     }
   }
-  @objc(imageURLForPictureMode:size:) final public func imageURL(forMode pictureMode: FBSDKCoreKit.Profile.PictureMode, size: CoreFoundation.CGSize) -> Foundation.URL?
+  @objc(imageURLForPictureMode:size:) final public func imageURL(forMode pictureMode: FBSDKCoreKit.Profile.PictureMode, size: CoreGraphics.CGSize) -> Foundation.URL?
 }
 extension FBSDKCoreKit.Profile {
   @objc(loadCurrentProfileWithCompletion:) public static func loadCurrentProfile(completion: FBSDKCoreKit.ProfileBlock?)
@@ -348,7 +347,7 @@ extension FBSDKCoreKit.Settings {
   @objc final public var defaultGraphAPIVersion: Swift.String {
     @objc get
   }
-  @objc(JPEGCompressionQuality) final public var jpegCompressionQuality: CoreFoundation.CGFloat {
+  @objc(JPEGCompressionQuality) final public var jpegCompressionQuality: CoreGraphics.CGFloat {
     @objc get
     @objc set
   }
@@ -519,6 +518,7 @@ public enum DialogConfigurationName {
   public static let message: Swift.String
   public static let share: Swift.String
 }
+@available(tvOS, unavailable)
 public struct ShareDialogConfiguration {
   public init()
   public var defaultShareMode: Swift.String? {
@@ -533,7 +533,6 @@ public struct ShareDialogConfiguration {
   @objc static func setConversionFilteringEnabled(_ isEnabled: Swift.Bool)
   @objc static func setCatalogMatchingEnabled(_ isEnabled: Swift.Bool)
   @objc static func setAdvertiserRuleMatchInServerEnabled(_ isEnabled: Swift.Bool)
-  @objc static func handle(_ url: Foundation.URL)
 }
 extension FBAEMKit.AEMReporter : FBSDKCoreKit._AEMReporterProtocol {
 }
@@ -596,12 +595,12 @@ extension FBSDKCoreKit._BridgeAPI : AuthenticationServices.ASWebAuthenticationPr
   @objc deinit
 }
 @_inheritsConvenienceInitializers @objcMembers @objc(FBSDKCloseIcon) final public class _FBCloseIcon : ObjectiveC.NSObject {
-  @objc final public func image(size: CoreFoundation.CGSize) -> UIKit.UIImage?
+  @objc final public func image(size: CoreGraphics.CGSize) -> UIKit.UIImage?
   @objc override dynamic public init()
   @objc deinit
 }
 @_inheritsConvenienceInitializers @objcMembers @objc(FBSDKLogo) final public class _FBLogo : FBSDKCoreKit.FBIcon {
-  @objc override final public func path(with size: CoreFoundation.CGSize) -> CoreGraphics.CGPath?
+  @objc override final public func path(with size: CoreGraphics.CGSize) -> CoreGraphics.CGPath?
   @objc override dynamic public init()
   @objc deinit
 }
@@ -614,7 +613,7 @@ extension FBSDKCoreKit._BridgeAPI : AuthenticationServices.ASWebAuthenticationPr
   @objc deinit
 }
 @_inheritsConvenienceInitializers @objcMembers @objc(FBSDKHumanSilhouetteIcon) final public class _HumanSilhouetteIcon : FBSDKCoreKit.FBIcon {
-  @objc override final public func path(with size: CoreFoundation.CGSize) -> CoreGraphics.CGPath?
+  @objc override final public func path(with size: CoreGraphics.CGSize) -> CoreGraphics.CGPath?
   @objc override dynamic public init()
   @objc deinit
 }
@@ -658,7 +657,7 @@ extension FBSDKCoreKit._PaymentObserver : StoreKit.SKPaymentTransactionObserver 
 @objcMembers @objc(FBSDKWebDialog) final public class _WebDialog : ObjectiveC.NSObject {
   @objc final public var shouldDeferVisibility: Swift.Bool
   @objc weak final public var delegate: FBSDKCoreKit.WebDialogDelegate?
-  @objc public init(name: Swift.String, parameters: [Swift.String : Swift.String]?, webViewFrame: CoreFoundation.CGRect = .zero, path: Swift.String? = nil)
+  @objc public init(name: Swift.String, parameters: [Swift.String : Swift.String]?, webViewFrame: CoreGraphics.CGRect = .zero, path: Swift.String? = nil)
   @objc convenience public init(name: Swift.String)
   @objc final public func show()
   @objc deinit
@@ -670,7 +669,7 @@ extension FBSDKCoreKit._WebDialog : FBSDKCoreKit.WebDialogViewDelegate {
   @objc final public func webDialogViewDidFinishLoad(_ webDialogView: FBSDKCoreKit.FBWebDialogView)
 }
 @_inheritsConvenienceInitializers @objcMembers @objc(FBSDKWebViewFactory) final public class _WebViewFactory : ObjectiveC.NSObject, FBSDKCoreKit._WebViewProviding {
-  @objc final public func createWebView(frame: CoreFoundation.CGRect) -> FBSDKCoreKit.WebView
+  @objc final public func createWebView(frame: CoreGraphics.CGRect) -> FBSDKCoreKit.WebView
   @objc override dynamic public init()
   @objc deinit
 }

@@ -26,7 +26,6 @@ NS_SWIFT_NAME(CrashHandler)
 + (void)removeObserver:(id<FBSDKCrashObserving>)observer;
 + (void)clearCrashReportFiles;
 + (NSString *)getFBSDKVersion;
-- (void)saveException:(NSException *)exception;
 
 - (void)disable;
 

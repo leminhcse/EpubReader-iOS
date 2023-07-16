@@ -17,13 +17,19 @@ RSYNC_PROTECT_TMP_FILES=(--filter "P .*.??????")
 variant_for_slice()
 {
   case "$1" in
-  "FBAEMKit.xcframework/ios-arm64_x86_64-maccatalyst")
-    echo "maccatalyst"
+  "FBAEMKit.xcframework/ios-arm64")
+    echo ""
     ;;
   "FBAEMKit.xcframework/ios-arm64_x86_64-simulator")
     echo "simulator"
     ;;
-  "FBAEMKit.xcframework/ios-arm64")
+  "FBAEMKit.xcframework/ios-arm64_x86_64-maccatalyst")
+    echo "maccatalyst"
+    ;;
+  "FBAEMKit.xcframework/tvos-arm64_x86_64-simulator")
+    echo "simulator"
+    ;;
+  "FBAEMKit.xcframework/tvos-arm64")
     echo ""
     ;;
   esac
@@ -32,13 +38,19 @@ variant_for_slice()
 archs_for_slice()
 {
   case "$1" in
-  "FBAEMKit.xcframework/ios-arm64_x86_64-maccatalyst")
-    echo "arm64 x86_64"
+  "FBAEMKit.xcframework/ios-arm64")
+    echo "arm64"
     ;;
   "FBAEMKit.xcframework/ios-arm64_x86_64-simulator")
     echo "arm64 x86_64"
     ;;
-  "FBAEMKit.xcframework/ios-arm64")
+  "FBAEMKit.xcframework/ios-arm64_x86_64-maccatalyst")
+    echo "arm64 x86_64"
+    ;;
+  "FBAEMKit.xcframework/tvos-arm64_x86_64-simulator")
+    echo "arm64 x86_64"
+    ;;
+  "FBAEMKit.xcframework/tvos-arm64")
     echo "arm64"
     ;;
   esac
@@ -123,5 +135,5 @@ install_xcframework() {
   echo "Copied $source to $destination"
 }
 
-install_xcframework "${PODS_ROOT}/FBAEMKit/XCFrameworks/FBAEMKit.xcframework" "FBAEMKit" "framework" "ios-arm64_x86_64-maccatalyst" "ios-arm64_x86_64-simulator" "ios-arm64"
+install_xcframework "${PODS_ROOT}/FBAEMKit/XCFrameworks/FBAEMKit.xcframework" "FBAEMKit" "framework" "ios-arm64" "ios-arm64_x86_64-simulator" "ios-arm64_x86_64-maccatalyst"
 

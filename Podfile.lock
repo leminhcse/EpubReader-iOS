@@ -8,14 +8,14 @@ PODS:
   - AppAuth/ExternalUserAgent (1.6.2):
     - AppAuth/Core
   - Connectivity (6.0.0)
-  - FBAEMKit (16.1.0):
-    - FBSDKCoreKit_Basics (= 16.1.0)
-  - FBSDKCoreKit (16.1.0):
-    - FBAEMKit (= 16.1.0)
-    - FBSDKCoreKit_Basics (= 16.1.0)
-  - FBSDKCoreKit_Basics (16.1.0)
-  - FBSDKLoginKit (16.1.0):
-    - FBSDKCoreKit (= 16.1.0)
+  - FBAEMKit (15.1.0):
+    - FBSDKCoreKit_Basics (= 15.1.0)
+  - FBSDKCoreKit (15.1.0):
+    - FBAEMKit (= 15.1.0)
+    - FBSDKCoreKit_Basics (= 15.1.0)
+  - FBSDKCoreKit_Basics (15.1.0)
+  - FBSDKLoginKit (15.1.0):
+    - FBSDKCoreKit (= 15.1.0)
   - FolioReaderKit (1.4.0):
     - AEXML (= 4.3.3)
     - FontBlaster (= 4.1.0)
@@ -50,9 +50,9 @@ PODS:
   - RxTest (6.5.0):
     - RxSwift (= 6.5.0)
   - ScrollableSegmentedControl (1.5.0)
-  - SDWebImage (5.15.8):
-    - SDWebImage/Core (= 5.15.8)
-  - SDWebImage/Core (5.15.8)
+  - SDWebImage (5.16.0):
+    - SDWebImage/Core (= 5.16.0)
+  - SDWebImage/Core (5.16.0)
   - SnapKit (5.6.0)
   - SSZipArchive (2.1.1)
   - SwiftyJSON (4.0.0)
@@ -63,8 +63,8 @@ PODS:
 DEPENDENCIES:
   - Alamofire (= 5.7.0)
   - Connectivity
-  - FBSDKCoreKit (= 16.1.0)
-  - FBSDKLoginKit (= 16.1.0)
+  - FBSDKCoreKit (= 15.1)
+  - FBSDKLoginKit (= 15.1)
   - FolioReaderKit (from `../`)
   - GoogleSignIn (= 7.0.0)
   - Kingfisher (= 7.6.2)
@@ -120,10 +120,10 @@ SPEC CHECKSUMS:
   Alamofire: ad60cc5d76abe294f672f51f5aaa4a6ef164ede3
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   Connectivity: 1919d4dc94c63514a2ec0574336f2e83857a20a8
-  FBAEMKit: c7efe06720a8b15b1d25b68921ba46dee20996e0
-  FBSDKCoreKit: ca77d40d46786157b7b31ad3516f5ad9c2315339
-  FBSDKCoreKit_Basics: d39c3361379def7297bf76738cdd4fd2e0eb1a68
-  FBSDKLoginKit: 8fa1a0e3be1c9e8ae6df522844235a05cb03d835
+  FBAEMKit: c7f82b5145d446bcbbcd50485c032689032fc6a2
+  FBSDKCoreKit: 7542746fc63a2a38dd6a865eeb54268341f37b83
+  FBSDKCoreKit_Basics: 92d6b26c0bed30ab09bbdd96dccaa26e6c9978d1
+  FBSDKLoginKit: 4e275d30cf90e92bdf3a7c82857a8642abf23037
   FolioReaderKit: 6b5daca560b3dd6905ab14870f4823d7e1f283de
   FontBlaster: 127aa66419478d1c62926c7fdb39841633344a45
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
@@ -139,7 +139,7 @@ SPEC CHECKSUMS:
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   RxTest: eb2d23adefc5a5ebf5779c7792fa3edfe6ebcc17
   ScrollableSegmentedControl: 2e64bbe8968a7fcd8aae5014434481464fcdfe60
-  SDWebImage: cb032eba469c54e0000e78bcb0a13cdde0a52798
+  SDWebImage: 2aea163b50bfcb569a2726b6a754c54a4506fcf6
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SSZipArchive: 14401ade5f8e82aba1ff03e9f88e9de60937ae60
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
@@ -147,6 +147,6 @@ SPEC CHECKSUMS:
   Whisper: 6869ae85284ae2ba0aa4c7d8a826be6436409fed
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: b8e0cd06ef70c4c3199e82cd74fea57c5b016caf
+PODFILE CHECKSUM: 563e723ce1bc86c4c96d6870bc154f3887aecd9f
 
 COCOAPODS: 1.11.3
