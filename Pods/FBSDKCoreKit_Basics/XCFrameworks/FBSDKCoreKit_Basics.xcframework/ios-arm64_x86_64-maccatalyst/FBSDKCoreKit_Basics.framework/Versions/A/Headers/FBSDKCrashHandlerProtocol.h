@@ -15,7 +15,6 @@ NS_SWIFT_NAME(CrashHandlerProtocol)
 
 - (void)addObserver:(id<FBSDKCrashObserving>)observer;
 - (void)clearCrashReportFiles;
-- (void)saveException:(NSException *)exception;
 
 @end
 

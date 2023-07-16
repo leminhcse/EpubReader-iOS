@@ -91,5 +91,6 @@ class MainTabBarViewController: UITabBarController {
 extension MainTabBarViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         print("Selected \(String(describing: viewController.title))")
+        tabBarController.tabBar.tintColor = UIColor.color(with: .background)
     }
 }

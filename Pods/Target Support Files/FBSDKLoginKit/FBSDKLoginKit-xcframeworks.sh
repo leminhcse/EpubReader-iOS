@@ -17,14 +17,20 @@ RSYNC_PROTECT_TMP_FILES=(--filter "P .*.??????")
 variant_for_slice()
 {
   case "$1" in
-  "FBSDKLoginKit.xcframework/ios-arm64")
-    echo ""
-    ;;
   "FBSDKLoginKit.xcframework/ios-arm64_x86_64-simulator")
     echo "simulator"
     ;;
+  "FBSDKLoginKit.xcframework/tvos-arm64_x86_64-simulator")
+    echo "simulator"
+    ;;
+  "FBSDKLoginKit.xcframework/ios-arm64")
+    echo ""
+    ;;
   "FBSDKLoginKit.xcframework/ios-arm64_x86_64-maccatalyst")
     echo "maccatalyst"
+    ;;
+  "FBSDKLoginKit.xcframework/tvos-arm64")
+    echo ""
     ;;
   esac
 }
@@ -32,14 +38,20 @@ variant_for_slice()
 archs_for_slice()
 {
   case "$1" in
-  "FBSDKLoginKit.xcframework/ios-arm64")
-    echo "arm64"
-    ;;
   "FBSDKLoginKit.xcframework/ios-arm64_x86_64-simulator")
     echo "arm64 x86_64"
     ;;
+  "FBSDKLoginKit.xcframework/tvos-arm64_x86_64-simulator")
+    echo "arm64 x86_64"
+    ;;
+  "FBSDKLoginKit.xcframework/ios-arm64")
+    echo "arm64"
+    ;;
   "FBSDKLoginKit.xcframework/ios-arm64_x86_64-maccatalyst")
     echo "arm64 x86_64"
+    ;;
+  "FBSDKLoginKit.xcframework/tvos-arm64")
+    echo "arm64"
     ;;
   esac
 }
@@ -123,5 +135,5 @@ install_xcframework() {
   echo "Copied $source to $destination"
 }
 
-install_xcframework "${PODS_ROOT}/FBSDKLoginKit/XCFrameworks/FBSDKLoginKit.xcframework" "FBSDKLoginKit" "framework" "ios-arm64" "ios-arm64_x86_64-simulator" "ios-arm64_x86_64-maccatalyst"
+install_xcframework "${PODS_ROOT}/FBSDKLoginKit/XCFrameworks/FBSDKLoginKit.xcframework" "FBSDKLoginKit" "framework" "ios-arm64_x86_64-simulator" "ios-arm64" "ios-arm64_x86_64-maccatalyst"
 
