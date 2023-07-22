@@ -14,7 +14,7 @@ enum ButtonStyle {
     case profile
     case more
     case close
-    case share
+    case view
 }
 
 extension UIButton {
@@ -28,7 +28,7 @@ extension UIButton {
             setImage(downArrowIcon, for: .normal)
             imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         case .favorite:
-            let inset: CGFloat = 28
+            let inset: CGFloat = 8
             let imageName = "fi_heart.png"
             let downArrowIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
             setImage(downArrowIcon, for: .normal)
@@ -51,9 +51,9 @@ extension UIButton {
             let nextIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
             setImage(nextIcon, for: .normal)
             imageEdgeInsets = UIEdgeInsets(top: inset, left: 0, bottom: inset, right: inset)
-        case .share:
-            let inset: CGFloat = 10
-            let imageName = "ic_share.png"
+        case .view:
+            let inset: CGFloat = 28
+            let imageName = "ic_view.png"
             let nextIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
             setImage(nextIcon, for: .normal)
             imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
