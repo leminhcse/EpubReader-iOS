@@ -11,6 +11,7 @@
 		0401C1F528BE7463008A686B /* AudioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401C1F428BE7463008A686B /* AudioViewModel.swift */; };
 		040509052916186600A956C7 /* disable_ads.html in Resources */ = {isa = PBXBuildFile; fileRef = 040509042916186600A956C7 /* disable_ads.html */; };
 		04054ABE289FB386006E71BA /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04054ABD289FB386006E71BA /* UIImage.swift */; };
+		0408ACAE2A6BE45B00FECB96 /* ic_view.png in Resources */ = {isa = PBXBuildFile; fileRef = 0408ACAD2A6BE45B00FECB96 /* ic_view.png */; };
 		040A2F9B294AFEF200CF0E54 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040A2F9A294AFEF200CF0E54 /* SplashViewController.swift */; };
 		040A2F9D294B07E600CF0E54 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040A2F9C294B07E600CF0E54 /* PermissionManager.swift */; };
 		040A2FA3294B1E5A00CF0E54 /* ic_book.png in Resources */ = {isa = PBXBuildFile; fileRef = 040A2FA2294B1E5A00CF0E54 /* ic_book.png */; };
@@ -114,7 +115,6 @@
 		04FA55DD286C651D00724CF9 /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */; };
 		04FA55DF286CB0E900724CF9 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FA55DE286CB0E900724CF9 /* UIButtonExtension.swift */; };
 		04FC5D8A29570D0700578B8A /* clock_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 04FC5D8929570D0700578B8A /* clock_icon.png */; };
-		04FD3A1F2A63F73F003250A7 /* ic_share.png in Resources */ = {isa = PBXBuildFile; fileRef = 04FD3A1E2A63F73F003250A7 /* ic_share.png */; };
 		04FD3A262A640951003250A7 /* FBSDKCoreKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04FD3A222A6407C0003250A7 /* FBSDKCoreKit.xcframework */; };
 		04FD3A272A640951003250A7 /* FBSDKCoreKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 04FD3A222A6407C0003250A7 /* FBSDKCoreKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8BC8BF17FD90027C3027604C /* Pods_EpubReaderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83E9F9CB594D13B99F40DF3F /* Pods_EpubReaderTests.framework */; };
@@ -186,6 +186,7 @@
 		0401C1F428BE7463008A686B /* AudioViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioViewModel.swift; sourceTree = "<group>"; };
 		040509042916186600A956C7 /* disable_ads.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = disable_ads.html; sourceTree = "<group>"; };
 		04054ABD289FB386006E71BA /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		0408ACAD2A6BE45B00FECB96 /* ic_view.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_view.png; sourceTree = "<group>"; };
 		040A2F9A294AFEF200CF0E54 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		040A2F9C294B07E600CF0E54 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
 		040A2FA2294B1E5A00CF0E54 /* ic_book.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_book.png; sourceTree = "<group>"; };
@@ -289,7 +290,6 @@
 		04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
 		04FA55DE286CB0E900724CF9 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
 		04FC5D8929570D0700578B8A /* clock_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clock_icon.png; sourceTree = "<group>"; };
-		04FD3A1E2A63F73F003250A7 /* ic_share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_share.png; sourceTree = "<group>"; };
 		04FD3A202A6407C0003250A7 /* FBSDKCoreKit_Basics.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKCoreKit_Basics.xcframework; path = Pods/FBSDKCoreKit_Basics/XCFrameworks/FBSDKCoreKit_Basics.xcframework; sourceTree = "<group>"; };
 		04FD3A222A6407C0003250A7 /* FBSDKCoreKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKCoreKit.xcframework; path = Pods/FBSDKCoreKit/XCFrameworks/FBSDKCoreKit.xcframework; sourceTree = "<group>"; };
 		1ACAA9E66AE1AE9938FCFA67 /* Pods-EpubReader-EpubReaderUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpubReader-EpubReaderUITests.release.xcconfig"; path = "Target Support Files/Pods-EpubReader-EpubReaderUITests/Pods-EpubReader-EpubReaderUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -424,7 +424,7 @@
 		0464017228AC08A300CCAD3F /* Icon */ = {
 			isa = PBXGroup;
 			children = (
-				04FD3A1E2A63F73F003250A7 /* ic_share.png */,
+				0408ACAD2A6BE45B00FECB96 /* ic_view.png */,
 				045412442A62AF5E004639E7 /* ic_chapters.png */,
 				045412422A62AE6F004639E7 /* ic_pages.png */,
 				047877B02A6152F7000EAEC2 /* ic_rating.png */,
@@ -965,7 +965,6 @@
 				047877AF2A610BA7000EAEC2 /* home_icon.png in Resources */,
 				04196D7928A2C010008FA2FC /* audio_scrubber_dot.png in Resources */,
 				040A2FA3294B1E5A00CF0E54 /* ic_book.png in Resources */,
-				04FD3A1F2A63F73F003250A7 /* ic_share.png in Resources */,
 				04196D7028A2BD3B008FA2FC /* video_pause.png in Resources */,
 				04B360E728B68431005ADBA1 /* close_button.png in Resources */,
 				047877B32A6152F8000EAEC2 /* ic_rating.png in Resources */,
@@ -984,6 +983,7 @@
 				041F9B9828B141C000FB4DEA /* fastforward_15_seconds.png in Resources */,
 				FA3D8EA7283BD6FA004C186E /* Assets.xcassets in Resources */,
 				049F879829166F6D008D4456 /* ic_profile.png in Resources */,
+				0408ACAE2A6BE45B00FECB96 /* ic_view.png in Resources */,
 				04196D7828A2C010008FA2FC /* forward_new_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

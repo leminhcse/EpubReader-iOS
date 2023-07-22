@@ -129,8 +129,7 @@ class BookDetailViewController: UIViewController {
         menuView.layer.borderWidth = 0.2
         menuView.layer.cornerRadius = 12.0
 
-        menuView.setInFavourite(hasIn: false, text: "Chọn yêu thích")
-        menuView.btnFavorite.btnAction.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
+        menuView.setReview(hasIn: true, text: "231")
         menuView.setChapters(chapters: "12")
         menuView.setPages(pages: "321")
         return menuView
@@ -176,18 +175,19 @@ class BookDetailViewController: UIViewController {
         return downloadButton
     }()
     
-    private lazy var shareButton: UIButton = {
-        let shareButton = UIButton()
-        shareButton.tintColor = UIColor.color(with: .background)
-        shareButton.style(with: .share)
-        shareButton.titleLabel?.font = UIFont.font(with: .h4)
-        shareButton.layer.cornerRadius = padding
-        shareButton.layer.borderWidth = 1
-        shareButton.layer.borderColor = UIColor.gray.cgColor
+    private lazy var favoriteButton: UIButton = {
+        let favoriteButton = UIButton()
+        favoriteButton.tintColor = UIColor.color(with: .background)
+        favoriteButton.style(with: .favorite)
+        favoriteButton.titleLabel?.font = UIFont.font(with: .h4)
+        favoriteButton.layer.cornerRadius = padding
+        favoriteButton.layer.borderWidth = 1
+        favoriteButton.layer.borderColor = UIColor.gray.cgColor
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
         if UIDevice.current.userInterfaceIdiom == .pad {
-            shareButton.titleLabel?.font = UIFont.font(with: .h2)
+            favoriteButton.titleLabel?.font = UIFont.font(with: .h2)
         }
-        return shareButton
+        return favoriteButton
     }()
     
     private lazy var downloadAudioView: UIView = {
@@ -310,7 +310,7 @@ class BookDetailViewController: UIViewController {
         
         scrollView.addSubview(mainStackView)
         bottomView.addSubview(downloadButton)
-        bottomView.addSubview(shareButton)
+        bottomView.addSubview(favoriteButton)
         
         self.view.addSubview(scrollView)
         self.view.addSubview(bottomView)
@@ -429,7 +429,7 @@ class BookDetailViewController: UIViewController {
             make.leading.equalTo(padding)
         }
         
-        shareButton.snp.makeConstraints { (make) in
+        favoriteButton.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(padding+4)
             make.leading.equalTo(downloadButton.snp.trailing).offset(24)
             make.size.equalTo(CGSize(width: padding*2-8, height: padding*2-8))
@@ -458,7 +458,7 @@ class BookDetailViewController: UIViewController {
         bookTitle.text = self.book.title
         bookComposer.text = self.book.composer
         
-//        setStatusButton()
+        setStatusButton()
 //        loadAudioData()
         audioViewModel.getAudioList(bookId: book.id)
         summaryText.text = book.description
@@ -475,10 +475,10 @@ class BookDetailViewController: UIViewController {
             }
         }
         
-        var imageName = "fi_heart.png"
-        if Utilities.shared.isFavorited(bookId: book.id) {
-            imageName = "fi_heart_fill.png"
-        }
+//        var imageName = "fi_heart.png"
+//        if Utilities.shared.isFavorited(bookId: book.id) {
+//            imageName = "fi_heart_fill.png"
+//        }
     }
     
     private func readerConfiguration(forEpub epub: Epub) -> FolioReaderConfig {
@@ -582,15 +582,15 @@ class BookDetailViewController: UIViewController {
                         print("download")
                         if success {
                             DispatchQueue.main.async {
-                                self.setStatusButton()
                                 BannerNotification.downloadSuccessful(title: self.book.title).present()
                                 EpubReaderHelper.shared.downloadBooks.append(self.book)
                                 PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+                                self.setStatusButton()
                             }
                         } else {
                             DispatchQueue.main.async {
-                                self.setStatusButton()
                                 Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
+                                self.setStatusButton()
                             }
                         }
                     }
