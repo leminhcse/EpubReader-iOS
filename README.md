@@ -7,12 +7,12 @@ an ebook iOS app using Swift
 
 ## Screenshots
 
-<img src="preview/preview1.png">
-<img src="preview/preview2.png">
-<img src="preview/preview3.png">
-<img src="preview/preview4.png">
-<img src="preview/preview5.png">
-<img src="preview/preview6.png">
+<img src="preview/preview1.png" height="400" width="200">
+<img src="preview/preview2.png" height="400" width="200">
+<img src="preview/preview3.png" height="400" width="200">
+<img src="preview/preview4.png" height="400" width="200">
+<img src="preview/preview5.png" height="400" width="200">
+<img src="preview/preview6.png" height="400" width="200">
 
 ## Features
 
