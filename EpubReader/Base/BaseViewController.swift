@@ -15,14 +15,10 @@ class BaseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-        navigationController?.navigationBar.backgroundColor =  UIColor.color(with: .background)
-        navigationController?.navigationBar.barTintColor = UIColor.color(with: .background)
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        navigationController?.navigationBar.backgroundColor = .white
+        navigationController?.navigationBar.barTintColor = .white
+        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.color(with: .darkColor)]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
     }
 }

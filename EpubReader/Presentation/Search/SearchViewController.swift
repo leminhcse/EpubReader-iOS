@@ -59,8 +59,8 @@ class SearchViewController: BaseViewController {
     
     // MARK: Setup UI
     private func setupUI() {
-        self.title = "Tìm Kiếm".uppercased()
         self.view.backgroundColor = UIColor.white
+        self.navigationController?.navigationBar.isHidden = true
         
         bookTableView.delegate = self
         bookTableView.dataSource = self

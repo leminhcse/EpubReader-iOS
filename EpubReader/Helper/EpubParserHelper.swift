@@ -20,23 +20,6 @@ class EpubParserHelper: NSObject {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    func parse() -> Bool {
-//        if let data = try? Data(contentsOf: url) {
-//            let parser = XMLParser(data: data)
-//            parser.delegate = self
-//
-//            let success = parser.parse()
-//
-//            if success {
-//                totalPages = parser.columnNumber//.totalPages
-//            }
-//            return success
-//        }
-//        return false
-//    }
-
-
 }
 
 extension EpubParserHelper: XMLParserDelegate {

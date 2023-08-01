@@ -40,6 +40,7 @@
 		043DFB1628BB3905003CD6C0 /* download-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 043DFB1528BB3905003CD6C0 /* download-icon.png */; };
 		043DFB1828BB75C6003CD6C0 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043DFB1728BB75C6003CD6C0 /* Reachability.swift */; };
 		043DFB1A28BB77B7003CD6C0 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043DFB1928BB77B7003CD6C0 /* Message.swift */; };
+		044176F22A6E92420095397C /* EpubParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044176F12A6E92420095397C /* EpubParserHelper.swift */; };
 		04490EB228D61BD8004820CD /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04490EB128D61BD8004820CD /* UIFont.swift */; };
 		045412432A62AE6F004639E7 /* ic_pages.png in Resources */ = {isa = PBXBuildFile; fileRef = 045412422A62AE6F004639E7 /* ic_pages.png */; };
 		045412452A62AF5E004639E7 /* ic_chapters.png in Resources */ = {isa = PBXBuildFile; fileRef = 045412442A62AF5E004639E7 /* ic_chapters.png */; };
@@ -215,6 +216,7 @@
 		043DFB1528BB3905003CD6C0 /* download-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "download-icon.png"; sourceTree = "<group>"; };
 		043DFB1728BB75C6003CD6C0 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		043DFB1928BB77B7003CD6C0 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		044176F12A6E92420095397C /* EpubParserHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpubParserHelper.swift; sourceTree = "<group>"; };
 		04490EB128D61BD8004820CD /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		045412422A62AE6F004639E7 /* ic_pages.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_pages.png; sourceTree = "<group>"; };
 		045412442A62AF5E004639E7 /* ic_chapters.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_chapters.png; sourceTree = "<group>"; };
@@ -817,6 +819,7 @@
 				04118AE228C905EF00BE4446 /* PersistenceHelper.swift */,
 				04F3647A2928E09700EAF994 /* MusicPlayerHelper.swift */,
 				04B21A3E2941EA3300499FF9 /* BannerHelper.swift */,
+				044176F12A6E92420095397C /* EpubParserHelper.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -840,6 +843,8 @@
 			dependencies = (
 			);
 			name = EpubReader;
+			packageProductDependencies = (
+			);
 			productName = EpubReader;
 			productReference = FA3D8E9A283BD6F8004C186E /* EpubReader.app */;
 			productType = "com.apple.product-type.application";
@@ -916,6 +921,8 @@
 				Base,
 			);
 			mainGroup = FA3D8E91283BD6F8004C186E;
+			packageReferences = (
+			);
 			productRefGroup = FA3D8E9B283BD6F8004C186E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1146,6 +1153,7 @@
 				04196D7428A2BDC8008FA2FC /* FullScreenAudioPlayerViewController.swift in Sources */,
 				048FDBB128CC9A770080509B /* CultureHistoryViewController.swift in Sources */,
 				04118AE328C905EF00BE4446 /* PersistenceHelper.swift in Sources */,
+				044176F22A6E92420095397C /* EpubParserHelper.swift in Sources */,
 				047877B82A615371000EAEC2 /* MenuBookView.swift in Sources */,
 				FAC01C23284FB9CB0004A0BA /* ApiWebService.swift in Sources */,
 				0464618528D7075200563427 /* SignInViewController.swift in Sources */,
