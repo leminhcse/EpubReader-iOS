@@ -7,127 +7,49 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "BDB71ACF-F63B-443F-ABB8-F0A07E583018"
+            uuid = "83764DEC-EAA4-4787-8BEA-0A1BC4DB0160"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "EpubReader/Presentation/Home/SignInViewController.swift"
+            filePath = "EpubReader/Helper/EpubParserHelper.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "283"
-            endingLineNumber = "283"
-            landmarkName = "closeButtonTapped()"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "parser(_:didStartElement:namespaceURI:qualifiedName:attributes:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "BDB71ACF-F63B-443F-ABB8-F0A07E583018 - e8b27b80dd541f78"
+                  uuid = "83764DEC-EAA4-4787-8BEA-0A1BC4DB0160 - 9c35ac703cf5b82"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "EpubReader.SignInViewController.closeButtonTapped() -&gt; ()"
+                  symbolName = "EpubReader.EpubParserHelper.parser(_: __C.NSXMLParser, didStartElement: Swift.String, namespaceURI: Swift.Optional&lt;Swift.String&gt;, qualifiedName: Swift.Optional&lt;Swift.String&gt;, attributes: Swift.Dictionary&lt;Swift.String, Swift.String&gt;) -&gt; ()"
                   moduleName = "EpubReader"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mac/Downloads/iOS/iOS_project/MyProject/FolioReaderKit/EpubReader-iOS/EpubReader/Presentation/Home/SignInViewController.swift"
+                  urlString = "file:///Users/mac/Downloads/iOS/iOS_project/MyProject/FolioReaderKit/EpubReader-iOS/EpubReader/Helper/EpubParserHelper.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "284"
-                  endingLineNumber = "284"
-                  offsetFromSymbolStart = "148">
+                  startingLineNumber = "49"
+                  endingLineNumber = "49"
+                  offsetFromSymbolStart = "415">
                </Location>
                <Location
-                  uuid = "BDB71ACF-F63B-443F-ABB8-F0A07E583018 - f89fd6ddf3a183cd"
+                  uuid = "83764DEC-EAA4-4787-8BEA-0A1BC4DB0160 - 9c35ac703cf5b82"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in EpubReader.SignInViewController.closeButtonTapped() -&gt; ()"
+                  symbolName = "EpubReader.EpubParserHelper.parser(_: __C.NSXMLParser, didStartElement: Swift.String, namespaceURI: Swift.Optional&lt;Swift.String&gt;, qualifiedName: Swift.Optional&lt;Swift.String&gt;, attributes: Swift.Dictionary&lt;Swift.String, Swift.String&gt;) -&gt; ()"
                   moduleName = "EpubReader"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mac/Downloads/iOS/iOS_project/MyProject/FolioReaderKit/EpubReader-iOS/EpubReader/Presentation/Home/SignInViewController.swift"
+                  urlString = "file:///Users/mac/Downloads/iOS/iOS_project/MyProject/FolioReaderKit/EpubReader-iOS/EpubReader/Helper/EpubParserHelper.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "285"
-                  endingLineNumber = "285"
-                  offsetFromSymbolStart = "28">
-               </Location>
-               <Location
-                  uuid = "BDB71ACF-F63B-443F-ABB8-F0A07E583018 - e8b27b80dd541ab7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "EpubReader.SignInViewController.closeButtonTapped() -&gt; ()"
-                  moduleName = "EpubReader"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mac/Downloads/iOS/iOS_project/MyProject/FolioReaderKit/EpubReader-iOS/EpubReader/Presentation/Home/SignInViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "313"
-                  endingLineNumber = "313"
-                  offsetFromSymbolStart = "141">
-               </Location>
-               <Location
-                  uuid = "BDB71ACF-F63B-443F-ABB8-F0A07E583018 - f89fd6ddf3a18780"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in EpubReader.SignInViewController.closeButtonTapped() -&gt; ()"
-                  moduleName = "EpubReader"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mac/Downloads/iOS/iOS_project/MyProject/FolioReaderKit/EpubReader-iOS/EpubReader/Presentation/Home/SignInViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "314"
-                  endingLineNumber = "314"
-                  offsetFromSymbolStart = "20">
+                  startingLineNumber = "49"
+                  endingLineNumber = "49"
+                  offsetFromSymbolStart = "310">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A1B35A72-B6B5-4E5C-9061-6A409FDA8345"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "EpubReader/Presentation/Home/SignInViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "284"
-            endingLineNumber = "284"
-            landmarkName = "closeButtonTapped()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B7A1A2FC-FC13-4A09-AAF5-836C39B26C3B"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "EpubReader/Presentation/Home/SignInViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
-            landmarkName = "googleAuthLogin()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "7FE0B799-AABC-40D2-9E9A-15EDD18F4CAB"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "EpubReader/Presentation/Home/SignInViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "234"
-            endingLineNumber = "234"
-            landmarkName = "googleAuthLogin()"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

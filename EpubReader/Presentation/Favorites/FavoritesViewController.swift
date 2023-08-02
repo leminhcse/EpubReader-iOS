@@ -80,7 +80,7 @@ class FavoritesViewController: BaseViewController {
     
     // MARK: Setup UI
     private func setupUI() {
-        self.title = "Yêu Thích".uppercased()
+        self.navigationController?.navigationBar.isHidden = true
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(label)
         self.view.addSubview(bookTableView)

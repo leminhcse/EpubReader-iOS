@@ -40,7 +40,7 @@ class HomeViewController: BaseViewController {
         let view = UIView(frame: CGRect(origin: .zero, size: size))
         let button = UIButton(type: .system)
         button.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: size)
-        button.tintColor = UIColor.white
+        button.tintColor = UIColor.color(with: .darkColor)
         button.setImage(UIImage(named: "menu.png"), for: .normal)
         button.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
         button.applyNavBarConstraints(size: button.frame.size)
@@ -63,10 +63,9 @@ class HomeViewController: BaseViewController {
     
     // MARK: SETUP UI
     private func setupView() {
-        view.backgroundColor = UIColor.color(with: .background)
+        view.backgroundColor = .white
         self.tabBarController?.tabBar.tintColor = UIColor.color(with: .background)
-        
-        title = "TRANG CHỦ"
+        title = "Trang Chủ"
         navigationItem.leftBarButtonItem = menuButton()
         
         view.addSubview(segmentedControl)
