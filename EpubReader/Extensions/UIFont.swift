@@ -37,17 +37,21 @@ extension UIFont {
             let weight: UIFont.Weight
             
             switch self {
-            case .h0, .h1, .h2, .h3, .h4, .h5:
-                weight = .semibold//.bold
-            case .subtitle:
+            case .h0, .h1, .h2, .subtitle:
                 weight = .semibold
+            case .h3, .h4:
+                weight = .medium
+            case .h5:
+                weight = .regular
             }
             return weight
         }
         
         var defaultFontName: String {
             switch self {
-            case .h0, .h1, .h2, .h3, .h4, .h5: return "OpenSans-Bold"
+            case .h0, .h1, .h2, .h4, .h5: return "OpenSans-Bold"
+            case .h3:
+                return "OpenSans-Regular"
             case .subtitle: return "OpenSans-Regular"
             }
         }

@@ -271,7 +271,8 @@ class Utilities: NSObject {
     
     func showFullScreenAudio() {
         let viewController = FullScreenAudioPlayerViewController()
-        if (UI_USER_INTERFACE_IDIOM() == .phone) {
+        let device = UIDevice.current
+        if device.userInterfaceIdiom == .phone {
             let value = NSNumber(value: UIInterfaceOrientation.portrait.rawValue)
             UIDevice.current.setValue(value, forKey: "orientation")
         }
