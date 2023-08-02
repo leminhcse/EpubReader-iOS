@@ -13,7 +13,7 @@ class HomeViewController: BaseViewController {
     private var viewControllers = [UIViewController]()
     private var pageViewController = UIPageViewController()
     
-    private let listTopic = ["Kĩ năng sống", "Kinh tế - Tài chính", "Văn học - Tiểu thuyết", "Văn hóa - Lịch sử", "Khoa học - Kĩ thuật", "Sức khỏe - Tâm lý"]
+    private let listTopic = ["Kỹ năng sống", "Kinh tế - Tài chính", "Văn học - Tiểu thuyết", "Văn hóa - Lịch sử", "Khoa học - Kĩ thuật", "Sức khỏe - Tâm lý"]
     
     private lazy var segmentedControl: ScrollableSegmentedControl = {
         let segmentFrame: CGRect = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54)
@@ -27,10 +27,10 @@ class HomeViewController: BaseViewController {
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(segmentedValueChanged(_:)), for: .valueChanged)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: boldFont as Any], for: .normal)
-        segmentedControl.tintColor = UIColor.color(with: .background).withAlphaComponent(0.5)
+        segmentedControl.tintColor = UIColor.color(with: .background).withAlphaComponent(0.7)
         segmentedControl.layer.masksToBounds = true
-        segmentedControl.layer.shadowOpacity = 0.8
-        segmentedControl.layer.shadowOffset = CGSize(width: 0, height: 2)
+        segmentedControl.layer.shadowOpacity = 1
+        segmentedControl.layer.shadowOffset = CGSize(width: 0, height: 1)
         segmentedControl.layer.shadowColor = UIColor.gray.cgColor
         return segmentedControl
     }()
@@ -123,10 +123,12 @@ class HomeViewController: BaseViewController {
     
     @objc func menuButtonTapped() {
         let menuController = SideMenuViewController()
-        if UI_USER_INTERFACE_IDIOM() == .phone {
+        let device = UIDevice.current
+        if device.userInterfaceIdiom == .phone {
             let value = NSNumber(value: UIInterfaceOrientation.portrait.rawValue)
             UIDevice.current.setValue(value, forKey: "orientation")
         }
+        
         let navigationController = UINavigationController(rootViewController: menuController)
         navigationController.modalPresentationStyle = .overFullScreen
         if let tabBarController = tabBarController {

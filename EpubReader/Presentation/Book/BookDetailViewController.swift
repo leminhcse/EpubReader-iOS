@@ -100,7 +100,6 @@ class BookDetailViewController: UIViewController {
     
     private lazy var bookTitle: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.black
         label.backgroundColor = .clear
         label.numberOfLines = 3
         label.textAlignment = .center
@@ -133,17 +132,6 @@ class BookDetailViewController: UIViewController {
         menuView.setChapters(chapters: "12")
         menuView.setPages(pages: "321")
         return menuView
-    }()
-    
-    private lazy var summaryLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.black
-        label.backgroundColor = .clear
-        label.numberOfLines = 1
-        label.sizeToFit()
-        label.font = UIFont.font(with: .h4)
-        label.text = "Summary"
-        return label
     }()
     
     private lazy var summaryText: UILabel = {
@@ -304,8 +292,6 @@ class BookDetailViewController: UIViewController {
 
         contentView.addSubview(bookThumbnailView)
         contentView.addSubview(bookDescView)
-        
-        contentView.addSubview(summaryLabel)
         contentView.addSubview(summaryText)
         
         scrollView.addSubview(mainStackView)
@@ -406,15 +392,9 @@ class BookDetailViewController: UIViewController {
             make.leading.equalToSuperview().offset(16)
         }
 
-        // Summary View
-        summaryLabel.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(padding)
-            make.top.equalTo(menuBookView.snp.bottom).offset(marginTop)
-        }
-
         summaryText.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(padding)
-            make.top.equalTo(summaryLabel.snp.bottom).offset(marginTop)
+            make.top.equalTo(menuBookView.snp.bottom).offset(marginTop)
             make.bottom.equalToSuperview()
         }
         
