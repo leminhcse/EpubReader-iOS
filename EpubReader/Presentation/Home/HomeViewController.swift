@@ -36,12 +36,12 @@ class HomeViewController: BaseViewController {
     }()
     
     private func menuButton() -> UIBarButtonItem {
-        let size = CGSize(width: 30, height: 30)
+        let size = CGSize(width: 24, height: 24)
         let view = UIView(frame: CGRect(origin: .zero, size: size))
         let button = UIButton(type: .system)
         button.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: size)
         button.tintColor = UIColor.color(with: .darkColor)
-        button.setImage(UIImage(named: "menu.png"), for: .normal)
+        button.setImage(UIImage(named: "ic_menu.png"), for: .normal)
         button.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
         button.applyNavBarConstraints(size: button.frame.size)
         view.addSubview(button)
