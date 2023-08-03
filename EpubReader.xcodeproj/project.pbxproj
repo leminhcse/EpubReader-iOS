@@ -118,6 +118,7 @@
 		04FC5D8A29570D0700578B8A /* clock_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 04FC5D8929570D0700578B8A /* clock_icon.png */; };
 		04FD3A262A640951003250A7 /* FBSDKCoreKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04FD3A222A6407C0003250A7 /* FBSDKCoreKit.xcframework */; };
 		04FD3A272A640951003250A7 /* FBSDKCoreKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 04FD3A222A6407C0003250A7 /* FBSDKCoreKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		04FD77E12A7B6C3700232205 /* UITextFieldExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FD77E02A7B6C3700232205 /* UITextFieldExtensions.swift */; };
 		8BC8BF17FD90027C3027604C /* Pods_EpubReaderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83E9F9CB594D13B99F40DF3F /* Pods_EpubReaderTests.framework */; };
 		F9C95FC5E61ACB6A086C6BDB /* Pods_EpubReader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85A9056E2DA1F8A06AD0FB5E /* Pods_EpubReader.framework */; };
 		FA2F846A283BE64100DF928B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2F8469283BE64100DF928B /* HomeViewController.swift */; };
@@ -294,6 +295,7 @@
 		04FC5D8929570D0700578B8A /* clock_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clock_icon.png; sourceTree = "<group>"; };
 		04FD3A202A6407C0003250A7 /* FBSDKCoreKit_Basics.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKCoreKit_Basics.xcframework; path = Pods/FBSDKCoreKit_Basics/XCFrameworks/FBSDKCoreKit_Basics.xcframework; sourceTree = "<group>"; };
 		04FD3A222A6407C0003250A7 /* FBSDKCoreKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKCoreKit.xcframework; path = Pods/FBSDKCoreKit/XCFrameworks/FBSDKCoreKit.xcframework; sourceTree = "<group>"; };
+		04FD77E02A7B6C3700232205 /* UITextFieldExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtensions.swift; sourceTree = "<group>"; };
 		1ACAA9E66AE1AE9938FCFA67 /* Pods-EpubReader-EpubReaderUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpubReader-EpubReaderUITests.release.xcconfig"; path = "Target Support Files/Pods-EpubReader-EpubReaderUITests/Pods-EpubReader-EpubReaderUITests.release.xcconfig"; sourceTree = "<group>"; };
 		2B4D4E10F66837167C0BBBC7 /* Pods-EpubReaderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpubReaderTests.release.xcconfig"; path = "Target Support Files/Pods-EpubReaderTests/Pods-EpubReaderTests.release.xcconfig"; sourceTree = "<group>"; };
 		4C4E9414DA186C53B11F2B0E /* Pods-EpubReader.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpubReader.debug.xcconfig"; path = "Target Support Files/Pods-EpubReader/Pods-EpubReader.debug.xcconfig"; sourceTree = "<group>"; };
@@ -575,6 +577,7 @@
 				04490EB128D61BD8004820CD /* UIFont.swift */,
 				047877BB2A615453000EAEC2 /* UILabelExtensions.swift */,
 				047877BD2A61547C000EAEC2 /* StringExtensions.swift */,
+				04FD77E02A7B6C3700232205 /* UITextFieldExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1155,6 +1158,7 @@
 				04118AE328C905EF00BE4446 /* PersistenceHelper.swift in Sources */,
 				044176F22A6E92420095397C /* EpubParserHelper.swift in Sources */,
 				047877B82A615371000EAEC2 /* MenuBookView.swift in Sources */,
+				04FD77E12A7B6C3700232205 /* UITextFieldExtensions.swift in Sources */,
 				FAC01C23284FB9CB0004A0BA /* ApiWebService.swift in Sources */,
 				0464618528D7075200563427 /* SignInViewController.swift in Sources */,
 				FA2F8470283BE71700DF928B /* MainTabBarViewController.swift in Sources */,

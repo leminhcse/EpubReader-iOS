@@ -21,10 +21,13 @@ class SearchViewController: BaseViewController {
     // MARK: - UI Controls
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.showsCancelButton = true
-        searchBar.searchBarStyle = .default
-        searchBar.placeholder = " Tìm sách....."
+        searchBar.showsCancelButton = false
+        searchBar.searchBarStyle = .minimal
+        searchBar.placeholder = " Tên sách, tên tác giả"
         searchBar.sizeToFit()
+        searchBar.searchTextField.layer.cornerRadius = 20
+        searchBar.searchTextField.layer.masksToBounds = true
+        searchBar.searchTextField.setLeftImage(with: 12)
         return searchBar
     }()
     
@@ -65,10 +68,10 @@ class SearchViewController: BaseViewController {
         bookTableView.delegate = self
         bookTableView.dataSource = self
         searchBar.delegate = self
-        
+
         self.view.addSubview(searchBar)
         self.view.addSubview(bookTableView)
-        
+
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
@@ -77,19 +80,20 @@ class SearchViewController: BaseViewController {
     private func setupConstraint() {
         let safeAreaTop = self.view.safeAreaInsets.top
         let searchTop = safeAreaTop
+        let padding: CGFloat = 24
         
         searchBar.snp.makeConstraints { (make) in
             make.top.equalTo(searchTop)
-            make.height.equalTo(56)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.height.equalTo(64)
+            make.size.equalTo(CGSize(width: frameWidth - padding, height: 64))
+            make.centerX.equalToSuperview()
         }
         
         bookTableView.snp.makeConstraints { (make) in
             make.top.equalTo(searchBar.snp.bottom).offset(12)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.size.equalTo(CGSize(width: frameWidth, height: frameHeight))
+            make.size.equalTo(CGSize(width: frameWidth - padding, height: frameHeight))
         }
     }
     
