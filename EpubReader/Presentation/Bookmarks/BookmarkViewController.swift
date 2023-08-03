@@ -87,7 +87,7 @@ class BookmarkViewController: BaseViewController {
         
         bookTableView.snp.makeConstraints{ (make) in
             make.leading.equalToSuperview()
-            make.top.equalToSuperview().offset(112)
+            make.top.equalToSuperview()
             make.size.equalTo(CGSize(width: frameWidth, height: frameHeight))
         }
     }
