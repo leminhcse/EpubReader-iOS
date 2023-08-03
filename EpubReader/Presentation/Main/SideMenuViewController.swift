@@ -21,7 +21,7 @@ class SideMenuViewController: BaseViewController {
     var ratiowidth: CGFloat = 0.815
     
     //private let listMenu = ["Hồ sơ", "Sách đã tải", "Audio đã tải", "Về Chúng Tôi", "Tắt Quảng Cáo", "Hẹn Giờ"]
-    private let listMenu = ["Sách đã tải", "Về Chúng Tôi", "Tắt Quảng Cáo"]
+    private let listMenu = ["Sách đã tải", "Về chúng tôi", "Tắt quảng cáo"]
     private let listIconMenu = ["book_download_icon", "us_icon", "disable_ads_icon"]
     //private let listIconMenu = ["profile_icon", "book_download_icon", "audio_download_icon", "us_icon", "disable_ads_icon", "clock_icon"]
     

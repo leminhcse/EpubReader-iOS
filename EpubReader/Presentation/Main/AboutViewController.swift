@@ -28,7 +28,7 @@ class AboutViewController: UIViewController {
         let sendEmailButton = UIButton()
         sendEmailButton.layer.cornerRadius = 20
         sendEmailButton.backgroundColor = UIColor.color(with: .background)
-        sendEmailButton.setTitle("Gửi Email", for: .normal)
+        sendEmailButton.setTitle("Gửi email", for: .normal)
         sendEmailButton.addTarget(self, action: #selector(sendEmailTapped), for: .touchUpInside)
         return sendEmailButton
     }()
@@ -56,7 +56,7 @@ class AboutViewController: UIViewController {
     private func setupUI() {
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.topItem?.title = ""
-        self.title = "Về Chúng Tôi".uppercased()
+        self.title = "Về chúng tôi"
         
         sendEmailView.addSubview(sendEmailButton)
         self.view.addSubview(swipeView)

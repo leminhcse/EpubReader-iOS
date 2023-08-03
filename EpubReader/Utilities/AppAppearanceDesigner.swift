@@ -20,7 +20,7 @@ struct AppAppearanceDesigner {
             paragraphStyle.alignment = NSTextAlignment.left
             paragraphStyle.lineBreakMode = .byTruncatingTail
 
-            UINavigationBar.appearance().tintColor = UIColor.white
+            UINavigationBar.appearance().tintColor = UIColor.color(with: .darkColor)
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
         }
