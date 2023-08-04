@@ -50,9 +50,9 @@ PODS:
   - RxTest (6.5.0):
     - RxSwift (= 6.5.0)
   - ScrollableSegmentedControl (1.5.0)
-  - SDWebImage (5.16.0):
-    - SDWebImage/Core (= 5.16.0)
-  - SDWebImage/Core (5.16.0)
+  - SDWebImage (5.17.0):
+    - SDWebImage/Core (= 5.17.0)
+  - SDWebImage/Core (5.17.0)
   - SnapKit (5.6.0)
   - SSZipArchive (2.1.1)
   - SwiftyJSON (4.0.0)
@@ -139,7 +139,7 @@ SPEC CHECKSUMS:
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   RxTest: eb2d23adefc5a5ebf5779c7792fa3edfe6ebcc17
   ScrollableSegmentedControl: 2e64bbe8968a7fcd8aae5014434481464fcdfe60
-  SDWebImage: 2aea163b50bfcb569a2726b6a754c54a4506fcf6
+  SDWebImage: 750adf017a315a280c60fde706ab1e552a3ae4e9
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SSZipArchive: 14401ade5f8e82aba1ff03e9f88e9de60937ae60
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
@@ -147,6 +147,6 @@ SPEC CHECKSUMS:
   Whisper: 6869ae85284ae2ba0aa4c7d8a826be6436409fed
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: 563e723ce1bc86c4c96d6870bc154f3887aecd9f
+PODFILE CHECKSUM: eb03f4ee0bffcb22603ba05beb9b2487b564966c
 
 COCOAPODS: 1.11.3
