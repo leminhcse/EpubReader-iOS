@@ -13,7 +13,7 @@ class HomeViewController: BaseViewController {
     private var viewControllers = [UIViewController]()
     private var pageViewController = UIPageViewController()
     
-    private let listTopic = ["KĨ NĂNG SỐNG", "KINH TẾ - TÀI CHÍNH", "VĂN HỌC - TIỂU THUYẾT", "VĂN HÓA - LỊCH SỬ", "KHOA HỌC - KĨ THUẬT", "SỨC KHỎE - TÂM LÝ"]
+    private let listTopic = ["Kỹ năng sống", "Kinh tế - Tài chính", "Văn học - Tiểu thuyết", "Văn hóa - Lịch sử", "Khoa học - Kĩ thuật", "Sức khỏe - Tâm lý"]
     
     private lazy var segmentedControl: ScrollableSegmentedControl = {
         let segmentFrame: CGRect = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54)
@@ -27,21 +27,21 @@ class HomeViewController: BaseViewController {
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(segmentedValueChanged(_:)), for: .valueChanged)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: boldFont as Any], for: .normal)
-        segmentedControl.tintColor = UIColor.color(with: .background).withAlphaComponent(0.4)
+        segmentedControl.tintColor = UIColor.color(with: .background).withAlphaComponent(0.7)
         segmentedControl.layer.masksToBounds = true
-        segmentedControl.layer.shadowOpacity = 0.8
-        segmentedControl.layer.shadowOffset = CGSize(width: 0, height: 2)
+        segmentedControl.layer.shadowOpacity = 1
+        segmentedControl.layer.shadowOffset = CGSize(width: 0, height: 1)
         segmentedControl.layer.shadowColor = UIColor.gray.cgColor
         return segmentedControl
     }()
     
     private func menuButton() -> UIBarButtonItem {
-        let size = CGSize(width: 30, height: 30)
+        let size = CGSize(width: 24, height: 24)
         let view = UIView(frame: CGRect(origin: .zero, size: size))
         let button = UIButton(type: .system)
         button.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: size)
-        button.tintColor = UIColor.white
-        button.setImage(UIImage(named: "menu.png"), for: .normal)
+        button.tintColor = UIColor.color(with: .darkColor)
+        button.setImage(UIImage(named: "ic_menu.png"), for: .normal)
         button.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
         button.applyNavBarConstraints(size: button.frame.size)
         view.addSubview(button)
@@ -63,10 +63,9 @@ class HomeViewController: BaseViewController {
     
     // MARK: SETUP UI
     private func setupView() {
-        view.backgroundColor = UIColor.color(with: .background)
+        view.backgroundColor = .white
         self.tabBarController?.tabBar.tintColor = UIColor.color(with: .background)
-        
-        title = "TRANG CHỦ"
+        title = "Trang Chủ"
         navigationItem.leftBarButtonItem = menuButton()
         
         view.addSubview(segmentedControl)
@@ -124,10 +123,12 @@ class HomeViewController: BaseViewController {
     
     @objc func menuButtonTapped() {
         let menuController = SideMenuViewController()
-        if UI_USER_INTERFACE_IDIOM() == .phone {
+        let device = UIDevice.current
+        if device.userInterfaceIdiom == .phone {
             let value = NSNumber(value: UIInterfaceOrientation.portrait.rawValue)
             UIDevice.current.setValue(value, forKey: "orientation")
         }
+        
         let navigationController = UINavigationController(rootViewController: menuController)
         navigationController.modalPresentationStyle = .overFullScreen
         if let tabBarController = tabBarController {

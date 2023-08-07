@@ -64,7 +64,7 @@ class BookDownloadsViewController: BaseViewController {
     
     // MARK: Setup UI
     private func setupUI() {
-        self.title = "Sách đã tải".uppercased()
+        self.title = "Sách đã tải"
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(label)
         self.view.addSubview(bookTableView)

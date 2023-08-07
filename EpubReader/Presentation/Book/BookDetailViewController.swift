@@ -19,32 +19,32 @@ class BookDetailViewController: UIViewController {
         return scrollView
     }()
     
-    private lazy var mainStackView: UIStackView = {
-        let mainStackView = UIStackView()
-        mainStackView.translatesAutoresizingMaskIntoConstraints = false
-        mainStackView.alignment = .fill
-        mainStackView.axis = .vertical
-        mainStackView.distribution = .equalSpacing
-        return mainStackView
-    }()
-    
-    private lazy var contentView: UIView = {
-        let contentView = UIView()
-        contentView.backgroundColor = .clear
+    private lazy var contentView: UIStackView = {
+        let contentView = UIStackView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.alignment = .fill
+        contentView.axis = .vertical
+        contentView.distribution = .equalSpacing
         return contentView
     }()
     
-    private lazy var bookThumbnailView: UIView = {
-        let bookThumbnailView = UIView()
-        bookThumbnailView.backgroundColor = .clear
-        return bookThumbnailView
+    private lazy var firstContentView: UIView = {
+        let firstContentView = UIView()
+        firstContentView.backgroundColor = .clear
+        return firstContentView
+    }()
+    
+    private lazy var secondContentView: UIView = {
+        let secondContentView = UIView()
+        secondContentView.backgroundColor = .white
+        secondContentView.layer.cornerRadius = 30
+        return secondContentView
     }()
     
     private lazy var previewBookImage: UIImageView = {
         let previewBookImage = UIImageView()
         previewBookImage.clipsToBounds = true
         previewBookImage.contentMode = .scaleAspectFill
-        previewBookImage.backgroundColor = UIColor.red.withAlphaComponent(0.1)
         return previewBookImage
     }()
     
@@ -100,7 +100,6 @@ class BookDetailViewController: UIViewController {
     
     private lazy var bookTitle: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.black
         label.backgroundColor = .clear
         label.numberOfLines = 3
         label.textAlignment = .center
@@ -129,22 +128,10 @@ class BookDetailViewController: UIViewController {
         menuView.layer.borderWidth = 0.2
         menuView.layer.cornerRadius = 12.0
 
-        menuView.setInFavourite(hasIn: false, text: "Chọn yêu thích")
-        menuView.btnFavorite.btnAction.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
+        menuView.setReview(hasIn: true, text: "231")
         menuView.setChapters(chapters: "12")
         menuView.setPages(pages: "321")
         return menuView
-    }()
-    
-    private lazy var summaryLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.black
-        label.backgroundColor = .clear
-        label.numberOfLines = 1
-        label.sizeToFit()
-        label.font = UIFont.font(with: .h4)
-        label.text = "Summary"
-        return label
     }()
     
     private lazy var summaryText: UILabel = {
@@ -169,25 +156,26 @@ class BookDetailViewController: UIViewController {
         downloadButton.backgroundColor = UIColor.color(with: .background)
         downloadButton.setTitle("Tải Sách", for: .normal)
         downloadButton.titleLabel?.font = UIFont.font(with: .h4)
-        downloadButton.layer.cornerRadius = padding
+        downloadButton.layer.cornerRadius = 24
         if UIDevice.current.userInterfaceIdiom == .pad {
             downloadButton.titleLabel?.font = UIFont.font(with: .h2)
         }
         return downloadButton
     }()
     
-    private lazy var shareButton: UIButton = {
-        let shareButton = UIButton()
-        shareButton.tintColor = UIColor.color(with: .background)
-        shareButton.style(with: .share)
-        shareButton.titleLabel?.font = UIFont.font(with: .h4)
-        shareButton.layer.cornerRadius = padding
-        shareButton.layer.borderWidth = 1
-        shareButton.layer.borderColor = UIColor.gray.cgColor
+    private lazy var favoriteButton: UIButton = {
+        let favoriteButton = UIButton()
+        favoriteButton.tintColor = UIColor.color(with: .background)
+        favoriteButton.style(with: .favorite)
+        favoriteButton.titleLabel?.font = UIFont.font(with: .h4)
+        favoriteButton.layer.cornerRadius = 30
+        favoriteButton.layer.borderWidth = 1
+        favoriteButton.layer.borderColor = UIColor.gray.cgColor
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
         if UIDevice.current.userInterfaceIdiom == .pad {
-            shareButton.titleLabel?.font = UIFont.font(with: .h2)
+            favoriteButton.titleLabel?.font = UIFont.font(with: .h2)
         }
-        return shareButton
+        return favoriteButton
     }()
     
     private lazy var downloadAudioView: UIView = {
@@ -288,29 +276,24 @@ class BookDetailViewController: UIViewController {
     // MARK: - Private Methods
     private func setupViews() {
         self.view.backgroundColor = UIColor.white
-        mainStackView.addArrangedSubview(contentView)
+        
+        scrollView.addSubview(contentView)
+        contentView.addSubview(previewBookImage)
+        contentView.addSubview(firstContentView)
+        contentView.addSubview(secondContentView)
         
         closeButtonView.addSubview(closeButton)
         topButtonView.addSubview(closeButtonView)
-
-        previewBookImage.layer.addSublayer(gradiantLayer)
-        bookThumbnailView.addSubview(topButtonView)
-        bookThumbnailView.addSubview(previewBookImage)
-        bookThumbnailView.addSubview(bookImage)
-
-        bookDescView.addSubview(bookTitle)
-        bookDescView.addSubview(bookComposer)
-        bookDescView.addSubview(menuBookView)
-
-        contentView.addSubview(bookThumbnailView)
-        contentView.addSubview(bookDescView)
+        firstContentView.addSubview(topButtonView)
+        firstContentView.addSubview(bookImage)
+        firstContentView.addSubview(bookTitle)
+        firstContentView.addSubview(bookComposer)
         
-        contentView.addSubview(summaryLabel)
-        contentView.addSubview(summaryText)
-        
-        scrollView.addSubview(mainStackView)
+        secondContentView.addSubview(menuBookView)
+        secondContentView.addSubview(summaryText)
+
         bottomView.addSubview(downloadButton)
-        bottomView.addSubview(shareButton)
+        bottomView.addSubview(favoriteButton)
         
         self.view.addSubview(scrollView)
         self.view.addSubview(bottomView)
@@ -321,30 +304,24 @@ class BookDetailViewController: UIViewController {
         let top = safeAreaTop > 48 ? safeAreaTop : 48
         let frameWidth = self.view.frame.size.width
         let frameHeight = self.view.frame.size.height
-        let bookViewHeight = frameHeight/2
+        let bookViewHeight = frameHeight/2 + 72
         let marginTop: CGFloat = 16
         let padding: CGFloat = 24
         
-        if book.description != nil && book.description != "" {
-            scrollView.snp.makeConstraints { (make) in
-                make.edges.equalToSuperview()
-                make.top.bottom.equalToSuperview().offset(-top)
-            }
-        } else {
-            scrollView.snp.makeConstraints { (make) in
-                make.edges.equalToSuperview()
-                make.top.bottom.equalToSuperview().offset(top)
-            }
-        }
-        
-        mainStackView.snp.makeConstraints { (make) in
-            make.top.bottom.equalToSuperview()
-            make.left.right.equalTo(self.view)
+        scrollView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+            make.top.equalToSuperview().offset(-top)
         }
         
         contentView.snp.makeConstraints { (make) in
+            make.size.equalToSuperview()
             make.top.bottom.equalToSuperview()
-            make.left.right.equalTo(self.view)
+        }
+        
+        let firstContentHeight = frameHeight/2 + 64
+        firstContentView.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
+            make.size.equalTo(CGSize(width: frameWidth, height: firstContentHeight))
         }
         
         // Close button
@@ -364,26 +341,22 @@ class BookDetailViewController: UIViewController {
             make.leading.equalToSuperview().inset(4)
             make.top.equalToSuperview().inset(4)
         }
-
-        // Book thumbnail
-        bookThumbnailView.snp.makeConstraints { (make) in
-            make.size.equalTo(CGSize(width: frameWidth, height: bookViewHeight))
-        }
-
+        
         previewBookImage.snp.makeConstraints { (make) in
             make.size.equalToSuperview()
         }
-
+        
         bookImage.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.top.equalTo(topButtonView.snp.bottom).offset(8)
-            make.size.equalTo(CGSize(width: frameWidth/3 + padding*3, height: bookViewHeight/2 + 80))
+            make.top.equalTo(topButtonView.snp.bottom)
+            make.size.equalTo(CGSize(width: frameWidth/3 + padding*2, height: bookViewHeight/2 + 32))
         }
-
+        
         // Book Description
         let bookHeight: CGFloat = Utils.estimatedHeightOfLabel(text: bookTitle.text!, font: bookTitle.font, width: frameWidth - 64)
         bookTitle.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
+            make.top.equalTo(bookImage.snp.bottom).offset(marginTop)
             make.size.equalTo(CGSize(width: frameWidth - 64, height: bookHeight))
         }
 
@@ -393,47 +366,44 @@ class BookDetailViewController: UIViewController {
             make.top.equalTo(bookTitle.snp.bottom).offset(marginTop/2)
             make.size.equalTo(CGSize(width: frameWidth/2, height: bookCompose))
         }
-
-        let bookDescHeight = bookCompose + bookHeight + padding
-        bookDescView.snp.makeConstraints { (make) in
-            make.top.equalTo(bookViewHeight)
-            make.size.equalTo(CGSize(width: frameWidth, height: bookDescHeight))
-        }
-
-        menuBookView.snp.makeConstraints { (make) in
-            make.top.equalTo(bookDescView.snp.bottom).offset(marginTop/2)
-            make.size.equalTo(CGSize(width: frameWidth - padding, height: padding*3))
-            make.leading.equalToSuperview().offset(16)
-        }
-
-        // Summary View
-        summaryLabel.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(padding)
-            make.top.equalTo(menuBookView.snp.bottom).offset(marginTop)
-        }
-
-        summaryText.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(padding)
-            make.top.equalTo(summaryLabel.snp.bottom).offset(marginTop)
-            make.bottom.equalToSuperview()
+        
+        secondContentView.snp.makeConstraints { (make) in
+            make.top.equalTo(firstContentView.snp.bottom)
+            make.size.equalToSuperview()
         }
         
+        // Bottom view
         bottomView.snp.makeConstraints { (make) in
-            make.size.equalTo(CGSize(width: frameWidth, height: padding*5))
+            make.size.equalTo(CGSize(width: frameWidth, height: padding*4))
             make.bottom.equalToSuperview()
         }
-        
+
         downloadButton.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(padding)
+            make.top.equalToSuperview().offset(padding/2)
             make.size.equalTo(CGSize(width: frameWidth - padding*5, height: padding*2))
             make.leading.equalTo(padding)
         }
-        
-        shareButton.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(padding+4)
+
+        favoriteButton.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().offset(padding/2+4)
             make.leading.equalTo(downloadButton.snp.trailing).offset(24)
             make.size.equalTo(CGSize(width: padding*2-8, height: padding*2-8))
         }
+        
+        menuBookView.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(24)
+            make.size.equalTo(CGSize(width: frameWidth - padding*2, height: padding*3))
+        }
+        
+        summaryText.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview().inset(padding)
+            make.top.equalTo(menuBookView.snp.bottom).offset(marginTop)
+        }
+        
+        let summaryHeight: CGFloat = Utils.estimatedHeightOfLabel(text: book.description, font: summaryText.font, width: frameWidth - padding)
+        let height = summaryHeight + frameHeight - top*2 - marginTop
+        scrollView.contentSize = CGSize(width: frameWidth, height: height)
     }
     
     private func resetContrainst() {
@@ -444,7 +414,7 @@ class BookDetailViewController: UIViewController {
     private func setupData() {
         if let thumbnailUrl = URL(string: self.book.thumbnail) {
             previewBookImage.kf_setImage(url: thumbnailUrl) {_ in
-                self.previewBookImage.alpha = 0.1
+                self.previewBookImage.alpha = 0.2
             }
         }
         
@@ -458,7 +428,7 @@ class BookDetailViewController: UIViewController {
         bookTitle.text = self.book.title
         bookComposer.text = self.book.composer
         
-//        setStatusButton()
+        setStatusButton()
 //        loadAudioData()
         audioViewModel.getAudioList(bookId: book.id)
         summaryText.text = book.description
@@ -475,10 +445,10 @@ class BookDetailViewController: UIViewController {
             }
         }
         
-        var imageName = "fi_heart.png"
-        if Utilities.shared.isFavorited(bookId: book.id) {
-            imageName = "fi_heart_fill.png"
-        }
+//        var imageName = "fi_heart.png"
+//        if Utilities.shared.isFavorited(bookId: book.id) {
+//            imageName = "fi_heart_fill.png"
+//        }
     }
     
     private func readerConfiguration(forEpub epub: Epub) -> FolioReaderConfig {
@@ -582,15 +552,15 @@ class BookDetailViewController: UIViewController {
                         print("download")
                         if success {
                             DispatchQueue.main.async {
-                                self.setStatusButton()
                                 BannerNotification.downloadSuccessful(title: self.book.title).present()
                                 EpubReaderHelper.shared.downloadBooks.append(self.book)
                                 PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+                                self.setStatusButton()
                             }
                         } else {
                             DispatchQueue.main.async {
-                                self.setStatusButton()
                                 Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
+                                self.setStatusButton()
                             }
                         }
                     }

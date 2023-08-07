@@ -19,7 +19,7 @@ class MenuBookView: UIView {
         return stackView
     }()
 
-    public lazy var favoriteView: UIView = {
+    public lazy var reviewView: UIView = {
         [unowned self] in
         let view: UIView = UIView()
         view.heightAnchor.constraint(equalToConstant: self.bounds.size.height).isActive = true
@@ -43,11 +43,11 @@ class MenuBookView: UIView {
         return view
     }()
 
-    public lazy var btnFavorite: ActionButton = {
+    public lazy var btnReview: ActionButton = {
         [unowned self] in
-        let btnFavorite: ActionButton = ActionButton()
-        btnFavorite.btnAction.isEnabled = true
-        return btnFavorite
+        let btnReview: ActionButton = ActionButton()
+        btnReview.btnAction.isEnabled = false
+        return btnReview
     }()
 
     public lazy var btnChapter: ActionButton = {
@@ -79,12 +79,12 @@ class MenuBookView: UIView {
     private func setupUI() {
         self.addSubview(self.contentView)
         
-        self.contentView.addArrangedSubview(favoriteView)
+        self.contentView.addArrangedSubview(reviewView)
         self.contentView.addArrangedSubview(chapterView)
         self.contentView.addArrangedSubview(pageView)
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
 
-        self.favoriteView.addSubview(self.btnFavorite)
+        self.reviewView.addSubview(self.btnReview)
         self.chapterView.addSubview(self.btnChapter)
         self.pageView.addSubview(self.btnPage)
     }
@@ -95,7 +95,7 @@ class MenuBookView: UIView {
             make.leading.equalToSuperview()
         }
 
-        self.btnFavorite.snp.makeConstraints { make in
+        self.btnReview.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -108,11 +108,12 @@ class MenuBookView: UIView {
         }
     }
 
-    func setInFavourite(hasIn: Bool, text: String) {
-        self.btnFavorite.imgView.tintColor = UIColor.color(with: .background)
-        setTitle(self.btnFavorite.lbDescription, text)
-        let tintableImage = UIImage(named: "fi_heart.png")?.withRenderingMode(.alwaysTemplate)
-        self.btnFavorite.imgView.image = tintableImage
+    func setReview(hasIn: Bool, text: String) {
+        self.btnReview.imgView.tintColor = UIColor.color(with: .background)
+        let summary = text + " lượt xem"
+        setTitle(self.btnReview.lbDescription, summary)
+        let tintableImage = UIImage(named: "ic_view.png")?.withRenderingMode(.alwaysTemplate)
+        self.btnReview.imgView.image = tintableImage
     }
 
     func setChapters(chapters: String) {

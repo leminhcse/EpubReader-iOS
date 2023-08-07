@@ -11,6 +11,7 @@
 		0401C1F528BE7463008A686B /* AudioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401C1F428BE7463008A686B /* AudioViewModel.swift */; };
 		040509052916186600A956C7 /* disable_ads.html in Resources */ = {isa = PBXBuildFile; fileRef = 040509042916186600A956C7 /* disable_ads.html */; };
 		04054ABE289FB386006E71BA /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04054ABD289FB386006E71BA /* UIImage.swift */; };
+		0408ACAE2A6BE45B00FECB96 /* ic_view.png in Resources */ = {isa = PBXBuildFile; fileRef = 0408ACAD2A6BE45B00FECB96 /* ic_view.png */; };
 		040A2F9B294AFEF200CF0E54 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040A2F9A294AFEF200CF0E54 /* SplashViewController.swift */; };
 		040A2F9D294B07E600CF0E54 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040A2F9C294B07E600CF0E54 /* PermissionManager.swift */; };
 		040A2FA3294B1E5A00CF0E54 /* ic_book.png in Resources */ = {isa = PBXBuildFile; fileRef = 040A2FA2294B1E5A00CF0E54 /* ic_book.png */; };
@@ -39,6 +40,7 @@
 		043DFB1628BB3905003CD6C0 /* download-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 043DFB1528BB3905003CD6C0 /* download-icon.png */; };
 		043DFB1828BB75C6003CD6C0 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043DFB1728BB75C6003CD6C0 /* Reachability.swift */; };
 		043DFB1A28BB77B7003CD6C0 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043DFB1928BB77B7003CD6C0 /* Message.swift */; };
+		044176F22A6E92420095397C /* EpubParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044176F12A6E92420095397C /* EpubParserHelper.swift */; };
 		04490EB228D61BD8004820CD /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04490EB128D61BD8004820CD /* UIFont.swift */; };
 		045412432A62AE6F004639E7 /* ic_pages.png in Resources */ = {isa = PBXBuildFile; fileRef = 045412422A62AE6F004639E7 /* ic_pages.png */; };
 		045412452A62AF5E004639E7 /* ic_chapters.png in Resources */ = {isa = PBXBuildFile; fileRef = 045412442A62AF5E004639E7 /* ic_chapters.png */; };
@@ -114,9 +116,10 @@
 		04FA55DD286C651D00724CF9 /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */; };
 		04FA55DF286CB0E900724CF9 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FA55DE286CB0E900724CF9 /* UIButtonExtension.swift */; };
 		04FC5D8A29570D0700578B8A /* clock_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 04FC5D8929570D0700578B8A /* clock_icon.png */; };
-		04FD3A1F2A63F73F003250A7 /* ic_share.png in Resources */ = {isa = PBXBuildFile; fileRef = 04FD3A1E2A63F73F003250A7 /* ic_share.png */; };
 		04FD3A262A640951003250A7 /* FBSDKCoreKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04FD3A222A6407C0003250A7 /* FBSDKCoreKit.xcframework */; };
 		04FD3A272A640951003250A7 /* FBSDKCoreKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 04FD3A222A6407C0003250A7 /* FBSDKCoreKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		04FD77E12A7B6C3700232205 /* UITextFieldExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FD77E02A7B6C3700232205 /* UITextFieldExtensions.swift */; };
+		04FD77E32A7B995100232205 /* ic_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 04FD77E22A7B995100232205 /* ic_menu.png */; };
 		8BC8BF17FD90027C3027604C /* Pods_EpubReaderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83E9F9CB594D13B99F40DF3F /* Pods_EpubReaderTests.framework */; };
 		F9C95FC5E61ACB6A086C6BDB /* Pods_EpubReader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85A9056E2DA1F8A06AD0FB5E /* Pods_EpubReader.framework */; };
 		FA2F846A283BE64100DF928B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2F8469283BE64100DF928B /* HomeViewController.swift */; };
@@ -142,7 +145,6 @@
 		FAC51FC8283FC5810016889F /* AppAppearanceDesigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC51FC7283FC5800016889F /* AppAppearanceDesigner.swift */; };
 		FAC51FCA283FC97B0016889F /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC51FC9283FC97B0016889F /* UIColorExtensions.swift */; };
 		FAC51FCC283FCE590016889F /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC51FCB283FCE590016889F /* BaseViewController.swift */; };
-		FAC654A5283D2F490086CC9D /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = FAC654A4283D2F490086CC9D /* menu.png */; };
 		FAC654A7283D2F770086CC9D /* notification.png in Resources */ = {isa = PBXBuildFile; fileRef = FAC654A6283D2F770086CC9D /* notification.png */; };
 		FAC654A9283D31D60086CC9D /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC654A8283D31D60086CC9D /* UIViewExtensions.swift */; };
 		FAD7401B284BCAB0005B9459 /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7401A284BCAB0005B9459 /* BookCell.swift */; };
@@ -186,6 +188,7 @@
 		0401C1F428BE7463008A686B /* AudioViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioViewModel.swift; sourceTree = "<group>"; };
 		040509042916186600A956C7 /* disable_ads.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = disable_ads.html; sourceTree = "<group>"; };
 		04054ABD289FB386006E71BA /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		0408ACAD2A6BE45B00FECB96 /* ic_view.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_view.png; sourceTree = "<group>"; };
 		040A2F9A294AFEF200CF0E54 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		040A2F9C294B07E600CF0E54 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
 		040A2FA2294B1E5A00CF0E54 /* ic_book.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_book.png; sourceTree = "<group>"; };
@@ -214,6 +217,7 @@
 		043DFB1528BB3905003CD6C0 /* download-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "download-icon.png"; sourceTree = "<group>"; };
 		043DFB1728BB75C6003CD6C0 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		043DFB1928BB77B7003CD6C0 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		044176F12A6E92420095397C /* EpubParserHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpubParserHelper.swift; sourceTree = "<group>"; };
 		04490EB128D61BD8004820CD /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		045412422A62AE6F004639E7 /* ic_pages.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_pages.png; sourceTree = "<group>"; };
 		045412442A62AF5E004639E7 /* ic_chapters.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_chapters.png; sourceTree = "<group>"; };
@@ -289,9 +293,10 @@
 		04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
 		04FA55DE286CB0E900724CF9 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
 		04FC5D8929570D0700578B8A /* clock_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clock_icon.png; sourceTree = "<group>"; };
-		04FD3A1E2A63F73F003250A7 /* ic_share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_share.png; sourceTree = "<group>"; };
 		04FD3A202A6407C0003250A7 /* FBSDKCoreKit_Basics.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKCoreKit_Basics.xcframework; path = Pods/FBSDKCoreKit_Basics/XCFrameworks/FBSDKCoreKit_Basics.xcframework; sourceTree = "<group>"; };
 		04FD3A222A6407C0003250A7 /* FBSDKCoreKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKCoreKit.xcframework; path = Pods/FBSDKCoreKit/XCFrameworks/FBSDKCoreKit.xcframework; sourceTree = "<group>"; };
+		04FD77E02A7B6C3700232205 /* UITextFieldExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtensions.swift; sourceTree = "<group>"; };
+		04FD77E22A7B995100232205 /* ic_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_menu.png; sourceTree = "<group>"; };
 		1ACAA9E66AE1AE9938FCFA67 /* Pods-EpubReader-EpubReaderUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpubReader-EpubReaderUITests.release.xcconfig"; path = "Target Support Files/Pods-EpubReader-EpubReaderUITests/Pods-EpubReader-EpubReaderUITests.release.xcconfig"; sourceTree = "<group>"; };
 		2B4D4E10F66837167C0BBBC7 /* Pods-EpubReaderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpubReaderTests.release.xcconfig"; path = "Target Support Files/Pods-EpubReaderTests/Pods-EpubReaderTests.release.xcconfig"; sourceTree = "<group>"; };
 		4C4E9414DA186C53B11F2B0E /* Pods-EpubReader.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpubReader.debug.xcconfig"; path = "Target Support Files/Pods-EpubReader/Pods-EpubReader.debug.xcconfig"; sourceTree = "<group>"; };
@@ -328,7 +333,6 @@
 		FAC51FC7283FC5800016889F /* AppAppearanceDesigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAppearanceDesigner.swift; sourceTree = "<group>"; };
 		FAC51FC9283FC97B0016889F /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		FAC51FCB283FCE590016889F /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
-		FAC654A4283D2F490086CC9D /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
 		FAC654A6283D2F770086CC9D /* notification.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notification.png; sourceTree = "<group>"; };
 		FAC654A8283D31D60086CC9D /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		FAD7401A284BCAB0005B9459 /* BookCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCell.swift; sourceTree = "<group>"; };
@@ -424,7 +428,7 @@
 		0464017228AC08A300CCAD3F /* Icon */ = {
 			isa = PBXGroup;
 			children = (
-				04FD3A1E2A63F73F003250A7 /* ic_share.png */,
+				0408ACAD2A6BE45B00FECB96 /* ic_view.png */,
 				045412442A62AF5E004639E7 /* ic_chapters.png */,
 				045412422A62AE6F004639E7 /* ic_pages.png */,
 				047877B02A6152F7000EAEC2 /* ic_rating.png */,
@@ -573,6 +577,7 @@
 				04490EB128D61BD8004820CD /* UIFont.swift */,
 				047877BB2A615453000EAEC2 /* UILabelExtensions.swift */,
 				047877BD2A61547C000EAEC2 /* StringExtensions.swift */,
+				04FD77E02A7B6C3700232205 /* UITextFieldExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -788,9 +793,9 @@
 		FAC654A3283D2F2A0086CC9D /* Navigation Bar Icons */ = {
 			isa = PBXGroup;
 			children = (
+				04FD77E22A7B995100232205 /* ic_menu.png */,
 				04A081112871525200FFAFBF /* demo-bg.jpeg */,
 				04BC25AC2870B018007ECAEE /* chevron_down.png */,
-				FAC654A4283D2F490086CC9D /* menu.png */,
 				FAC654A6283D2F770086CC9D /* notification.png */,
 			);
 			path = "Navigation Bar Icons";
@@ -817,6 +822,7 @@
 				04118AE228C905EF00BE4446 /* PersistenceHelper.swift */,
 				04F3647A2928E09700EAF994 /* MusicPlayerHelper.swift */,
 				04B21A3E2941EA3300499FF9 /* BannerHelper.swift */,
+				044176F12A6E92420095397C /* EpubParserHelper.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -840,6 +846,8 @@
 			dependencies = (
 			);
 			name = EpubReader;
+			packageProductDependencies = (
+			);
 			productName = EpubReader;
 			productReference = FA3D8E9A283BD6F8004C186E /* EpubReader.app */;
 			productType = "com.apple.product-type.application";
@@ -916,6 +924,8 @@
 				Base,
 			);
 			mainGroup = FA3D8E91283BD6F8004C186E;
+			packageReferences = (
+			);
 			productRefGroup = FA3D8E9B283BD6F8004C186E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -964,8 +974,8 @@
 				04196D7A28A2C010008FA2FC /* backward_new_icon.png in Resources */,
 				047877AF2A610BA7000EAEC2 /* home_icon.png in Resources */,
 				04196D7928A2C010008FA2FC /* audio_scrubber_dot.png in Resources */,
+				04FD77E32A7B995100232205 /* ic_menu.png in Resources */,
 				040A2FA3294B1E5A00CF0E54 /* ic_book.png in Resources */,
-				04FD3A1F2A63F73F003250A7 /* ic_share.png in Resources */,
 				04196D7028A2BD3B008FA2FC /* video_pause.png in Resources */,
 				04B360E728B68431005ADBA1 /* close_button.png in Resources */,
 				047877B32A6152F8000EAEC2 /* ic_rating.png in Resources */,
@@ -977,13 +987,13 @@
 				04ECD18F28B7DA5800DAA295 /* headphones.png in Resources */,
 				04F8906129570AB400D13BE4 /* book_download_icon.png in Resources */,
 				FA3D8EAA283BD6FA004C186E /* LaunchScreen.storyboard in Resources */,
-				FAC654A5283D2F490086CC9D /* menu.png in Resources */,
 				045412452A62AF5E004639E7 /* ic_chapters.png in Resources */,
 				0455AC7028A903C600E41D28 /* sound_increase.png in Resources */,
 				0455AC6F28A903C600E41D28 /* sound_decrease.png in Resources */,
 				041F9B9828B141C000FB4DEA /* fastforward_15_seconds.png in Resources */,
 				FA3D8EA7283BD6FA004C186E /* Assets.xcassets in Resources */,
 				049F879829166F6D008D4456 /* ic_profile.png in Resources */,
+				0408ACAE2A6BE45B00FECB96 /* ic_view.png in Resources */,
 				04196D7828A2C010008FA2FC /* forward_new_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1146,7 +1156,9 @@
 				04196D7428A2BDC8008FA2FC /* FullScreenAudioPlayerViewController.swift in Sources */,
 				048FDBB128CC9A770080509B /* CultureHistoryViewController.swift in Sources */,
 				04118AE328C905EF00BE4446 /* PersistenceHelper.swift in Sources */,
+				044176F22A6E92420095397C /* EpubParserHelper.swift in Sources */,
 				047877B82A615371000EAEC2 /* MenuBookView.swift in Sources */,
+				04FD77E12A7B6C3700232205 /* UITextFieldExtensions.swift in Sources */,
 				FAC01C23284FB9CB0004A0BA /* ApiWebService.swift in Sources */,
 				0464618528D7075200563427 /* SignInViewController.swift in Sources */,
 				FA2F8470283BE71700DF928B /* MainTabBarViewController.swift in Sources */,

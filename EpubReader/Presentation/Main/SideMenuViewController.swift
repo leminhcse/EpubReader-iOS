@@ -20,8 +20,10 @@ class SideMenuViewController: BaseViewController {
     
     var ratiowidth: CGFloat = 0.815
     
-    private let listMenu = ["Hồ sơ", "Sách đã tải", "Audio đã tải", "Về Chúng Tôi", "Tắt Quảng Cáo", "Hẹn Giờ"]
-    private let listIconMenu = ["profile_icon", "book_download_icon", "audio_download_icon", "us_icon", "disable_ads_icon", "clock_icon"]
+    //private let listMenu = ["Hồ sơ", "Sách đã tải", "Audio đã tải", "Về Chúng Tôi", "Tắt Quảng Cáo", "Hẹn Giờ"]
+    private let listMenu = ["Sách đã tải", "Về chúng tôi", "Tắt quảng cáo"]
+    private let listIconMenu = ["book_download_icon", "us_icon", "disable_ads_icon"]
+    //private let listIconMenu = ["profile_icon", "book_download_icon", "audio_download_icon", "us_icon", "disable_ads_icon", "clock_icon"]
     
     // MARK: UIViewController - LIFE CYCLE
     override func viewDidLoad() {
@@ -193,28 +195,28 @@ extension SideMenuViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let title = self.listMenu[indexPath.row]
         switch title {
+//        case self.listMenu[0]:
+//            let viewController = ProfileViewController()
+//            self.navigationController?.pushViewController(viewController, animated: true)
+//            break
         case self.listMenu[0]:
-            let viewController = ProfileViewController()
-            self.navigationController?.pushViewController(viewController, animated: true)
-            break
-        case self.listMenu[1]:
             let viewController = BookDownloadsViewController()
             self.navigationController?.pushViewController(viewController, animated: true)
             break
-        case self.listMenu[2]:
-            let viewController = AudioDownloadsViewController()
-            self.navigationController?.pushViewController(viewController, animated: true)
-            break
-        case self.listMenu[3]:
+//        case self.listMenu[2]:
+//            let viewController = AudioDownloadsViewController()
+//            self.navigationController?.pushViewController(viewController, animated: true)
+//            break
+        case self.listMenu[1]:
             let viewController = AboutViewController()
             self.navigationController?.pushViewController(viewController, animated: true)
             break
-        case self.listMenu[4]:
+        case self.listMenu[2]:
             let viewController = DisableAdsViewController()
             self.navigationController?.pushViewController(viewController, animated: true)
             break
-        case self.listMenu[5]:
-            break
+//        case self.listMenu[5]:
+//            break
         default:
             break
         }

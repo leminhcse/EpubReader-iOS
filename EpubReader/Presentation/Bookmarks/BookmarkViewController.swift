@@ -71,7 +71,7 @@ class BookmarkViewController: BaseViewController {
     
     // MARK: Setup UI
     private func setupUI() {
-        self.title = "Đang Đọc".uppercased()
+        self.navigationController?.navigationBar.isHidden = true
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(label)
         self.view.addSubview(bookTableView)
@@ -87,7 +87,7 @@ class BookmarkViewController: BaseViewController {
         
         bookTableView.snp.makeConstraints{ (make) in
             make.leading.equalToSuperview()
-            make.top.equalToSuperview().offset(112)
+            make.top.equalToSuperview()
             make.size.equalTo(CGSize(width: frameWidth, height: frameHeight))
         }
     }

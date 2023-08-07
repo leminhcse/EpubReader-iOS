@@ -14,13 +14,13 @@ struct AppAppearanceDesigner {
         if #available(iOS 15, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = UIColor.color(with: .background)
-            appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+            appearance.backgroundColor = .white
+            appearance.titleTextAttributes = [.foregroundColor: UIColor.color(with: .darkColor)]
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = NSTextAlignment.left
             paragraphStyle.lineBreakMode = .byTruncatingTail
 
-            UINavigationBar.appearance().tintColor = UIColor.white
+            UINavigationBar.appearance().tintColor = UIColor.color(with: .darkColor)
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
         }

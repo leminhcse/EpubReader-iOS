@@ -55,7 +55,7 @@ class DisableAdsViewController: UIViewController {
     private func setupUI() {
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.topItem?.title = ""
-        self.title = "Tắt Quảng Cáo".uppercased()
+        self.title = "Tắt quảng cáo"
         
         purchaseView.addSubview(purchaseButton)
         self.view.addSubview(swipeView)
