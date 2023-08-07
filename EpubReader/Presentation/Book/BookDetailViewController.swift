@@ -128,9 +128,9 @@ class BookDetailViewController: UIViewController {
         menuView.layer.borderWidth = 0.2
         menuView.layer.cornerRadius = 12.0
 
-        menuView.setReview(hasIn: true, text: "231")
-        menuView.setChapters(chapters: "12")
-        menuView.setPages(pages: "321")
+        menuView.setPages(hasIn: true, text: "231")
+        menuView.setRating(rating: "4.4")
+        menuView.setReview(reviews: "168")
         return menuView
     }()
     
@@ -168,14 +168,19 @@ class BookDetailViewController: UIViewController {
         favoriteButton.tintColor = UIColor.color(with: .background)
         favoriteButton.style(with: .favorite)
         favoriteButton.titleLabel?.font = UIFont.font(with: .h4)
-        favoriteButton.layer.cornerRadius = 30
-        favoriteButton.layer.borderWidth = 1
         favoriteButton.layer.borderColor = UIColor.gray.cgColor
         favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
         if UIDevice.current.userInterfaceIdiom == .pad {
             favoriteButton.titleLabel?.font = UIFont.font(with: .h2)
         }
         return favoriteButton
+    }()
+    
+    private lazy var favoriteButtonView: UIView = {
+        let favoriteButtonView = UIView()
+        favoriteButtonView.backgroundColor = UIColor.init(hex: "#ECECEC")
+        favoriteButtonView.layer.cornerRadius = 24
+        return favoriteButtonView
     }()
     
     private lazy var downloadAudioView: UIView = {
@@ -292,8 +297,9 @@ class BookDetailViewController: UIViewController {
         secondContentView.addSubview(menuBookView)
         secondContentView.addSubview(summaryText)
 
+        favoriteButtonView.addSubview(favoriteButton)
         bottomView.addSubview(downloadButton)
-        bottomView.addSubview(favoriteButton)
+        bottomView.addSubview(favoriteButtonView)
         
         self.view.addSubview(scrollView)
         self.view.addSubview(bottomView)
@@ -308,9 +314,16 @@ class BookDetailViewController: UIViewController {
         let marginTop: CGFloat = 16
         let padding: CGFloat = 24
         
-        scrollView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-            make.top.equalToSuperview().offset(-top)
+        if book.description == "" {
+            scrollView.snp.makeConstraints { (make) in
+                make.edges.equalToSuperview()
+                make.top.equalToSuperview().offset(top)
+            }
+        } else {
+            scrollView.snp.makeConstraints { (make) in
+                make.edges.equalToSuperview()
+                make.top.equalToSuperview().offset(-top)
+            }
         }
         
         contentView.snp.makeConstraints { (make) in
@@ -384,15 +397,21 @@ class BookDetailViewController: UIViewController {
             make.leading.equalTo(padding)
         }
 
-        favoriteButton.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(padding/2+4)
-            make.leading.equalTo(downloadButton.snp.trailing).offset(24)
-            make.size.equalTo(CGSize(width: padding*2-8, height: padding*2-8))
+        favoriteButtonView.snp.makeConstraints{ (make) in
+            make.top.equalToSuperview().offset(padding/2)
+            make.leading.equalTo(downloadButton.snp.trailing).offset(padding - 8)
+            make.size.equalTo(CGSize(width: padding*2, height: padding*2))
+        }
+
+        favoriteButton.snp.makeConstraints{ (make) in
+            make.size.equalToSuperview().inset(2)
+            make.leading.equalToSuperview().inset(2)
+            make.top.equalToSuperview().inset(2)
         }
         
         menuBookView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(24)
+            make.top.equalToSuperview().offset(padding)
             make.size.equalTo(CGSize(width: frameWidth - padding*2, height: padding*3))
         }
         

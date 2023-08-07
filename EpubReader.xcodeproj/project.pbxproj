@@ -40,7 +40,6 @@
 		043DFB1628BB3905003CD6C0 /* download-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 043DFB1528BB3905003CD6C0 /* download-icon.png */; };
 		043DFB1828BB75C6003CD6C0 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043DFB1728BB75C6003CD6C0 /* Reachability.swift */; };
 		043DFB1A28BB77B7003CD6C0 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043DFB1928BB77B7003CD6C0 /* Message.swift */; };
-		044176F22A6E92420095397C /* EpubParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044176F12A6E92420095397C /* EpubParserHelper.swift */; };
 		04490EB228D61BD8004820CD /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04490EB128D61BD8004820CD /* UIFont.swift */; };
 		045412432A62AE6F004639E7 /* ic_pages.png in Resources */ = {isa = PBXBuildFile; fileRef = 045412422A62AE6F004639E7 /* ic_pages.png */; };
 		045412452A62AF5E004639E7 /* ic_chapters.png in Resources */ = {isa = PBXBuildFile; fileRef = 045412442A62AF5E004639E7 /* ic_chapters.png */; };
@@ -59,9 +58,7 @@
 		0473513C29463727004B9A33 /* AudioDownloadsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0473513B29463727004B9A33 /* AudioDownloadsViewController.swift */; };
 		04785B7328E6E456009CD72C /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04785B7228E6E456009CD72C /* UserViewModel.swift */; };
 		047877AF2A610BA7000EAEC2 /* home_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 047877AE2A610BA7000EAEC2 /* home_icon.png */; };
-		047877B32A6152F8000EAEC2 /* ic_rating.png in Resources */ = {isa = PBXBuildFile; fileRef = 047877B02A6152F7000EAEC2 /* ic_rating.png */; };
 		047877B82A615371000EAEC2 /* MenuBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047877B72A615371000EAEC2 /* MenuBookView.swift */; };
-		047877BA2A6153E1000EAEC2 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047877B92A6153E1000EAEC2 /* ActionButton.swift */; };
 		047877BC2A615453000EAEC2 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047877BB2A615453000EAEC2 /* UILabelExtensions.swift */; };
 		047877BE2A61547C000EAEC2 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047877BD2A61547C000EAEC2 /* StringExtensions.swift */; };
 		04856C1728E6050C00426B6C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04856C1628E6050C00426B6C /* User.swift */; };
@@ -115,6 +112,8 @@
 		04F8906729570C2700D13BE4 /* audio_download_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 04F8906529570C2700D13BE4 /* audio_download_icon.png */; };
 		04FA55DD286C651D00724CF9 /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */; };
 		04FA55DF286CB0E900724CF9 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FA55DE286CB0E900724CF9 /* UIButtonExtension.swift */; };
+		04FC11D12A80F948004C55CF /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FC11D02A80F948004C55CF /* BookDetailView.swift */; };
+		04FC11D32A814D54004C55CF /* ic_rating.png in Resources */ = {isa = PBXBuildFile; fileRef = 04FC11D22A814D54004C55CF /* ic_rating.png */; };
 		04FC5D8A29570D0700578B8A /* clock_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 04FC5D8929570D0700578B8A /* clock_icon.png */; };
 		04FD3A262A640951003250A7 /* FBSDKCoreKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04FD3A222A6407C0003250A7 /* FBSDKCoreKit.xcframework */; };
 		04FD3A272A640951003250A7 /* FBSDKCoreKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 04FD3A222A6407C0003250A7 /* FBSDKCoreKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -217,7 +216,6 @@
 		043DFB1528BB3905003CD6C0 /* download-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "download-icon.png"; sourceTree = "<group>"; };
 		043DFB1728BB75C6003CD6C0 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		043DFB1928BB77B7003CD6C0 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		044176F12A6E92420095397C /* EpubParserHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpubParserHelper.swift; sourceTree = "<group>"; };
 		04490EB128D61BD8004820CD /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		045412422A62AE6F004639E7 /* ic_pages.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_pages.png; sourceTree = "<group>"; };
 		045412442A62AF5E004639E7 /* ic_chapters.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_chapters.png; sourceTree = "<group>"; };
@@ -236,9 +234,7 @@
 		0473513B29463727004B9A33 /* AudioDownloadsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDownloadsViewController.swift; sourceTree = "<group>"; };
 		04785B7228E6E456009CD72C /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		047877AE2A610BA7000EAEC2 /* home_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_icon.png; sourceTree = "<group>"; };
-		047877B02A6152F7000EAEC2 /* ic_rating.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_rating.png; sourceTree = "<group>"; };
 		047877B72A615371000EAEC2 /* MenuBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBookView.swift; sourceTree = "<group>"; };
-		047877B92A6153E1000EAEC2 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		047877BB2A615453000EAEC2 /* UILabelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
 		047877BD2A61547C000EAEC2 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		04856C1628E6050C00426B6C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -292,6 +288,8 @@
 		04F8906529570C2700D13BE4 /* audio_download_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = audio_download_icon.png; sourceTree = "<group>"; };
 		04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
 		04FA55DE286CB0E900724CF9 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
+		04FC11D02A80F948004C55CF /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
+		04FC11D22A814D54004C55CF /* ic_rating.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_rating.png; path = ../../../../../../../../ic_rating.png; sourceTree = "<group>"; };
 		04FC5D8929570D0700578B8A /* clock_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clock_icon.png; sourceTree = "<group>"; };
 		04FD3A202A6407C0003250A7 /* FBSDKCoreKit_Basics.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKCoreKit_Basics.xcframework; path = Pods/FBSDKCoreKit_Basics/XCFrameworks/FBSDKCoreKit_Basics.xcframework; sourceTree = "<group>"; };
 		04FD3A222A6407C0003250A7 /* FBSDKCoreKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKCoreKit.xcframework; path = Pods/FBSDKCoreKit/XCFrameworks/FBSDKCoreKit.xcframework; sourceTree = "<group>"; };
@@ -428,10 +426,10 @@
 		0464017228AC08A300CCAD3F /* Icon */ = {
 			isa = PBXGroup;
 			children = (
+				04FC11D22A814D54004C55CF /* ic_rating.png */,
 				0408ACAD2A6BE45B00FECB96 /* ic_view.png */,
 				045412442A62AF5E004639E7 /* ic_chapters.png */,
 				045412422A62AE6F004639E7 /* ic_pages.png */,
-				047877B02A6152F7000EAEC2 /* ic_rating.png */,
 				04B719D429597CFB005E3C09 /* cross_icon.png */,
 				04B719D229597CFB005E3C09 /* no_wifi_icon.png */,
 				04B719D329597CFB005E3C09 /* tick_icon.png */,
@@ -466,7 +464,7 @@
 			isa = PBXGroup;
 			children = (
 				047877B72A615371000EAEC2 /* MenuBookView.swift */,
-				047877B92A6153E1000EAEC2 /* ActionButton.swift */,
+				04FC11D02A80F948004C55CF /* BookDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -822,7 +820,6 @@
 				04118AE228C905EF00BE4446 /* PersistenceHelper.swift */,
 				04F3647A2928E09700EAF994 /* MusicPlayerHelper.swift */,
 				04B21A3E2941EA3300499FF9 /* BannerHelper.swift */,
-				044176F12A6E92420095397C /* EpubParserHelper.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -978,7 +975,6 @@
 				040A2FA3294B1E5A00CF0E54 /* ic_book.png in Resources */,
 				04196D7028A2BD3B008FA2FC /* video_pause.png in Resources */,
 				04B360E728B68431005ADBA1 /* close_button.png in Resources */,
-				047877B32A6152F8000EAEC2 /* ic_rating.png in Resources */,
 				04F89051295701AC00D13BE4 /* search_icon.png in Resources */,
 				04F89057295706EB00D13BE4 /* profile_icon.png in Resources */,
 				04F8904E295701AC00D13BE4 /* favorite_icon.png in Resources */,
@@ -991,6 +987,7 @@
 				0455AC7028A903C600E41D28 /* sound_increase.png in Resources */,
 				0455AC6F28A903C600E41D28 /* sound_decrease.png in Resources */,
 				041F9B9828B141C000FB4DEA /* fastforward_15_seconds.png in Resources */,
+				04FC11D32A814D54004C55CF /* ic_rating.png in Resources */,
 				FA3D8EA7283BD6FA004C186E /* Assets.xcassets in Resources */,
 				049F879829166F6D008D4456 /* ic_profile.png in Resources */,
 				0408ACAE2A6BE45B00FECB96 /* ic_view.png in Resources */,
@@ -1142,6 +1139,7 @@
 				0464017A28AC0C7D00CCAD3F /* Audio.swift in Sources */,
 				041F9B8F28B11FAC00FB4DEA /* IntExtensions.swift in Sources */,
 				04C79DA928E0A24400593DFD /* MenuTableViewCell.swift in Sources */,
+				04FC11D12A80F948004C55CF /* BookDetailView.swift in Sources */,
 				FA349DE6284B6490005047DC /* SkillsViewController.swift in Sources */,
 				04CC80D3288DAB4700D53C0C /* FileDownloadInfo.swift in Sources */,
 				0473513A29461BA2004B9A33 /* BookDownloadsViewController.swift in Sources */,
@@ -1156,7 +1154,6 @@
 				04196D7428A2BDC8008FA2FC /* FullScreenAudioPlayerViewController.swift in Sources */,
 				048FDBB128CC9A770080509B /* CultureHistoryViewController.swift in Sources */,
 				04118AE328C905EF00BE4446 /* PersistenceHelper.swift in Sources */,
-				044176F22A6E92420095397C /* EpubParserHelper.swift in Sources */,
 				047877B82A615371000EAEC2 /* MenuBookView.swift in Sources */,
 				04FD77E12A7B6C3700232205 /* UITextFieldExtensions.swift in Sources */,
 				FAC01C23284FB9CB0004A0BA /* ApiWebService.swift in Sources */,
@@ -1182,7 +1179,6 @@
 				FAC654A9283D31D60086CC9D /* UIViewExtensions.swift in Sources */,
 				04CC80D1288DA96500D53C0C /* FileHelper.swift in Sources */,
 				04490EB228D61BD8004820CD /* UIFont.swift in Sources */,
-				047877BA2A6153E1000EAEC2 /* ActionButton.swift in Sources */,
 				FA3D8E9E283BD6F8004C186E /* AppDelegate.swift in Sources */,
 				045C43E528C7ABDB000A83E4 /* DatabaseHelper.swift in Sources */,
 				04C6045329AA4A26008EADA7 /* BaseGestureRecognizerProtocol.swift in Sources */,
