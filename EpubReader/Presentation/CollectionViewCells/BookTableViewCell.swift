@@ -32,7 +32,7 @@ class BookTableViewCell: UITableViewCell {
         titleLabel.textColor = .darkText
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.5
-        titleLabel.numberOfLines = 1
+        titleLabel.numberOfLines = 2
         return titleLabel
     }()
     
@@ -67,13 +67,12 @@ class BookTableViewCell: UITableViewCell {
         return pageLabel
     }()
     
-    private lazy var moreButton: UIButton = {
-        let moreButton = UIButton()
-        moreButton.style(with: .more)
-        moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
-        moreButton.tintColor = UIColor.darkText
-        moreButton.isHidden = false
-        return moreButton
+    private lazy var favoriteButton: UIButton = {
+        let favoriteButton = UIButton()
+        favoriteButton.style(with: .favorite)
+        favoriteButton.tintColor = UIColor.color(with: .background)
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
+        return favoriteButton
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -95,54 +94,55 @@ class BookTableViewCell: UITableViewCell {
         self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(composerLabel)
         self.contentView.addSubview(pageLabel)
-        self.contentView.addSubview(moreButton)
+        self.contentView.addSubview(favoriteButton)
     }
     
     private func setupConstraints() {
         let width = self.frame.size.width
         let height = self.frame.size.height
+        let padding: CGFloat = 12
         
-        var imageWidth = width/5 + 24
-        var imageHeight = height*2 + 48
+        var imageWidth = width/5 + padding*2
+        var imageHeight = height*2 + padding*4
         var titleWidth = width - imageWidth
         var titleHeight = height/3
-        var titleY = CGFloat(36)
+        var titleY = CGFloat(24)
         
         if UIDevice.current.userInterfaceIdiom == .pad {
-            imageWidth = width/5 + 96
-            imageHeight = height*2 + 144
+            imageWidth = width/5 + padding*8
+            imageHeight = height*2 + padding*12
             titleWidth = titleWidth*2
             titleHeight = titleHeight*1.5
             titleY = CGFloat(58)
         }
         
         image.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview().offset(12)
+            make.leading.equalToSuperview().offset(padding)
             make.size.equalTo(CGSize(width: imageWidth, height: imageHeight))
         }
         
         titleLabel.snp.makeConstraints { (make) in
-            make.leading.equalTo(image.snp.trailing).offset(12)
-            make.size.equalTo(CGSize(width: titleWidth, height: titleHeight*2))
+            make.leading.equalTo(image.snp.trailing).offset(padding)
+            make.size.equalTo(CGSize(width: titleWidth - padding, height: titleHeight*3))
             make.top.equalToSuperview().offset(titleY)
         }
         
         composerLabel.snp.makeConstraints { (make) in
-            make.leading.equalTo(image.snp.trailing).offset(12)
+            make.leading.equalTo(image.snp.trailing).offset(padding)
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.size.equalTo(CGSize(width: titleWidth, height: titleHeight))
         }
         
         pageLabel.snp.makeConstraints { (make) in
-            make.leading.equalTo(image.snp.trailing).offset(12)
+            make.leading.equalTo(image.snp.trailing).offset(padding)
             make.top.equalTo(composerLabel.snp.bottom).offset(8)
             make.size.equalTo(CGSize(width: titleWidth/2, height: titleHeight + 8))
         }
         
-        moreButton.snp.makeConstraints { (make) in
-            make.trailing.equalToSuperview().inset(24)
+        favoriteButton.snp.makeConstraints { (make) in
+            make.trailing.equalToSuperview().inset(padding*2)
             make.centerY.equalToSuperview()
-            make.size.equalTo(CGSize(width: 32, height: titleHeight + 12))
+            make.size.equalTo(CGSize(width: 48, height: 48))
         }
     }
     
@@ -193,7 +193,7 @@ class BookTableViewCell: UITableViewCell {
         composerLabel.text = composer
     }
     
-    @objc func moreButtonTapped() {
+    @objc func favoriteButtonTapped() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         if #available(iOS 13.0, *) {
             alert.view.tintColor = UIColor.primaryTextColor(traitCollection: UITraitCollection.current)

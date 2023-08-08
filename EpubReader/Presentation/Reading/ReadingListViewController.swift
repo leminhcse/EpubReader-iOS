@@ -1,14 +1,14 @@
 //
-//  BookmarkViewController.swift
+//  ReadingListViewController.swift
 //  EpubReader
 //
-//  Created by MacBook on 5/23/22.
+//  Created by mac on 08/08/2023.
 //
 
 import UIKit
 import SnapKit
 
-class BookmarkViewController: BaseViewController {
+class ReadingListViewController: BaseViewController {
     
     private var readingBook = [ReadingBook]()
     private var bookViewModel = BookViewModel()
@@ -112,7 +112,7 @@ class BookmarkViewController: BaseViewController {
 }
 
 //MARK: - Extension with UITableView
-extension BookmarkViewController: UITableViewDelegate, UITableViewDataSource {
+extension ReadingListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.readingBook.count
     }

@@ -28,10 +28,9 @@ class HomeViewController: BaseViewController {
         segmentedControl.addTarget(self, action: #selector(segmentedValueChanged(_:)), for: .valueChanged)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: boldFont as Any], for: .normal)
         segmentedControl.tintColor = UIColor.color(with: .background).withAlphaComponent(0.7)
+        segmentedControl.layer.borderWidth = 0.3
+        segmentedControl.layer.borderColor = UIColor.gray.cgColor
         segmentedControl.layer.masksToBounds = true
-        segmentedControl.layer.shadowOpacity = 1
-        segmentedControl.layer.shadowOffset = CGSize(width: 0, height: 1)
-        segmentedControl.layer.shadowColor = UIColor.gray.cgColor
         return segmentedControl
     }()
     
