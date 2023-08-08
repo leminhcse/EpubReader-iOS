@@ -22,24 +22,30 @@ class MenuBookView: UIView {
     public lazy var pageView: UIView = {
         [unowned self] in
         let view = UIView()
-        view.heightAnchor.constraint(equalToConstant: self.bounds.size.height).isActive = true
-        view.widthAnchor.constraint(equalToConstant: self.bounds.size.width/3 - 8).isActive = true
+        view.snp.makeConstraints { make in
+            make.height.equalTo(self.bounds.size.height)
+            make.width.equalTo(self.bounds.size.width/3 - 8)
+        }
         return view
     }()
 
     public lazy var ratingView: UIView = {
         [unowned self] in
         let view = UIView()
-        view.heightAnchor.constraint(equalToConstant: self.bounds.size.height).isActive = true
-        view.widthAnchor.constraint(equalToConstant: self.bounds.size.width/3 - 8).isActive = true
+        view.snp.makeConstraints { make in
+            make.height.equalTo(self.bounds.size.height)
+            make.width.equalTo(self.bounds.size.width/3 - 8)
+        }
         return view
     }()
 
     public lazy var reviewView: UIView = {
         [unowned self] in
         let view = UIView()
-        view.heightAnchor.constraint(equalToConstant: self.bounds.size.height).isActive = true
-        view.widthAnchor.constraint(equalToConstant: self.bounds.size.width/3 - 8).isActive = true
+        view.snp.makeConstraints { make in
+            make.height.equalTo(self.bounds.size.height)
+            make.width.equalTo(self.bounds.size.width/3 - 8)
+        }
         return view
     }()
 
@@ -73,6 +79,7 @@ class MenuBookView: UIView {
         super.init(coder: aDecoder)
     }
 
+    // MARK: - UI Update
     private func setupUI() {
         self.addSubview(self.contentView)
         
@@ -86,7 +93,7 @@ class MenuBookView: UIView {
         self.reviewView.addSubview(self.lbReview)
     }
 
-    fileprivate func setupConstraint() {
+    private func setupConstraint() {
         self.contentView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
@@ -105,6 +112,7 @@ class MenuBookView: UIView {
         }
     }
 
+    // MARK: - Events
     func setPages(hasIn: Bool, text: String) {
         self.lbPages.lbTitle.text = text
         self.lbPages.lbDescription.text = "Trang"

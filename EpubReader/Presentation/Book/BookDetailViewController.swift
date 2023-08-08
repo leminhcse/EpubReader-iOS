@@ -183,36 +183,36 @@ class BookDetailViewController: UIViewController {
         return favoriteButtonView
     }()
     
-    private lazy var downloadAudioView: UIView = {
-        let downloadAudioView = UIView()
-        downloadAudioView.backgroundColor = .clear
-        return downloadAudioView
-    }()
-    
-    private lazy var miniAudioPlayerView: MiniAudioPlayerView = {
-        let miniAudioPlayerView = MiniAudioPlayerView()
-        miniAudioPlayerView.delegate = self
-        miniAudioPlayerView.isAccessoriesScreen = false
-        return miniAudioPlayerView
-    }()
-    
-    private lazy var audioFlowLayout: UICollectionViewFlowLayout = {
-        let audioFlowLayout = UICollectionViewFlowLayout()
-        audioFlowLayout.sectionInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
-        audioFlowLayout.scrollDirection = .vertical
-        return audioFlowLayout
-    }()
-
-    private lazy var audioCollectionView: UICollectionView = {
-        let audioCollectionView = UICollectionView(frame: .zero, collectionViewLayout: audioFlowLayout)
-        audioCollectionView.register(AudioResourceCell.self, forCellWithReuseIdentifier: "AudioResourceCell")
-        audioCollectionView.delegate = self
-        audioCollectionView.dataSource = self
-        audioCollectionView.isHidden = true
-        audioCollectionView.clipsToBounds = false
-        audioCollectionView.backgroundColor = .white
-        return audioCollectionView
-    }()
+//    private lazy var downloadAudioView: UIView = {
+//        let downloadAudioView = UIView()
+//        downloadAudioView.backgroundColor = .clear
+//        return downloadAudioView
+//    }()
+//
+//    private lazy var miniAudioPlayerView: MiniAudioPlayerView = {
+//        let miniAudioPlayerView = MiniAudioPlayerView()
+//        miniAudioPlayerView.delegate = self
+//        miniAudioPlayerView.isAccessoriesScreen = false
+//        return miniAudioPlayerView
+//    }()
+//
+//    private lazy var audioFlowLayout: UICollectionViewFlowLayout = {
+//        let audioFlowLayout = UICollectionViewFlowLayout()
+//        audioFlowLayout.sectionInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
+//        audioFlowLayout.scrollDirection = .vertical
+//        return audioFlowLayout
+//    }()
+//
+//    private lazy var audioCollectionView: UICollectionView = {
+//        let audioCollectionView = UICollectionView(frame: .zero, collectionViewLayout: audioFlowLayout)
+//        audioCollectionView.register(AudioResourceCell.self, forCellWithReuseIdentifier: "AudioResourceCell")
+//        audioCollectionView.delegate = self
+//        audioCollectionView.dataSource = self
+//        audioCollectionView.isHidden = true
+//        audioCollectionView.clipsToBounds = false
+//        audioCollectionView.backgroundColor = .white
+//        return audioCollectionView
+//    }()
     
     private lazy var textLabel: UILabel = {
         let textLabel = UILabel()
@@ -257,10 +257,10 @@ class BookDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(reloadData(_:)),
-                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
-                                               object: nil)
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(reloadData(_:)),
+//                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
+//                                               object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(reloadFavoriteStatus(_:)),
                                                name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification),
@@ -425,9 +425,9 @@ class BookDetailViewController: UIViewController {
         scrollView.contentSize = CGSize(width: frameWidth, height: height)
     }
     
-    private func resetContrainst() {
-        audioCollectionView.snp.removeConstraints()
-    }
+//    private func resetContrainst() {
+//        audioCollectionView.snp.removeConstraints()
+//    }
     
     // MARK: - Setup and Load data
     private func setupData() {
@@ -448,7 +448,7 @@ class BookDetailViewController: UIViewController {
         bookComposer.text = self.book.composer
         
         setStatusButton()
-//        loadAudioData()
+//      loadAudioData()
         audioViewModel.getAudioList(bookId: book.id)
         summaryText.text = book.description
     }
@@ -497,16 +497,16 @@ class BookDetailViewController: UIViewController {
     }
     
     //MARK: - @objc Attributes
-    @objc func reloadData(_ notification: NSNotification) {
-        if EpubReaderHelper.shared.listAudio.count > 0 {
-            self.listAudio.removeAll()
-            self.listAudio = EpubReaderHelper.shared.listAudio
-            self.audioCollectionView.reloadData()
-            self.textLabel.isHidden = true
-        } else {
-            self.textLabel.isHidden = false
-        }
-    }
+//    @objc func reloadData(_ notification: NSNotification) {
+//        if EpubReaderHelper.shared.listAudio.count > 0 {
+//            self.listAudio.removeAll()
+//            self.listAudio = EpubReaderHelper.shared.listAudio
+//            self.audioCollectionView.reloadData()
+//            self.textLabel.isHidden = true
+//        } else {
+//            self.textLabel.isHidden = false
+//        }
+//    }
     
     @objc func reloadFavoriteStatus(_ notification: NSNotification) {
         setStatusButton()
@@ -590,68 +590,68 @@ class BookDetailViewController: UIViewController {
         }
     }
     
-    func handleShowMiniPlayer() {
-        if AudioPlayer.shared.sound != nil {
-            playerView.isHidden = false
-            miniAudioPlayerView.urlThumnail = AudioPlayer.shared.imgThumbnail
-            miniAudioPlayerView.statusPlay = AudioPlayer.shared.isPaused
-            miniAudioPlayerView.setNeedsLayout()
-        } else {
-            playerView.isHidden = true
-        }
-    }
+//    func handleShowMiniPlayer() {
+//        if AudioPlayer.shared.sound != nil {
+//            playerView.isHidden = false
+//            miniAudioPlayerView.urlThumnail = AudioPlayer.shared.imgThumbnail
+//            miniAudioPlayerView.statusPlay = AudioPlayer.shared.isPaused
+//            miniAudioPlayerView.setNeedsLayout()
+//        } else {
+//            playerView.isHidden = true
+//        }
+//    }
 }
 
 //MARK: - Extension with MiniAudioPlayerViewDelegate -
-extension BookDetailViewController: MiniAudioPlayerViewDelegate {
-    func removeController() {
-        AudioPlayer.shared.sound = nil
-        handleShowMiniPlayer()
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
-    }
-    
-    func showFullScreenAudioPlayerFromMiniPlayer() {
-        let viewController = FullScreenAudioPlayerViewController()
-        DispatchQueue.main.async {
-            self.present(viewController, animated: true, completion: nil)
-        }
-    }
-}
+//extension BookDetailViewController: MiniAudioPlayerViewDelegate {
+//    func removeController() {
+//        AudioPlayer.shared.sound = nil
+//        handleShowMiniPlayer()
+//        view.setNeedsLayout()
+//        view.layoutIfNeeded()
+//    }
+//
+//    func showFullScreenAudioPlayerFromMiniPlayer() {
+//        let viewController = FullScreenAudioPlayerViewController()
+//        DispatchQueue.main.async {
+//            self.present(viewController, animated: true, completion: nil)
+//        }
+//    }
+//}
 
 //MARK: - Extension with UICollectionView
-extension BookDetailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.listAudio.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AudioResourceCell", for: indexPath) as! AudioResourceCell
-        let audio = self.listAudio[indexPath.row]
-        cell.configure(audio: audio)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let audio = self.listAudio[indexPath.row]
-        if audio.fileAudio != "" {
-            Utilities.shared.openAudioPlayer(audio: audio, thumbnail: book.thumbnail)
-            Utilities.shared.showFullScreenAudio()
-            self.handleShowMiniPlayer()
-        } else {
-            Utilities.shared.showAlertDialog(title: "", message: "Sorry, this audio is comming soon")
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return AudioResourceCell.sizeForResource(audio: self.listAudio[indexPath.row],
-                                            cellWidth: collectionView.bounds.width,
-                                            cell: audioCollectionView.cellForItem(at: indexPath) as? AudioResourceCell)
-    }
-}
+//extension BookDetailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+//    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        return 1
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return self.listAudio.count
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AudioResourceCell", for: indexPath) as! AudioResourceCell
+//        let audio = self.listAudio[indexPath.row]
+//        cell.configure(audio: audio)
+//        return cell
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let audio = self.listAudio[indexPath.row]
+//        if audio.fileAudio != "" {
+//            Utilities.shared.openAudioPlayer(audio: audio, thumbnail: book.thumbnail)
+//            Utilities.shared.showFullScreenAudio()
+//            self.handleShowMiniPlayer()
+//        } else {
+//            Utilities.shared.showAlertDialog(title: "", message: "Sorry, this audio is comming soon")
+//        }
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView,
+//                        layout collectionViewLayout: UICollectionViewLayout,
+//                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        return AudioResourceCell.sizeForResource(audio: self.listAudio[indexPath.row],
+//                                            cellWidth: collectionView.bounds.width,
+//                                            cell: audioCollectionView.cellForItem(at: indexPath) as? AudioResourceCell)
+//    }
+//}
