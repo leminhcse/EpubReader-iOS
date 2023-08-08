@@ -18,7 +18,7 @@ class HomeViewController: BaseViewController {
     private lazy var segmentedControl: ScrollableSegmentedControl = {
         let segmentFrame: CGRect = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54)
         let segmentedControl = ScrollableSegmentedControl.init(frame: segmentFrame)
-        let boldFont = UIFont(name: "Helvetica-Bold", size: 14.0)
+        let boldFont = UIFont(name: "Helvetica", size: 14.0)
         for i in 0..<(listTopic.count) {
             segmentedControl.insertSegment(withTitle: listTopic[i], at: i)
         }
@@ -27,7 +27,7 @@ class HomeViewController: BaseViewController {
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(segmentedValueChanged(_:)), for: .valueChanged)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: boldFont as Any], for: .normal)
-        segmentedControl.tintColor = UIColor.color(with: .background).withAlphaComponent(0.7)
+        segmentedControl.tintColor = UIColor.color(with: .background).withAlphaComponent(0.6)
         segmentedControl.layer.borderWidth = 0.3
         segmentedControl.layer.borderColor = UIColor.gray.cgColor
         segmentedControl.layer.masksToBounds = true
@@ -64,7 +64,7 @@ class HomeViewController: BaseViewController {
     private func setupView() {
         view.backgroundColor = .white
         self.tabBarController?.tabBar.tintColor = UIColor.color(with: .background)
-        title = "Trang Chủ"
+        title = "Sách hay"
         navigationItem.leftBarButtonItem = menuButton()
         
         view.addSubview(segmentedControl)
