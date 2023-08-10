@@ -68,11 +68,6 @@ class FavoritesViewController: BaseViewController {
         loadData()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         setupConstranst()
@@ -94,7 +89,7 @@ class FavoritesViewController: BaseViewController {
         
         bookTableView.snp.makeConstraints{ (make) in
             make.leading.equalToSuperview()
-            make.top.equalToSuperview().offset(112)
+            make.top.equalToSuperview().offset(inset)
             make.size.equalTo(CGSize(width: frameWidth, height: frameHeight))
         }
     }

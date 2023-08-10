@@ -464,10 +464,12 @@ class BookDetailViewController: UIViewController {
             }
         }
         
-//        var imageName = "fi_heart.png"
-//        if Utilities.shared.isFavorited(bookId: book.id) {
-//            imageName = "fi_heart_fill.png"
-//        }
+        var imageName = "fi_heart.png"
+        if Utilities.shared.isFavorited(bookId: book.id) {
+            imageName = "fi_heart_fill.png"
+        }
+        let uiImage = UIImage.init(named: imageName)?.withRenderingMode(.alwaysTemplate)
+        favoriteButton.setImage(uiImage, for: .normal)
     }
     
     private func readerConfiguration(forEpub epub: Epub) -> FolioReaderConfig {
