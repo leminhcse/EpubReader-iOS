@@ -15,6 +15,7 @@ enum ButtonStyle {
     case more
     case close
     case view
+    case delete
 }
 
 extension UIButton {
@@ -30,32 +31,38 @@ extension UIButton {
         case .favorite:
             let inset: CGFloat = 8
             let imageName = "fi_heart.png"
-            let downArrowIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
-            setImage(downArrowIcon, for: .normal)
+            let favoriteIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            setImage(favoriteIcon, for: .normal)
             imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         case .profile:
             let inset: CGFloat = 0
             let imageName = "ic_next.png"
-            let nextIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
-            setImage(nextIcon, for: .normal)
+            let profileIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            setImage(profileIcon, for: .normal)
             imageEdgeInsets = UIEdgeInsets(top: inset, left: 0, bottom: inset, right: inset)
         case .more:
             let inset: CGFloat = 0
             let imageName = "ic_more.png"
-            let nextIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
-            setImage(nextIcon, for: .normal)
+            let moreIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            setImage(moreIcon, for: .normal)
             imageEdgeInsets = UIEdgeInsets(top: inset, left: 0, bottom: inset, right: inset)
         case .close:
             let inset: CGFloat = 0
             let imageName = "close_button.png"
-            let nextIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
-            setImage(nextIcon, for: .normal)
+            let closeIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            setImage(closeIcon, for: .normal)
             imageEdgeInsets = UIEdgeInsets(top: inset, left: 0, bottom: inset, right: inset)
         case .view:
             let inset: CGFloat = 28
             let imageName = "ic_view.png"
-            let nextIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
-            setImage(nextIcon, for: .normal)
+            let viewIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            setImage(viewIcon, for: .normal)
+            imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
+        case .delete:
+            let inset: CGFloat = 8
+            let imageName = "trash.png"
+            let trashIcon = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            setImage(trashIcon, for: .normal)
             imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         }
     }
