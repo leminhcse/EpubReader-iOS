@@ -115,7 +115,7 @@ extension BookDownloadsViewController: UITableViewDelegate, UITableViewDataSourc
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookTableViewCell", for: indexPath) as! BookTableViewCell
         let book = downloadBooks[indexPath.row]
         cell.selectionStyle = .none
-        cell.configure(book: book)
+        cell.configure(book: book, isCanDelete: true)
         return cell
     }
     

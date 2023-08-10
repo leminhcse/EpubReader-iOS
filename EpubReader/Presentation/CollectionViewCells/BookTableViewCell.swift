@@ -74,6 +74,15 @@ class BookTableViewCell: UITableViewCell {
         favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
         return favoriteButton
     }()
+    
+    private lazy var deleteButton: UIButton = {
+        let deleteButton = UIButton()
+        deleteButton.style(with: .delete)
+        deleteButton.tintColor = UIColor.color(with: .background)
+        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        deleteButton.isHidden = true
+        return deleteButton
+    }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -95,6 +104,7 @@ class BookTableViewCell: UITableViewCell {
         self.contentView.addSubview(composerLabel)
         self.contentView.addSubview(pageLabel)
         self.contentView.addSubview(favoriteButton)
+        self.contentView.addSubview(deleteButton)
     }
     
     private func setupConstraints() {
@@ -144,9 +154,15 @@ class BookTableViewCell: UITableViewCell {
             make.centerY.equalToSuperview()
             make.size.equalTo(CGSize(width: 48, height: 48))
         }
+        
+        deleteButton.snp.makeConstraints { (make) in
+            make.trailing.equalToSuperview().inset(padding*2)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(CGSize(width: 48, height: 48))
+        }
     }
     
-    public func configure(book: Book, pageNumber: Int? = nil) {
+    public func configure(book: Book, pageNumber: Int? = nil, isCanDelete: Bool? = nil) {
         self.book = book
         DispatchQueue.main.async {
             if let url = URL(string: book.thumbnail) {
@@ -167,12 +183,20 @@ class BookTableViewCell: UITableViewCell {
             pageLabel.text = "Đã đọc \(pageNumber ?? 1) trang"
         }
         
-        var imageName = "fi_heart.png"
-        if Utilities.shared.isFavorited(bookId: book.id) {
-            imageName = "fi_heart_fill.png"
+        if isCanDelete != nil && isCanDelete == true {
+            favoriteButton.isHidden = true
+            deleteButton.isHidden = false
+        } else {
+            favoriteButton.isHidden = false
+            deleteButton.isHidden = true
+            
+            var imageName = "fi_heart.png"
+            if Utilities.shared.isFavorited(bookId: book.id) {
+                imageName = "fi_heart_fill.png"
+            }
+            let uiImage = UIImage.init(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            favoriteButton.setImage(uiImage, for: .normal)
         }
-        let uiImage = UIImage.init(named: imageName)?.withRenderingMode(.alwaysTemplate)
-        favoriteButton.setImage(uiImage, for: .normal)
     }
     
     public func configureAudio(audio: Audio) {
@@ -220,6 +244,34 @@ class BookTableViewCell: UITableViewCell {
                     BannerNotification.addedToFavourites.present()
                 }
             }
+        }
+    }
+    
+    @objc func deleteButtonTapped() {
+        let alert = UIAlertController(title: "Xóa sách \(self.book.title)",
+                                      message: "Bạn có chắc muốn xóa cuốn sách này không ?",
+                                      preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Đồng ý", style: .default) { action in
+            if let bookUrl = URL(string: self.book.epub_source) {
+                let fileName = bookUrl.lastPathComponent
+                let path: String = Utilities.shared.getFileExist(fileName: fileName)
+                if path != "" {
+                    try? FileManager.default.removeItem(atPath: path)
+                    DispatchQueue.main.async {
+                        BannerNotification.downloadDeleted(title: self.book.title).present()
+                        EpubReaderHelper.shared.downloadBooks.removeAll(where: { $0.id == self.book.id})
+                        PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveBookSuccessNotification), object: nil)
+                    }
+                }
+            }
+        }
+        alert.addAction(okAction)
+        let cancelAction = UIAlertAction(title: "Hủy bỏ", style: .cancel)
+        alert.addAction(cancelAction)
+        
+        DispatchQueue.main.async {
+            UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
         }
     }
 }
