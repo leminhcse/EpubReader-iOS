@@ -56,12 +56,13 @@ class ReadingListViewController: BaseViewController {
                                                selector: #selector(reloadData),
                                                name: NSNotification.Name(rawValue: EpubReaderHelper.GetReadingBookFailedNotification),
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(reloadData),
+                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification),
+                                               object: nil)
+        
         setupUI()
         loadData()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
     }
     
     override func viewDidLayoutSubviews() {
@@ -87,7 +88,7 @@ class ReadingListViewController: BaseViewController {
         
         bookTableView.snp.makeConstraints{ (make) in
             make.leading.equalToSuperview()
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().offset(inset)
             make.size.equalTo(CGSize(width: frameWidth, height: frameHeight))
         }
     }

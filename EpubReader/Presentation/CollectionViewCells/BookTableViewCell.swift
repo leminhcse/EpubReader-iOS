@@ -166,6 +166,13 @@ class BookTableViewCell: UITableViewCell {
             pageLabel.isHidden = false
             pageLabel.text = "Đã đọc \(pageNumber ?? 1) trang"
         }
+        
+        var imageName = "fi_heart.png"
+        if Utilities.shared.isFavorited(bookId: book.id) {
+            imageName = "fi_heart_fill.png"
+        }
+        let uiImage = UIImage.init(named: imageName)?.withRenderingMode(.alwaysTemplate)
+        favoriteButton.setImage(uiImage, for: .normal)
     }
     
     public func configureAudio(audio: Audio) {
@@ -203,91 +210,16 @@ class BookTableViewCell: UITableViewCell {
         alert.popoverPresentationController?.permittedArrowDirections = []
 
         if self.book != nil {
+            let bookViewModel = BookViewModel()
             if Utilities.shared.isFavorited(bookId: self.book.id) {
-                let favouritesAction = UIAlertAction(title: "Xóa khỏi Yêu thích", style: .default) { action in
-                    if EpubReaderHelper.shared.user == nil {
-                        Utilities.shared.showLoginDialog()
-                        return
-                    }
-                    let bookViewModel = BookViewModel()
-                    bookViewModel.removeFavorite(bookId: self.book.id, userId: EpubReaderHelper.shared.user.id) { success in
-                        BannerNotification.removedFromFavourites.present()
-                    }
+                bookViewModel.removeFavorite(bookId: self.book.id, userId: EpubReaderHelper.shared.user.id) { success in
+                    BannerNotification.removedFromFavourites.present()
                 }
-                alert.addAction(favouritesAction)
             } else {
-                let favouritesAction = UIAlertAction(title: "Thêm vào Yêu thích", style: .default) { action in
-                    if EpubReaderHelper.shared.user == nil {
-                        Utilities.shared.showLoginDialog()
-                        return
-                    }
-                    let bookViewModel = BookViewModel()
-                    bookViewModel.putToFavorites(book: self.book, userId: EpubReaderHelper.shared.user.id) { success in
-                        BannerNotification.addedToFavourites.present()
-                    }
-                }
-                alert.addAction(favouritesAction)
-            }
-        
-            if let bookUrl = URL(string: self.book.epub_source), pageLabel.isHidden {
-                let fileName = bookUrl.lastPathComponent
-                let path: String = Utilities.shared.getFileExist(fileName: fileName)
-                if path != "" {
-                    let downloadAction = UIAlertAction(title: "Xóa sách", style: .default) { action in
-                        try? FileManager.default.removeItem(atPath: path)
-                        DispatchQueue.main.async {
-                            BannerNotification.downloadDeleted(title: self.book.title).present()
-                            EpubReaderHelper.shared.downloadBooks.removeAll(where: { $0.id == self.book.id})
-                            PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveBookSuccessNotification), object: nil)
-                        }
-                    }
-                    alert.addAction(downloadAction)
-                } else {
-                    let downloadAction = UIAlertAction(title: "Tải sách", style: .default) { action in
-                        if !Reachability.shared.isConnectedToNetwork {
-                            Utilities.shared.noConnectionAlert()
-                            return
-                        }
-                        if !self.book.epub_source.contains("http") {
-                            Utilities.shared.showAlertDialog(title: "", message: "Không thể tải, đã xảy ra lỗi!")
-                        } else {
-                            ApiWebService.shared.downloadFile(url: bookUrl) { success in
-                                print("download")
-                                if success {
-                                    DispatchQueue.main.async {
-                                        BannerNotification.downloadSuccessful(title: self.book.title).present()
-                                        EpubReaderHelper.shared.downloadBooks.append(self.book)
-                                        PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
-                                    }
-                                } else {
-                                    DispatchQueue.main.async {
-                                        Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    alert.addAction(downloadAction)
+                bookViewModel.putToFavorites(book: self.book, userId: EpubReaderHelper.shared.user.id) { success in
+                    BannerNotification.addedToFavourites.present()
                 }
             }
-        } else if self.audio != nil {
-            let deleteAction = UIAlertAction(title: "Xóa audio", style: .default) { action in
-                if let id = self.audio?.id, let itemPath = DatabaseHelper.getFilePath(id: id), FileManager.default.fileExists(atPath: itemPath) {
-                    try? FileManager.default.removeItem(atPath: itemPath)
-                    EpubReaderHelper.shared.downloadAudio.removeAll(where: {$0.id == self.audio?.id})
-                    PersistenceHelper.saveAudioData(object: EpubReaderHelper.shared.downloadAudio, key: "downloadAudio")
-                    BannerNotification.downloadDeleted(title: self.audio.title).present()
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveAudioSuccessNotification), object: nil)
-                }
-            }
-            alert.addAction(deleteAction)
-        } else {
-            return
         }
-
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        alert.addAction(cancelAction)
-        UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
     }
 }
