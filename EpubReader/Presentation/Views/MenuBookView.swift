@@ -113,24 +113,28 @@ class MenuBookView: UIView {
     }
 
     // MARK: - Events
-    func setPages(hasIn: Bool, text: String) {
-        self.lbPages.lbTitle.text = text
+    func setPageNumber(hasIn: Bool, pageNumber: String?) {
+        if pageNumber == "" {
+            self.lbPages.lbTitle.text = "N/A"
+        } else {
+            self.lbPages.lbTitle.text = pageNumber
+        }
         self.lbPages.lbDescription.text = "Trang"
         let tintableImage = UIImage(named: "ic_pages.png")?.withRenderingMode(.alwaysTemplate)
         self.lbPages.imgView.tintColor = UIColor.color(with: .background)
         self.lbPages.imgView.image = tintableImage
     }
 
-    func setRating(rating: String) {
-        self.lbRating.lbTitle.text = rating
-        self.lbRating.lbDescription.text = "Đánh giá"
-        let tintableImage = UIImage(named: "ic_rating.png")?.withRenderingMode(.alwaysTemplate)
-        self.lbRating.imgView.tintColor = UIColor.systemYellow
+    func setFavoriteNumber(favoriteNumber: Int) {
+        self.lbRating.lbTitle.text = String(describing: favoriteNumber)
+        self.lbRating.lbDescription.text = "Yêu thích"
+        let tintableImage = UIImage(named: "fi_heart.png")?.withRenderingMode(.alwaysTemplate)
+        self.lbRating.imgView.tintColor = UIColor.systemPink
         self.lbRating.imgView.image = tintableImage
     }
 
-    func setReview(reviews: String) {
-        self.lbReview.lbTitle.text = reviews
+    func setReviewNumber(reviewNumber: String) {
+        self.lbReview.lbTitle.text = reviewNumber
         self.lbReview.lbDescription.text = "Lượt đọc"
         let tintableImage = UIImage(named: "ic_view.png")?.withRenderingMode(.alwaysTemplate)
         self.lbReview.imgView.tintColor = UIColor.color(with: .background)

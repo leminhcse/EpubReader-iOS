@@ -23,7 +23,7 @@ class BookDetailView: UIView {
         [unowned self] in
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont.font(with: .h3)
+        label.font = UIFont.font(with: .h4)
         label.textColor = .black
         label.backgroundColor = .clear
         label.adjustsFontSizeToFitWidth = true
@@ -62,13 +62,13 @@ class BookDetailView: UIView {
     fileprivate func setupConstraint() {
         self.lbTitle.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(-10)
+            make.centerY.equalToSuperview().offset(-12)
         }
         
         self.imgView.snp.makeConstraints { (make) in
             make.top.equalTo(lbTitle.snp.bottom).offset(6)
             make.size.equalTo(CGSize(width: 18, height: 18))
-            make.centerX.equalTo(self.lbTitle.snp.centerX).offset(-24)
+            make.centerX.equalTo(self.lbTitle.snp.centerX).offset(-26)
         }
         
         self.lbDescription.snp.makeConstraints { (make) in
