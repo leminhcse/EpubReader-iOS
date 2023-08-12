@@ -29,7 +29,8 @@ class Utilities: NSObject {
                                  thumbnail: item.thumbnail,
                                  year: item.year,
                                  type: item.type,
-                                 epub_source: item.epub_source))
+                                 epub_source: item.epub_source,
+                                 page: item.page))
         }
         return listBook
     }

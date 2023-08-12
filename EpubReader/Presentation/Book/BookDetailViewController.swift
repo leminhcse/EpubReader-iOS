@@ -104,7 +104,11 @@ class BookDetailViewController: UIViewController {
         label.numberOfLines = 3
         label.textAlignment = .center
         label.sizeToFit()
-        label.font = UIFont.font(with: .h3)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            label.font = UIFont.font(with: .h2)
+        } else {
+            label.font = UIFont.font(with: .h3)
+        }
         return label
     }()
     
@@ -115,7 +119,11 @@ class BookDetailViewController: UIViewController {
         label.numberOfLines = 1
         label.textAlignment = .center
         label.sizeToFit()
-        label.font = UIFont.font(with: .h4)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            label.font = UIFont.font(with: .h3)
+        } else {
+            label.font = UIFont.font(with: .h4)
+        }
         return label
     }()
     
@@ -128,9 +136,9 @@ class BookDetailViewController: UIViewController {
         menuView.layer.borderWidth = 0.2
         menuView.layer.cornerRadius = 12.0
 
-        menuView.setPages(hasIn: true, text: "231")
-        menuView.setRating(rating: "4.4")
-        menuView.setReview(reviews: "168")
+        menuView.setPageNumber(hasIn: true, pageNumber: self.book.page)
+        menuView.setFavoriteNumber(favoriteNumber: self.getFavoriteNumber())
+        menuView.setReviewNumber(reviewNumber: "168")
         return menuView
     }()
     
@@ -257,10 +265,6 @@ class BookDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        NotificationCenter.default.addObserver(self,
-//                                               selector: #selector(reloadData(_:)),
-//                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
-//                                               object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(reloadFavoriteStatus(_:)),
                                                name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification),
@@ -331,7 +335,10 @@ class BookDetailViewController: UIViewController {
             make.top.bottom.equalToSuperview()
         }
         
-        let firstContentHeight = frameHeight/2 + 64
+        var firstContentHeight = frameHeight/2 + padding*2.5
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            firstContentHeight = frameHeight/2 + padding*4
+        }
         firstContentView.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
             make.size.equalTo(CGSize(width: frameWidth, height: firstContentHeight))
@@ -359,10 +366,14 @@ class BookDetailViewController: UIViewController {
             make.size.equalToSuperview()
         }
         
+        var bookImageHeight = bookViewHeight/2 + 32
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            bookImageHeight = bookViewHeight/2 + padding*6
+        }
         bookImage.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.top.equalTo(topButtonView.snp.bottom)
-            make.size.equalTo(CGSize(width: frameWidth/3 + padding*2, height: bookViewHeight/2 + 32))
+            make.size.equalTo(CGSize(width: frameWidth/3 + padding*2, height: bookImageHeight))
         }
         
         // Book Description
@@ -496,6 +507,16 @@ class BookDetailViewController: UIViewController {
         let config = FolioReaderConfig()
         let folioReader = FolioReader()
         folioReader.presentReader(parentViewController: self, withEpubPath: path, andConfig: config)
+    }
+    
+    private func getFavoriteNumber() -> Int {
+        var count = 100
+        for item in EpubReaderHelper.shared.favoritedBooks {
+            if item.id == self.book.id {
+                count += 1
+            }
+        }
+        return count
     }
     
     //MARK: - @objc Attributes
