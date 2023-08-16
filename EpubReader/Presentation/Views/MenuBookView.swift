@@ -48,6 +48,20 @@ class MenuBookView: UIView {
         }
         return view
     }()
+    
+    public lazy var verticalLine1: UIView = {
+        [unowned self] in
+        let verticalLine1 = UIView()
+        verticalLine1.backgroundColor = UIColor.gray
+        return verticalLine1
+    }()
+    
+    public lazy var verticalLine2: UIView = {
+        [unowned self] in
+        let verticalLine2 = UIView()
+        verticalLine2.backgroundColor = UIColor.gray
+        return verticalLine2
+    }()
 
     public lazy var lbPages: BookDetailView = {
         [unowned self] in
@@ -109,6 +123,25 @@ class MenuBookView: UIView {
 
         self.lbReview.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        self.contentView.addSubview(verticalLine1)
+        self.contentView.addSubview(verticalLine2)
+
+        let padding: CGFloat = 12
+        let verticalHeight = self.frame.height - padding*2
+        verticalLine1.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(padding)
+            make.leading.equalTo(self.lbPages.snp.trailing).offset(-padding)
+            make.trailing.equalTo(self.lbRating.snp.leading)
+            make.size.equalTo(CGSize(width: 0.5, height: verticalHeight))
+        }
+        
+        verticalLine2.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(padding)
+            make.leading.equalTo(self.lbRating.snp.trailing).offset(8)
+            make.trailing.equalTo(self.lbReview.snp.leading)
+            make.size.equalTo(CGSize(width: 0.5, height: verticalHeight))
         }
     }
 

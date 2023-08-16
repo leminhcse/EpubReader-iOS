@@ -432,7 +432,7 @@ class BookDetailViewController: UIViewController {
         }
         
         let summaryHeight: CGFloat = Utils.estimatedHeightOfLabel(text: book.description, font: summaryText.font, width: frameWidth - padding)
-        let height = summaryHeight + frameHeight - top*2 - marginTop
+        let height = summaryHeight + frameHeight - top*3 - marginTop
         scrollView.contentSize = CGSize(width: frameWidth, height: height)
     }
     
