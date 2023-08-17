@@ -48,7 +48,16 @@ class EconomicsViewController: UIViewController {
     }
     
     private func loadData() {
-        bookViewModel.getBookList()
+        bookViewModel.getBookList() { success in
+            if success {
+                print("sucess")
+            } else {
+                if let data = PersistenceHelper.loadData(key: "Books") as? [Book] {
+                    self.listSkillBook = Utilities.shared.importBookList(books: data).filter({$0.type == "2"})
+                    self.collectionView.reloadData()
+                }
+            }
+        }
     }
     
     @objc func reloadData(_ notification: NSNotification) {
