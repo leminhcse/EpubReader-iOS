@@ -50,12 +50,17 @@ class SplashViewController: UIViewController {
         
         self.activityIndicator.startAnimating()
         
-        PersistenceHelper.removeObj(key: "Books")
         bookViewModel.getBookList() { success in
             if success {
                 self.setupView()
             } else {
-                Utilities.shared.showAlertDialog(title: "Error", message: "Đã xày ra lỗi, vui lòng kiểm tra kết nối internet!")
+                if let data = PersistenceHelper.loadData(key: "Books") as? [Book] {
+                    self.bookViewModel.listBook = Utilities.shared.importBookList(books: data)
+                    EpubReaderHelper.shared.books = self.bookViewModel.listBook
+                    self.setupView()
+                } else {
+                    Utilities.shared.showAlertDialog(title: "Error", message: "Đã xày ra lỗi, vui lòng kiểm tra kết nối internet!")
+                }
             }
         }
     }

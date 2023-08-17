@@ -372,7 +372,7 @@ class BookDetailViewController: UIViewController {
         }
         bookImage.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.top.equalTo(topButtonView.snp.bottom)
+            make.top.equalTo(topButtonView.snp.bottom).offset(marginTop)
             make.size.equalTo(CGSize(width: frameWidth/3 + padding*2, height: bookImageHeight))
         }
         
