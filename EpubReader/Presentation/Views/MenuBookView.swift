@@ -129,17 +129,18 @@ class MenuBookView: UIView {
         self.contentView.addSubview(verticalLine2)
 
         let padding: CGFloat = 12
-        let verticalHeight = self.frame.height - padding*2
+        let verticalHeight = self.frame.height - padding*3
+        let top: CGFloat = 18
         verticalLine1.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(padding)
+            make.top.equalToSuperview().inset(top)
             make.leading.equalTo(self.lbPages.snp.trailing).offset(-padding)
             make.trailing.equalTo(self.lbRating.snp.leading)
             make.size.equalTo(CGSize(width: 0.5, height: verticalHeight))
         }
         
         verticalLine2.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(padding)
-            make.leading.equalTo(self.lbRating.snp.trailing).offset(8)
+            make.top.equalToSuperview().inset(top)
+            make.leading.equalTo(self.lbRating.snp.trailing).offset(top/2)
             make.trailing.equalTo(self.lbReview.snp.leading)
             make.size.equalTo(CGSize(width: 0.5, height: verticalHeight))
         }
