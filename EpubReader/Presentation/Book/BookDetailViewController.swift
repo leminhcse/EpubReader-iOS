@@ -104,6 +104,7 @@ class BookDetailViewController: UIViewController {
         label.numberOfLines = 3
         label.textAlignment = .center
         label.sizeToFit()
+        label.textColor = .darkText
         if UIDevice.current.userInterfaceIdiom == .pad {
             label.font = UIFont.font(with: .h2)
         } else {
@@ -148,6 +149,7 @@ class BookDetailViewController: UIViewController {
         label.numberOfLines = 0
         label.sizeToFit()
         label.font = UIFont.font(with: .h5)
+        label.textColor = .darkText
         return label
     }()
     
@@ -388,7 +390,7 @@ class BookDetailViewController: UIViewController {
         bookComposer.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.top.equalTo(bookTitle.snp.bottom).offset(marginTop/2)
-            make.size.equalTo(CGSize(width: frameWidth/2, height: bookCompose))
+            make.size.equalTo(CGSize(width: frameWidth - 128, height: bookCompose))
         }
         
         secondContentView.snp.makeConstraints { (make) in

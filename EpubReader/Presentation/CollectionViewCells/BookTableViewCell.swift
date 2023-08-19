@@ -225,6 +225,11 @@ class BookTableViewCell: UITableViewCell {
     }
     
     @objc func favoriteButtonTapped() {
+        if EpubReaderHelper.shared.user == nil {
+            Utilities.shared.showLoginDialog()
+            return
+        }
+        
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         if #available(iOS 13.0, *) {
             alert.view.tintColor = UIColor.primaryTextColor(traitCollection: UITraitCollection.current)
