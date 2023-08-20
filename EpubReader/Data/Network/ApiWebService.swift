@@ -49,33 +49,13 @@ class ApiWebService {
         return request(ApiRouter.getBookSearch(keySearch: keySearch))
     }
     
-    func downloadFile(url: URL, completion: ((Bool) -> Void)? = nil) {
-        let fileName = url.lastPathComponent
-        
-        let destination: DownloadRequest.Destination = { _, _ in
-            var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            
-            documentsURL.appendPathComponent(fileName)
-            return (documentsURL, [.removePreviousFile])
-        }
-        
-        AF.download(url, to: destination).response { response in
-            print(response)
-            if response.response == nil {
-                completion!(false)
-            } else {
-                completion!(true)
-            }
-        }
-    }
-    
-    func downloadAudio(audio: Audio, url: URL) -> Observable<Float> {
-        let downloadInfo = self.genericDownload(audio: audio, url: url, completion: { success in
+    func downloadBook(book: Book, url: URL) -> Observable<Float> {
+        let downloadInfo = self.genericDownload(id: book.id, url: url, completion: { success in
             if success {
-                print("download success!")
-                EpubReaderHelper.shared.downloadAudio.append(audio)
-                PersistenceHelper.saveAudioData(object: EpubReaderHelper.shared.downloadAudio, key: "downloadAudio")
-                BannerNotification.downloadSuccessful(title: audio.title).present()
+                print("download book success!")
+                EpubReaderHelper.shared.downloadBooks.append(book)
+                PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+                BannerNotification.downloadSuccessful(title: book.title).present()
             } else {
                 print("download fail!")
             }
@@ -83,7 +63,7 @@ class ApiWebService {
         return downloadInfo.downloadObs
     }
     
-    func genericDownload(audio: Audio, url: URL, completion: ((Bool) -> Void)? = nil) -> FileDownloadInfo {
+    func genericDownload(id: String, url: URL, completion: ((Bool) -> Void)? = nil) -> FileDownloadInfo {
         let fileName = url.lastPathComponent
         let filePathComponent = FileHelper.shared.getFileDownloadPathComponent(fileName: fileName)
         let destination: DownloadRequest.Destination = { _, _ in
@@ -96,7 +76,7 @@ class ApiWebService {
         let downloadInfo = FileDownloadInfo()
         let downloadRequest = AF.download(url, to: destination)
             .downloadProgress { progress in
-                if let downloadInfo = self.activeDownloads[audio.id] {
+                if let downloadInfo = self.activeDownloads[id] {
                     print("downloadProgress \(progress.fractionCompleted)")
                     downloadInfo.progress = Float(progress.fractionCompleted)
                     downloadInfo.downloadObs.onNext(Float(progress.fractionCompleted))
@@ -105,20 +85,20 @@ class ApiWebService {
             .response { response in
                 switch response.result {
                     case .success(_):
-                        self.activeDownloads[audio.id] = nil
+                        self.activeDownloads[id] = nil
                         downloadInfo.isDownloadCompleted = true
-                        DatabaseHelper.savePath(id: audio.id, localPathComponent: filePathComponent.string)
+                        DatabaseHelper.savePath(id: id, localPathComponent: filePathComponent.string)
                         completion?(true)
                         downloadInfo.downloadObs.onCompleted()
                     case .failure(let error):
-                        self.activeDownloads[audio.id] = nil
+                        self.activeDownloads[id] = nil
                         downloadInfo.isDownloadCompleted = true
                         completion?(false)
                         downloadInfo.downloadObs.onError(error)
                     }
             }
         downloadInfo.downloadRequest = downloadRequest
-        self.activeDownloads[audio.id] = downloadInfo
+        self.activeDownloads[id] = downloadInfo
         return downloadInfo
     }
     

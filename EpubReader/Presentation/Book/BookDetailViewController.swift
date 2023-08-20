@@ -8,6 +8,7 @@
 import UIKit
 import FolioReaderKit
 import Kingfisher
+import RxSwift
 
 class BookDetailViewController: UIViewController {
     
@@ -167,6 +168,7 @@ class BookDetailViewController: UIViewController {
         downloadButton.setTitle("Tải Sách", for: .normal)
         downloadButton.titleLabel?.font = UIFont.font(with: .h4)
         downloadButton.layer.cornerRadius = 24
+        downloadButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
         if UIDevice.current.userInterfaceIdiom == .pad {
             downloadButton.titleLabel?.font = UIFont.font(with: .h2)
         }
@@ -237,6 +239,16 @@ class BookDetailViewController: UIViewController {
         return textLabel
     }()
     
+    var progressDownloadView: ProgressBarView!
+    
+    var progressDownload: Float! {
+        didSet {
+            DispatchQueue.main.async {
+                self.progressDownloadView.progress = self.progressDownload
+            }
+        }
+    }
+    
     // MARK: - Local variables
     private let listTopic = ["Lời Tựa", "File Audio"]
     private let playerView = UIView()
@@ -249,6 +261,8 @@ class BookDetailViewController: UIViewController {
     private var bookViewModel = BookViewModel()
     private var selectedSegmentIndex: Int = 0
     private var currentPage: Int = 0
+    private var downloadObsDisposable: Disposable?
+    private let disposeBag = DisposeBag()
     
     private let segmentHeight = CGFloat(42)
     private let padding = CGFloat(12)
@@ -309,6 +323,14 @@ class BookDetailViewController: UIViewController {
         
         self.view.addSubview(scrollView)
         self.view.addSubview(bottomView)
+        
+        progressDownloadView = ProgressBarView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        progressDownloadView.tintColor = UIColor.color(with: .darkColor)
+//        let gesture = UITapGestureRecognizer(target: self, action: #selector(downloadAudioClick))
+//        progressDownloadView.addGestureRecognizer(gesture)
+        progressDownloadView.isHidden = false
+        progressDownloadView.status = .inProgress
+        downloadButton.addSubview(progressDownloadView)
     }
     
     private func setupConstraint() {
@@ -436,6 +458,12 @@ class BookDetailViewController: UIViewController {
         let summaryHeight: CGFloat = Utils.estimatedHeightOfLabel(text: book.description, font: summaryText.font, width: frameWidth - padding)
         let height = summaryHeight + frameHeight - top*3 - marginTop
         scrollView.contentSize = CGSize(width: frameWidth, height: height)
+        
+        progressDownloadView.snp.makeConstraints { (make) in
+            make.size.equalTo(CGSize(width: 24, height: 24))
+            make.centerY.equalToSuperview()
+            make.centerX.equalToSuperview().offset(-padding*2)
+        }
     }
     
 //    private func resetContrainst() {
@@ -467,14 +495,12 @@ class BookDetailViewController: UIViewController {
     }
     
     private func setStatusButton() {
-        if let bookUrl = URL(string: book.epub_source) {
-            let fileName = bookUrl.lastPathComponent
-            let path: String = Utilities.shared.getFileExist(fileName: fileName)
-            if path != "" {
-                downloadButton.setTitle("Đọc Sách", for: .normal)
-            } else {
-                downloadButton.setTitle("Tải Sách", for: .normal)
-            }
+        if isDownloadedBook() {
+            downloadButton.setTitle("Đọc Sách", for: .normal)
+            progressDownloadView.isHidden = true
+        } else {
+            downloadButton.setTitle("Tải Sách", for: .normal)
+            progressDownloadView.status = .notDownloaded
         }
         
         var imageName = "fi_heart.png"
@@ -483,6 +509,41 @@ class BookDetailViewController: UIViewController {
         }
         let uiImage = UIImage.init(named: imageName)?.withRenderingMode(.alwaysTemplate)
         favoriteButton.setImage(uiImage, for: .normal)
+    }
+    
+    private func isDownloadedBook() -> Bool {
+        if let bookUrl = URL(string: book.epub_source) {
+            let fileName = bookUrl.lastPathComponent
+            let path: String = Utilities.shared.getFileExist(fileName: fileName)
+            if path != "" {
+                return true
+            } else {
+                return false
+            }
+        }
+        return false
+    }
+    
+    private func subscribeDownloadProgress(downloadObs: BehaviorSubject<Float>) {
+        downloadObsDisposable?.dispose()
+        downloadObsDisposable = downloadObs.subscribe(onNext: { [weak self] progress in
+            print("download progress is = \(progress)")
+            self?.progressDownload = progress
+        }, onError: { [weak self] _ in
+            self?.configureDownloadView()
+            Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
+        }, onCompleted: { [weak self] in
+            self?.configureDownloadView()
+        })
+        downloadObsDisposable?.disposed(by: self.disposeBag)
+    }
+    
+    private func configureDownloadView() {
+        guard let progressDownloadView = progressDownloadView else {
+            return
+        }
+        
+        self.setStatusButton()
     }
     
     private func readerConfiguration(forEpub epub: Epub) -> FolioReaderConfig {
@@ -588,30 +649,18 @@ class BookDetailViewController: UIViewController {
                     Utilities.shared.noConnectionAlert()
                     return
                 }
+                
                 if !book.epub_source.contains("http") {
                     Utilities.shared.showAlertDialog(title: "", message: "Không thể tải, đã xảy ra lỗi!")
                 } else {
-                    downloadButton.setTitle("Đang tải ... ", for: .normal)
-                    ApiWebService.shared.downloadFile(url: url) { success in
-                        print("download")
-                        if success {
-                            DispatchQueue.main.async {
-                                BannerNotification.downloadSuccessful(title: self.book.title).present()
-                                EpubReaderHelper.shared.downloadBooks.append(self.book)
-                                PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
-                                self.setStatusButton()
-                            }
-                        } else {
-                            DispatchQueue.main.async {
-                                Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
-                                self.setStatusButton()
-                            }
-                        }
-                    }
+                    downloadButton.setTitle(" Đang tải..", for: .normal)
+                    let obs = ApiWebService.shared.downloadBook(book: self.book, url: url)
+                    progressDownloadView.status = .inProgress
+                    subscribeDownloadProgress(downloadObs: obs as! BehaviorSubject<Float>)
                 }
             }
         } else {
-            Utilities.shared.showAlertDialog(title: "", message: "Sorry, this book is comming soon")
+            Utilities.shared.showAlertDialog(title: "", message: "Xin lỗi, cuốn sách này sẽ có trên kệ sau này")
         }
     }
     
