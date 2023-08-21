@@ -137,7 +137,6 @@ class BookDetailViewController: UIViewController {
         menuView.backgroundColor = UIColor.init(hex: "#f8f8fc").withAlphaComponent(0.2)
         menuView.layer.borderWidth = 0.2
         menuView.layer.cornerRadius = 12.0
-
         menuView.setPageNumber(hasIn: true, pageNumber: self.book.page)
         menuView.setFavoriteNumber(favoriteNumber: self.getFavoriteNumber())
         menuView.setReviewNumber(reviewNumber: "168")
@@ -149,8 +148,12 @@ class BookDetailViewController: UIViewController {
         label.backgroundColor = .clear
         label.numberOfLines = 0
         label.sizeToFit()
-        label.font = UIFont.font(with: .h5)
         label.textColor = .darkText
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            label.font = UIFont.font(with: .h3)
+        } else {
+            label.font = UIFont.font(with: .h5)
+        }
         return label
     }()
     
@@ -444,10 +447,16 @@ class BookDetailViewController: UIViewController {
             make.top.equalToSuperview().inset(2)
         }
         
+        var menuBookHeight: CGFloat = padding*3
+        var progressDownloadPadding: CGFloat = -padding*2
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            menuBookHeight = menuBookHeight + marginTop
+            progressDownloadPadding = -padding*3
+        }
         menuBookView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(padding)
-            make.size.equalTo(CGSize(width: frameWidth - padding*2, height: padding*3))
+            make.size.equalTo(CGSize(width: frameWidth - padding*2, height: menuBookHeight))
         }
         
         summaryText.snp.makeConstraints { (make) in
@@ -462,7 +471,7 @@ class BookDetailViewController: UIViewController {
         progressDownloadView.snp.makeConstraints { (make) in
             make.size.equalTo(CGSize(width: 24, height: 24))
             make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview().offset(-padding*2)
+            make.centerX.equalToSuperview().offset(progressDownloadPadding)
         }
     }
     

@@ -23,11 +23,15 @@ class BookDetailView: UIView {
         [unowned self] in
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont.font(with: .h4)
         label.textColor = .black
         label.backgroundColor = .clear
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            label.font = UIFont.font(with: .h2)
+        } else {
+            label.font = UIFont.font(with: .h4)
+        }
         return label
     }()
     
@@ -35,11 +39,15 @@ class BookDetailView: UIView {
         [unowned self] in
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont.font(with: .h5)
         label.textColor = .darkGray
         label.backgroundColor = .clear
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            label.font = UIFont.font(with: .h4)
+        } else {
+            label.font = UIFont.font(with: .h5)
+        }
         return label
     }()
     
@@ -60,19 +68,26 @@ class BookDetailView: UIView {
     }
     
     fileprivate func setupConstraint() {
+        var imageSize: CGFloat = 18
+        var top: CGFloat = 6
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            imageSize = 28
+            top = 10
+        }
+        
         self.lbTitle.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().offset(-12)
         }
-        
+
         self.imgView.snp.makeConstraints { (make) in
             make.top.equalTo(lbTitle.snp.bottom).offset(6)
-            make.size.equalTo(CGSize(width: 18, height: 18))
+            make.size.equalTo(CGSize(width: imageSize, height: imageSize))
             make.centerX.equalTo(self.lbTitle.snp.centerX).offset(-26)
         }
         
         self.lbDescription.snp.makeConstraints { (make) in
-            make.top.equalTo(lbTitle.snp.bottom).offset(6)
+            make.top.equalTo(lbTitle.snp.bottom).offset(top)
             make.leading.equalTo(self.imgView.snp.trailing).offset(4)
         }
         
