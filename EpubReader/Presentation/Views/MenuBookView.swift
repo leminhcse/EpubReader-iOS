@@ -130,7 +130,11 @@ class MenuBookView: UIView {
 
         let padding: CGFloat = 12
         let verticalHeight = self.frame.height - padding*3
-        let top: CGFloat = 18
+        var top: CGFloat = 18
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            top = 24
+        }
+        
         verticalLine1.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(top)
             make.leading.equalTo(self.lbPages.snp.trailing).offset(-padding)

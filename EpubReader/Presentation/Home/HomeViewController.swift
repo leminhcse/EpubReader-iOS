@@ -18,7 +18,11 @@ class HomeViewController: BaseViewController {
     private lazy var segmentedControl: ScrollableSegmentedControl = {
         let segmentFrame: CGRect = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54)
         let segmentedControl = ScrollableSegmentedControl.init(frame: segmentFrame)
-        let boldFont = UIFont(name: "Helvetica", size: 14.0)
+        var boldFont = UIFont(name: "Helvetica", size: 14.0)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            boldFont = UIFont(name: "Helvetica", size: 18.0)
+        }
+        
         for i in 0..<(listTopic.count) {
             segmentedControl.insertSegment(withTitle: listTopic[i], at: i)
         }
