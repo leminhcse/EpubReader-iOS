@@ -371,23 +371,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		040A2F99294AFE1E00CF0E54 /* Splash */ = {
+		043EBF8C2B04C49C00C7AE64 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				04ECD19128B7E1AC00DAA295 /* AudioViewController.swift */,
+				04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */,
+				041F9B9028B13C6C00FB4DEA /* PlayerViewController.swift */,
+				04196D7328A2BDC8008FA2FC /* FullScreenAudioPlayerViewController.swift */,
 				040A2F9A294AFEF200CF0E54 /* SplashViewController.swift */,
+				0464618428D7075200563427 /* SignInViewController.swift */,
 			);
-			path = Splash;
+			path = ViewController;
 			sourceTree = "<group>";
 		};
-		04196D7228A2BD90008FA2FC /* Audio */ = {
+		043EBF8D2B04C5BA00C7AE64 /* SubNavViewController */ = {
 			isa = PBXGroup;
 			children = (
-				04196D7328A2BDC8008FA2FC /* FullScreenAudioPlayerViewController.swift */,
-				041F9B9028B13C6C00FB4DEA /* PlayerViewController.swift */,
-				041F9B9228B13CEC00FB4DEA /* MIniAudioPlayerView.swift */,
-				04B21E9B28BA78F700758B03 /* ProgressBarView.swift */,
+				FA349DE5284B6490005047DC /* SkillsViewController.swift */,
+				FA349DE7284B6503005047DC /* EconomicsViewController.swift */,
+				04182A65288BBB8100894854 /* LiteraryViewController.swift */,
+				048FDBB028CC9A770080509B /* CultureHistoryViewController.swift */,
+				048FDBB228CC9AB70080509B /* ScienceTechnologyViewController.swift */,
+				048FDBB428CC9AE20080509B /* HealthViewController.swift */,
 			);
-			path = Audio;
+			path = SubNavViewController;
+			sourceTree = "<group>";
+		};
+		043EBF8E2B04C65700C7AE64 /* TabBarViewController */ = {
+			isa = PBXGroup;
+			children = (
+				FA2F846F283BE71700DF928B /* MainTabBarViewController.swift */,
+				FA2F8469283BE64100DF928B /* HomeViewController.swift */,
+				FA2F846C283BE6D200DF928B /* SearchViewController.swift */,
+				04FC11D52A822D3E004C55CF /* ReadingListViewController.swift */,
+				FA951F41283BEBFA00013A84 /* FavoritesViewController.swift */,
+			);
+			path = TabBarViewController;
 			sourceTree = "<group>";
 		};
 		0455AC6B28A902D900E41D28 /* Full Audio Player */ = {
@@ -465,6 +484,10 @@
 		047877B62A615356000EAEC2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				04B21E9B28BA78F700758B03 /* ProgressBarView.swift */,
+				041F9B9228B13CEC00FB4DEA /* MIniAudioPlayerView.swift */,
+				041457A629195216008CD627 /* SegmentedControl.swift */,
+				041457A4291951D0008CD627 /* ScrollUISegmentController.swift */,
 				047877B72A615371000EAEC2 /* MenuBookView.swift */,
 				04FC11D02A80F948004C55CF /* BookDetailView.swift */,
 			);
@@ -477,25 +500,6 @@
 				04C6045229AA4A26008EADA7 /* BaseGestureRecognizerProtocol.swift */,
 			);
 			path = Protocol;
-			sourceTree = "<group>";
-		};
-		04FA55DB286C64CC00724CF9 /* Book */ = {
-			isa = PBXGroup;
-			children = (
-				04FA55DC286C651D00724CF9 /* BookDetailViewController.swift */,
-				04ECD19128B7E1AC00DAA295 /* AudioViewController.swift */,
-				041457A4291951D0008CD627 /* ScrollUISegmentController.swift */,
-				041457A629195216008CD627 /* SegmentedControl.swift */,
-			);
-			path = Book;
-			sourceTree = "<group>";
-		};
-		04FC11D42A822D13004C55CF /* Reading */ = {
-			isa = PBXGroup;
-			children = (
-				04FC11D52A822D3E004C55CF /* ReadingListViewController.swift */,
-			);
-			path = Reading;
 			sourceTree = "<group>";
 		};
 		6F055F932753B8181C5DB0A6 /* Frameworks */ = {
@@ -554,18 +558,13 @@
 		FA2F8465283BDF7C00DF928B /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				04FC11D42A822D13004C55CF /* Reading */,
+				043EBF8E2B04C65700C7AE64 /* TabBarViewController */,
+				043EBF8D2B04C5BA00C7AE64 /* SubNavViewController */,
+				043EBF8C2B04C49C00C7AE64 /* ViewController */,
 				047877B62A615356000EAEC2 /* Views */,
-				040A2F99294AFE1E00CF0E54 /* Splash */,
-				04196D7228A2BD90008FA2FC /* Audio */,
-				04FA55DB286C64CC00724CF9 /* Book */,
 				FAB7F4BB284CD7B800A16974 /* ViewModel */,
 				FAD74019284BCA66005B9459 /* CollectionViewCells */,
-				FA349DE4284B646D005047DC /* Topic */,
-				FA951F3F283BEBBF00013A84 /* Favorites */,
 				FA2F846E283BE70500DF928B /* Main */,
-				FA2F846B283BE6B700DF928B /* Search */,
-				FA2F8468283BE61B00DF928B /* Home */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -600,27 +599,9 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		FA2F8468283BE61B00DF928B /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				FA2F8469283BE64100DF928B /* HomeViewController.swift */,
-				0464618428D7075200563427 /* SignInViewController.swift */,
-			);
-			path = Home;
-			sourceTree = "<group>";
-		};
-		FA2F846B283BE6B700DF928B /* Search */ = {
-			isa = PBXGroup;
-			children = (
-				FA2F846C283BE6D200DF928B /* SearchViewController.swift */,
-			);
-			path = Search;
-			sourceTree = "<group>";
-		};
 		FA2F846E283BE70500DF928B /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				FA2F846F283BE71700DF928B /* MainTabBarViewController.swift */,
 				04C79DA428E08EF000593DFD /* SideMenuViewController.swift */,
 				04C79DAA28E0C4FA00593DFD /* ProfileViewController.swift */,
 				04C79DAC28E0C58400593DFD /* AboutViewController.swift */,
@@ -629,19 +610,6 @@
 				0473513B29463727004B9A33 /* AudioDownloadsViewController.swift */,
 			);
 			path = Main;
-			sourceTree = "<group>";
-		};
-		FA349DE4284B646D005047DC /* Topic */ = {
-			isa = PBXGroup;
-			children = (
-				FA349DE5284B6490005047DC /* SkillsViewController.swift */,
-				FA349DE7284B6503005047DC /* EconomicsViewController.swift */,
-				04182A65288BBB8100894854 /* LiteraryViewController.swift */,
-				048FDBB028CC9A770080509B /* CultureHistoryViewController.swift */,
-				048FDBB228CC9AB70080509B /* ScienceTechnologyViewController.swift */,
-				048FDBB428CC9AE20080509B /* HealthViewController.swift */,
-			);
-			path = Topic;
 			sourceTree = "<group>";
 		};
 		FA3D8E91283BD6F8004C186E = {
@@ -703,14 +671,6 @@
 				FA3D8EC0283BD6FA004C186E /* EpubReaderUITestsLaunchTests.swift */,
 			);
 			path = EpubReaderUITests;
-			sourceTree = "<group>";
-		};
-		FA951F3F283BEBBF00013A84 /* Favorites */ = {
-			isa = PBXGroup;
-			children = (
-				FA951F41283BEBFA00013A84 /* FavoritesViewController.swift */,
-			);
-			path = Favorites;
 			sourceTree = "<group>";
 		};
 		FAB7F4B7284CD41C00A16974 /* Entities */ = {
@@ -1318,7 +1278,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1372,7 +1332,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
