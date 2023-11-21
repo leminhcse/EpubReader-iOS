@@ -64,7 +64,7 @@ class BookDownloadsViewController: BaseViewController {
     
     // MARK: Setup UI
     private func setupUI() {
-        self.title = "Sách đã tải".uppercased()
+        self.title = "Sách đã tải"
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(label)
         self.view.addSubview(bookTableView)
@@ -115,7 +115,7 @@ extension BookDownloadsViewController: UITableViewDelegate, UITableViewDataSourc
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookTableViewCell", for: indexPath) as! BookTableViewCell
         let book = downloadBooks[indexPath.row]
         cell.selectionStyle = .none
-        cell.configure(book: book)
+        cell.configure(book: book, isCanDelete: true)
         return cell
     }
     

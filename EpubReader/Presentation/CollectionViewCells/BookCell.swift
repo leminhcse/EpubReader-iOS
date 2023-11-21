@@ -13,6 +13,7 @@ class BookCell: UICollectionViewCell {
     var imageView: UIImageView!
     var titleLabel: UILabel!
     var subtitleLabel: UILabel!
+    var longPressCallBack: (()->Void)?
     
     private let imageCornerRadius = CGFloat(8)
     
@@ -31,29 +32,39 @@ class BookCell: UICollectionViewCell {
     }
     
     private func setupView() {
+        var titleFont = UIFont.font(with: .h4)
+        var subtitleFont = UIFont.font(with: .h5)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            titleFont = UIFont.font(with: .h3)
+            subtitleFont = UIFont.font(with: .h4)
+        }
+        
         imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = imageCornerRadius
-        imageView.backgroundColor = .clear
+        imageView.backgroundColor = UIColor.color(with: .background).withAlphaComponent(0.2)
         
         titleLabel = UILabel()
         titleLabel.textColor = UIColor.black
         titleLabel.backgroundColor = .clear
         titleLabel.numberOfLines = 2
         titleLabel.sizeToFit()
-        titleLabel.font = UIFont.font(with: .h4)
+        titleLabel.font = titleFont
         
         subtitleLabel = UILabel()
         subtitleLabel.textColor = UIColor.gray
         subtitleLabel.backgroundColor = .clear
         subtitleLabel.numberOfLines = 1
         subtitleLabel.sizeToFit()
-        subtitleLabel.font = UIFont.font(with: .h5)
+        subtitleLabel.font = subtitleFont
         
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(subtitleLabel)
+        
+        addLongPressGestureRecognizer()
     }
     
     private func setupConstraints() {
@@ -81,5 +92,30 @@ class BookCell: UICollectionViewCell {
             make.width.equalToSuperview()
             make.height.equalTo(titleViewHeight/2)
         }
+    }
+    
+    public func configure(book: Book) {
+        DispatchQueue.main.async {
+            if let url = URL(string: book.thumbnail) {
+                self.imageView.kf_setImage(url: url) {_ in
+                    let imageWidth = self.imageView.image?.size.width ?? 0
+                    let imageHeight = self.imageView.image?.size.height ?? 0
+                    if imageHeight > imageWidth {
+                        self.imageView.backgroundColor = .clear
+                    }
+                }
+            }
+        }
+        titleLabel.text = book.title
+        subtitleLabel.text = book.composer
+        longPressCallBack = {
+            Utilities.shared.showMoreOptions(book: book)
+        }
+    }
+}
+
+extension BookCell: LongPressProtocol {
+    func longPressResult() {
+        longPressCallBack?()
     }
 }

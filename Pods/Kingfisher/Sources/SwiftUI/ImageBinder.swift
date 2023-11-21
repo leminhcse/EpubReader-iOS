@@ -38,26 +38,47 @@ extension KFImage {
         init() {}
 
         var downloadTask: DownloadTask?
+        private var loading = false
 
         var loadingOrSucceeded: Bool {
-            return downloadTask != nil || loadedImage != nil
+            return loading || loadedImage != nil
         }
 
-        @Published var loaded = false
-        @Published var loadedImage: KFCrossPlatformImage? = nil
-        @Published var progress: Progress = .init()
+        // Do not use @Published due to https://github.com/onevcat/Kingfisher/issues/1717. Revert to @Published once
+        // we can drop iOS 12.
+        private(set) var loaded = false
+
+        private(set) var animating = false
+
+        var loadedImage: KFCrossPlatformImage? = nil { willSet { objectWillChange.send() } }
+        var progress: Progress = .init()
+
+        func markLoading() {
+            loading = true
+        }
+
+        func markLoaded(sendChangeEvent: Bool) {
+            loaded = true
+            if sendChangeEvent {
+                objectWillChange.send()
+            }
+        }
 
         func start<HoldingView: KFImageHoldingView>(context: Context<HoldingView>) {
-
-            guard !loadingOrSucceeded else { return }
-
             guard let source = context.source else {
                 CallbackQueue.mainCurrentOrAsync.execute {
                     context.onFailureDelegate.call(KingfisherError.imageSettingError(reason: .emptySource))
+                    if let image = context.options.onFailureImage {
+                        self.loadedImage = image
+                    }
+                    self.loading = false
+                    self.markLoaded(sendChangeEvent: false)
                 }
                 return
             }
 
+            loading = true
+            
             progress = .init()
             downloadTask = KingfisherManager.shared
                 .retrieveImage(
@@ -71,21 +92,39 @@ extension KFImage {
 
                         guard let self = self else { return }
 
-                        self.downloadTask = nil
+                        CallbackQueue.mainCurrentOrAsync.execute {
+                            self.downloadTask = nil
+                            self.loading = false
+                        }
+                        
                         switch result {
                         case .success(let value):
-
                             CallbackQueue.mainCurrentOrAsync.execute {
+                                if let fadeDuration = context.fadeTransitionDuration(cacheType: value.cacheType) {
+                                    self.animating = true
+                                    let animation = Animation.linear(duration: fadeDuration)
+                                    withAnimation(animation) {
+                                        // Trigger the view render to apply the animation.
+                                        self.markLoaded(sendChangeEvent: true)
+                                    }
+                                } else {
+                                    self.markLoaded(sendChangeEvent: false)
+                                }
                                 self.loadedImage = value.image
-                                let animation = context.fadeTransitionDuration(cacheType: value.cacheType)
-                                    .map { duration in Animation.linear(duration: duration) }
-                                withAnimation(animation) { self.loaded = true }
+                                self.animating = false
                             }
 
                             CallbackQueue.mainAsync.execute {
                                 context.onSuccessDelegate.call(value)
                             }
                         case .failure(let error):
+                            CallbackQueue.mainCurrentOrAsync.execute {
+                                if let image = context.options.onFailureImage {
+                                    self.loadedImage = image
+                                }
+                                self.markLoaded(sendChangeEvent: true)
+                            }
+                            
                             CallbackQueue.mainAsync.execute {
                                 context.onFailureDelegate.call(error)
                             }
@@ -103,6 +142,7 @@ extension KFImage {
         func cancel() {
             downloadTask?.cancel()
             downloadTask = nil
+            loading = false
         }
     }
 }

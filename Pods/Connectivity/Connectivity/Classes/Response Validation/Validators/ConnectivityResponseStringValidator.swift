@@ -10,9 +10,11 @@ import Foundation
 @objc
 public enum ConnectivityResponseStringValidationMode: Int {
     case containsExpectedResponseString,
-        equalsExpectedResponseString,
-        matchesRegularExpression
+         equalsExpectedResponseString,
+         matchesRegularExpression
 }
+
+typealias ResponseStringValidator = ConnectivityResponseStringValidator // For internal use.
 
 @objcMembers
 public class ConnectivityResponseStringValidator: ConnectivityResponseValidator {

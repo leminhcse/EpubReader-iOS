@@ -49,11 +49,16 @@ extension ConnectivityStatus {
     
     var errorMessage: String {
         switch self {
-        case .connectedViaCellularWithoutInternet: return "Cellular doesn't have internet connection"
-        case .connectedViaWiFiWithoutInternet: return "Wifi doesn't have internet connection"
-        case .determining: return "The internet connection is being determined"
-        case .notConnected: return "No Internet Connection"
-        case .connected, .connectedViaWiFi, .connectedViaCellular: return "Connected to internet"
+        case .connectedViaCellularWithoutInternet:
+            return "Cellular doesn't have internet connection"
+        case .connectedViaWiFiWithoutInternet:
+            return "Wifi doesn't have internet connection"
+        case .determining:
+            return "The internet connection is being determined"
+        case .notConnected:
+            return "No Internet Connection"
+        case .connected, .connectedViaWiFi, .connectedViaCellular, .connectedViaEthernet, .connectedViaEthernetWithoutInternet:
+            return "Connected to internet"
         }
     }
 }

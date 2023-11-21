@@ -16,4 +16,5 @@ struct Book: Codable {
     let year: String
     let type: String
     let epub_source: String
+    let page: String
 }

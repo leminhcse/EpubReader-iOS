@@ -100,4 +100,10 @@ final class PersistenceHelper: NSObject {
             return nil
         }
     }
+    
+    class func removeObj(key: String) {
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: key)
+        defaults.synchronize()
+    }
 }

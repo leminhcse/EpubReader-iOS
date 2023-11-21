@@ -23,41 +23,33 @@ class BookViewModel: NSObject {
     }
     
     func getBookList(completion: ((Bool) -> Void)? = nil) {
-        self.listBook.removeAll()
-        if let data = PersistenceHelper.loadData(key: "Books") as? [Book] {
-            self.listBook = Utilities.shared.importBookList(books: data)
-            EpubReaderHelper.shared.books = self.listBook
-            NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification), object: nil)
-            completion?(true)
-        } else {
-            ApiWebService.shared.getBooks()
-                .observe(on: MainScheduler.instance)
-                .subscribe(onNext: { bookList in
-                    if bookList.count > 0 {
-                        PersistenceHelper.saveData(object: bookList, key: "Books")
-                        self.listBook = Utilities.shared.importBookList(books: bookList)
-                        EpubReaderHelper.shared.books = self.listBook
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification), object: nil)
-                        completion?(true)
-                    }
-                }, onError: { error in
-                    switch error {
-                    case ApiError.conflict:
-                        print("Conflict error")
-                        completion?(false)
-                    case ApiError.forbidden:
-                        print("Forbidden error")
-                        completion?(false)
-                    case ApiError.notFound:
-                        print("Not found error")
-                        completion?(false)
-                    default:
-                        completion?(false)
-                        print("Unknown error:", error)
-                    }
-                })
-                .disposed(by: disposeBag)
-        }
+        ApiWebService.shared.getBooks()
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { bookList in
+                if bookList.count > 0 {
+                    PersistenceHelper.saveData(object: bookList, key: "Books")
+                    self.listBook = Utilities.shared.importBookList(books: bookList)
+                    EpubReaderHelper.shared.books = self.listBook
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadDataNotification), object: nil)
+                    completion?(true)
+                }
+            }, onError: { error in
+                switch error {
+                case ApiError.conflict:
+                    print("Conflict error")
+                    completion?(false)
+                case ApiError.forbidden:
+                    print("Forbidden error")
+                    completion?(false)
+                case ApiError.notFound:
+                    print("Not found error")
+                    completion?(false)
+                default:
+                    completion?(false)
+                    print("Unknown error:", error)
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     func getFavoritesBook(userId: String) {
@@ -127,25 +119,47 @@ class BookViewModel: NSObject {
         }
         
         EpubReaderHelper.shared.favoritedBooks.append(book)
-        let parameters = ["bookId": book.id,
-                          "userId": userId]
-        AF.request(addFavoriteUrl, parameters: parameters).response { response in
-            let success = response.response?.statusCode
-            if success == 200 {
-                print("Add success")
-                PersistenceHelper.saveData(object: EpubReaderHelper.shared.favoritedBooks, key: "favoritedBook")
-                NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification), object: nil)
+        ApiWebService.shared.putToFavorite(bookId: book.id, userId: userId)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { response in
+                print("my tag is \(response)")
                 completion?(true)
-            } else {
-                if Utilities.shared.isFavorited(bookId: book.id) {
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification), object: nil)
-                    completion?(true)
-                } else {
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.AddFavoriteFailedNotification), object: nil)
+            }, onError: { error in
+                switch error {
+                case ApiError.conflict:
+                    print("Conflict error")
+                    completion?(false)
+                case ApiError.forbidden:
+                    print("Forbidden error")
+                    completion?(false)
+                case ApiError.notFound:
+                    print("Not found error")
+                    completion?(false)
+                default:
+                    print("Unknown error:", error)
                     completion?(false)
                 }
-            }
-        }
+            })
+            .disposed(by: disposeBag)
+//        let parameters = ["bookId": book.id,
+//                          "userId": userId]
+//        AF.request(addFavoriteUrl, parameters: parameters).response { response in
+//            let success = response.response?.statusCode
+//            if success == 200 {
+//                print("Add success")
+//                PersistenceHelper.saveData(object: EpubReaderHelper.shared.favoritedBooks, key: "favoritedBook")
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification), object: nil)
+//                completion?(true)
+//            } else {
+//                if Utilities.shared.isFavorited(bookId: book.id) {
+//                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification), object: nil)
+//                    completion?(true)
+//                } else {
+//                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.AddFavoriteFailedNotification), object: nil)
+//                    completion?(false)
+//                }
+//            }
+//        }
     }
     
     func removeFavorite(bookId: String, userId: String, completion: ((Bool) -> Void)? = nil) {

@@ -193,12 +193,13 @@ class AudioResourceCell: UICollectionViewCell {
         } else if progressDownloadView.status == .notDownloaded {
             progressDownloadView.progress = 0.0
             if let url = URL(string: self.audio?.fileAudio ?? "") {
-                let obs = ApiWebService.shared.downloadAudio(audio: self.audio!, url: url)
-                progressDownloadView.status = .inProgress
-                subscribeDownloadProgress(downloadObs: obs as! BehaviorSubject<Float>)
+
             }
         } else {
-            
+            if let id = self.audio?.id {
+                ApiWebService.shared.cancelDownload(audioId: id)
+                progressDownloadView.status = .notDownloaded
+            }
         }
     }
     

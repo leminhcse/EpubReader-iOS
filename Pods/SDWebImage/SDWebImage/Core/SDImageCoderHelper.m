@@ -16,11 +16,98 @@
 #import "UIImage+Metadata.h"
 #import "SDInternalMacros.h"
 #import "SDGraphicsImageRenderer.h"
+#import "SDInternalMacros.h"
+#import "SDDeviceHelper.h"
 #import <Accelerate/Accelerate.h>
 
-static inline size_t SDByteAlign(size_t size, size_t alignment) {
-    return ((size + (alignment - 1)) / alignment) * alignment;
+#define kCGColorSpaceDeviceRGB CFSTR("kCGColorSpaceDeviceRGB")
+
+#if SD_UIKIT
+static inline UIImage *SDImageDecodeUIKit(UIImage *image) {
+    // See: https://developer.apple.com/documentation/uikit/uiimage/3750834-imagebypreparingfordisplay
+    // Need CGImage-based
+    if (@available(iOS 15, tvOS 15, *)) {
+        UIImage *decodedImage = [image imageByPreparingForDisplay];
+        if (decodedImage) {
+            SDImageCopyAssociatedObject(image, decodedImage);
+            decodedImage.sd_isDecoded = YES;
+            return decodedImage;
+        }
+    }
+    return nil;
 }
+
+static inline UIImage *SDImageDecodeAndScaleDownUIKit(UIImage *image, CGSize destResolution) {
+    // See: https://developer.apple.com/documentation/uikit/uiimage/3750835-imagebypreparingthumbnailofsize
+    // Need CGImage-based
+    if (@available(iOS 15, tvOS 15, *)) {
+        // Calculate thumbnail point size
+        CGFloat scale = image.scale ?: 1;
+        CGSize thumbnailSize = CGSizeMake(destResolution.width / scale, destResolution.height / scale);
+        UIImage *decodedImage = [image imageByPreparingThumbnailOfSize:thumbnailSize];
+        if (decodedImage) {
+            SDImageCopyAssociatedObject(image, decodedImage);
+            decodedImage.sd_isDecoded = YES;
+            return decodedImage;
+        }
+    }
+    return nil;
+}
+
+static inline BOOL SDImageSupportsHardwareHEVCDecoder(void) {
+    static dispatch_once_t onceToken;
+    static BOOL supportsHardware = NO;
+    dispatch_once(&onceToken, ^{
+        SEL DeviceInfoSelector = SD_SEL_SPI(deviceInfoForKey:);
+        NSString *HEVCDecoder8bitSupported = @"N8lZxRgC7lfdRS3dRLn+Ag";
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        if ([UIDevice.currentDevice respondsToSelector:DeviceInfoSelector] && [UIDevice.currentDevice performSelector:DeviceInfoSelector withObject:HEVCDecoder8bitSupported]) {
+            supportsHardware = YES;
+        }
+#pragma clang diagnostic pop
+    });
+    return supportsHardware;
+}
+#endif
+
+static UIImage * _Nonnull SDImageGetAlphaDummyImage(void) {
+    static dispatch_once_t onceToken;
+    static UIImage *dummyImage;
+    dispatch_once(&onceToken, ^{
+        SDGraphicsImageRendererFormat *format = [SDGraphicsImageRendererFormat preferredFormat];
+        format.scale = 1;
+        format.opaque = NO;
+        CGSize size = CGSizeMake(1, 1);
+        SDGraphicsImageRenderer *renderer = [[SDGraphicsImageRenderer alloc] initWithSize:size format:format];
+        dummyImage = [renderer imageWithActions:^(CGContextRef  _Nonnull context) {
+            CGContextSetFillColorWithColor(context, UIColor.redColor.CGColor);
+            CGContextFillRect(context, CGRectMake(0, 0, size.width, size.height));
+        }];
+        NSCAssert(dummyImage, @"The sample alpha image (1x1 pixels) returns nil, OS bug ?");
+    });
+    return dummyImage;
+}
+
+static UIImage * _Nonnull SDImageGetNonAlphaDummyImage(void) {
+    static dispatch_once_t onceToken;
+    static UIImage *dummyImage;
+    dispatch_once(&onceToken, ^{
+        SDGraphicsImageRendererFormat *format = [SDGraphicsImageRendererFormat preferredFormat];
+        format.scale = 1;
+        format.opaque = YES;
+        CGSize size = CGSizeMake(1, 1);
+        SDGraphicsImageRenderer *renderer = [[SDGraphicsImageRenderer alloc] initWithSize:size format:format];
+        dummyImage = [renderer imageWithActions:^(CGContextRef  _Nonnull context) {
+            CGContextSetFillColorWithColor(context, UIColor.redColor.CGColor);
+            CGContextFillRect(context, CGRectMake(0, 0, size.width, size.height));
+        }];
+        NSCAssert(dummyImage, @"The sample non-alpha image (1x1 pixels) returns nil, OS bug ?");
+    });
+    return dummyImage;
+}
+
+static SDImageCoderDecodeSolution kDefaultDecodeSolution = SDImageCoderDecodeSolutionAutomatic;
 
 static const size_t kBytesPerPixel = 4;
 static const size_t kBitsPerComponent = 8;
@@ -41,6 +128,13 @@ static CGFloat kDestImageLimitBytes = 30.f * kBytesPerMB;
 #endif
 
 static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to overlap the seems where tiles meet.
+
+#if SD_MAC
+@interface SDAnimatedImageRep (Private)
+/// This wrap the animated image frames for legacy animated image coder API (`encodedDataWithImage:`).
+@property (nonatomic, readwrite, weak) NSArray<SDImageFrame *> *frames;
+@end
+#endif
 
 @implementation SDImageCoderHelper
 
@@ -89,13 +183,11 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     }
     
     for (size_t i = 0; i < frameCount; i++) {
-        @autoreleasepool {
-            SDImageFrame *frame = frames[i];
-            NSTimeInterval frameDuration = frame.duration;
-            CGImageRef frameImageRef = frame.image.CGImage;
-            NSDictionary *frameProperties = @{(__bridge NSString *)kCGImagePropertyGIFDictionary : @{(__bridge NSString *)kCGImagePropertyGIFDelayTime : @(frameDuration)}};
-            CGImageDestinationAddImage(imageDestination, frameImageRef, (__bridge CFDictionaryRef)frameProperties);
-        }
+        SDImageFrame *frame = frames[i];
+        NSTimeInterval frameDuration = frame.duration;
+        CGImageRef frameImageRef = frame.image.CGImage;
+        NSDictionary *frameProperties = @{(__bridge NSString *)kCGImagePropertyGIFDictionary : @{(__bridge NSString *)kCGImagePropertyGIFDelayTime : @(frameDuration)}};
+        CGImageDestinationAddImage(imageDestination, frameImageRef, (__bridge CFDictionaryRef)frameProperties);
     }
     // Finalize the destination.
     if (CGImageDestinationFinalize(imageDestination) == NO) {
@@ -109,6 +201,7 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     SDAnimatedImageRep *imageRep = [[SDAnimatedImageRep alloc] initWithData:imageData];
     NSSize size = NSMakeSize(imageRep.pixelsWide / scale, imageRep.pixelsHigh / scale);
     imageRep.size = size;
+    imageRep.frames = frames; // Weak assign to avoid effect lazy semantic of NSBitmapImageRep
     animatedImage = [[NSImage alloc] initWithSize:size];
     [animatedImage addRepresentation:imageRep];
 #endif
@@ -121,7 +214,7 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
         return nil;
     }
     
-    NSMutableArray<SDImageFrame *> *frames = [NSMutableArray array];
+    NSMutableArray<SDImageFrame *> *frames;
     NSUInteger frameCount = 0;
     
 #if SD_UIKIT || SD_WATCH
@@ -130,6 +223,7 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     if (frameCount == 0) {
         return nil;
     }
+    frames = [NSMutableArray arrayWithCapacity:frameCount];
     
     NSTimeInterval avgDuration = animatedImage.duration / frameCount;
     if (avgDuration == 0) {
@@ -160,6 +254,14 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     
     NSRect imageRect = NSMakeRect(0, 0, animatedImage.size.width, animatedImage.size.height);
     NSImageRep *imageRep = [animatedImage bestRepresentationForRect:imageRect context:nil hints:nil];
+    // Check weak assigned frames firstly
+    if ([imageRep isKindOfClass:[SDAnimatedImageRep class]]) {
+        SDAnimatedImageRep *animatedImageRep = (SDAnimatedImageRep *)imageRep;
+        if (animatedImageRep.frames) {
+            return animatedImageRep.frames;
+        }
+    }
+    
     NSBitmapImageRep *bitmapImageRep;
     if ([imageRep isKindOfClass:[NSBitmapImageRep class]]) {
         bitmapImageRep = (NSBitmapImageRep *)imageRep;
@@ -171,30 +273,100 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     if (frameCount == 0) {
         return nil;
     }
+    frames = [NSMutableArray arrayWithCapacity:frameCount];
     CGFloat scale = animatedImage.scale;
     
     for (size_t i = 0; i < frameCount; i++) {
-        @autoreleasepool {
-            // NSBitmapImageRep need to manually change frame. "Good taste" API
-            [bitmapImageRep setProperty:NSImageCurrentFrame withValue:@(i)];
-            NSTimeInterval frameDuration = [[bitmapImageRep valueForProperty:NSImageCurrentFrameDuration] doubleValue];
-            NSImage *frameImage = [[NSImage alloc] initWithCGImage:bitmapImageRep.CGImage scale:scale orientation:kCGImagePropertyOrientationUp];
-            SDImageFrame *frame = [SDImageFrame frameWithImage:frameImage duration:frameDuration];
-            [frames addObject:frame];
-        }
+        // NSBitmapImageRep need to manually change frame. "Good taste" API
+        [bitmapImageRep setProperty:NSImageCurrentFrame withValue:@(i)];
+        NSTimeInterval frameDuration = [[bitmapImageRep valueForProperty:NSImageCurrentFrameDuration] doubleValue];
+        NSImage *frameImage = [[NSImage alloc] initWithCGImage:bitmapImageRep.CGImage scale:scale orientation:kCGImagePropertyOrientationUp];
+        SDImageFrame *frame = [SDImageFrame frameWithImage:frameImage duration:frameDuration];
+        [frames addObject:frame];
     }
 #endif
     
-    return frames;
+    return [frames copy];
 }
 
 + (CGColorSpaceRef)colorSpaceGetDeviceRGB {
     static CGColorSpaceRef colorSpace;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+#if SD_MAC
+        NSScreen *mainScreen = nil;
+        if (@available(macOS 10.12, *)) {
+            mainScreen = [NSScreen mainScreen];
+        } else {
+            mainScreen = [NSScreen screens].firstObject;
+        }
+        colorSpace = mainScreen.colorSpace.CGColorSpace;
+#else
         colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+#endif
     });
     return colorSpace;
+}
+
++ (SDImagePixelFormat)preferredPixelFormat:(BOOL)containsAlpha {
+    CGImageRef cgImage;
+    if (containsAlpha) {
+        cgImage = SDImageGetAlphaDummyImage().CGImage;
+    } else {
+        cgImage = SDImageGetNonAlphaDummyImage().CGImage;
+    }
+    CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(cgImage);
+    size_t bitsPerPixel = 8;
+    if (SD_OPTIONS_CONTAINS(bitmapInfo, kCGBitmapFloatComponents)) {
+        bitsPerPixel = 16;
+    }
+    size_t components = 4; // Hardcode now
+    // https://github.com/path/FastImageCache#byte-alignment
+    // A properly aligned bytes-per-row value must be a multiple of 8 pixels × bytes per pixel.
+    size_t alignment = (bitsPerPixel / 8) * components * 8;
+    SDImagePixelFormat pixelFormat = {
+        .bitmapInfo = bitmapInfo,
+        .alignment = alignment
+    };
+    return pixelFormat;
+}
+
++ (BOOL)CGImageIsHardwareSupported:(CGImageRef)cgImage {
+    BOOL supported = YES;
+    // 1. Check byte alignment
+    size_t bytesPerRow = CGImageGetBytesPerRow(cgImage);
+    BOOL hasAlpha = [self CGImageContainsAlpha:cgImage];
+    SDImagePixelFormat pixelFormat = [self preferredPixelFormat:hasAlpha];
+    if (SDByteAlign(bytesPerRow, pixelFormat.alignment) == bytesPerRow) {
+        // byte aligned, OK
+        supported &= YES;
+    } else {
+        // not aligned
+        supported &= NO;
+    }
+    if (!supported) return supported;
+    
+    // 2. Check color space
+    CGColorSpaceRef colorSpace = CGImageGetColorSpace(cgImage);
+    CGColorSpaceRef perferredColorSpace = [self colorSpaceGetDeviceRGB];
+    if (colorSpace == perferredColorSpace) {
+        return supported;
+    } else {
+        if (@available(iOS 10.0, tvOS 10.0, macOS 10.6, watchOS 3.0, *)) {
+            NSString *colorspaceName = (__bridge_transfer NSString *)CGColorSpaceCopyName(colorSpace);
+            // Seems sRGB/deviceRGB always supported, P3 not always
+            if ([colorspaceName isEqualToString:(__bridge NSString *)kCGColorSpaceDeviceRGB]
+                || [colorspaceName isEqualToString:(__bridge NSString *)kCGColorSpaceSRGB]) {
+                supported &= YES;
+            } else {
+                supported &= NO;
+            }
+            return supported;
+        } else {
+            // Fallback on earlier versions
+            return supported;
+        }
+    }
 }
 
 + (BOOL)CGImageContainsAlpha:(CGImageRef)cgImage {
@@ -241,16 +413,8 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     BOOL hasAlpha = [self CGImageContainsAlpha:cgImage];
     // kCGImageAlphaNone is not supported in CGBitmapContextCreate.
     // Check #3330 for more detail about why this bitmap is choosen.
-    CGBitmapInfo bitmapInfo;
-    if (hasAlpha) {
-        // iPhone GPU prefer to use BGRA8888, see: https://forums.raywenderlich.com/t/why-mtlpixelformat-bgra8unorm/53489
-        // BGRA8888
-        bitmapInfo = kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst;
-    } else {
-        // BGR888 previously works on iOS 8~iOS 14, however, iOS 15+ will result a black image. FB9958017
-        // RGB888
-        bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNoneSkipLast;
-    }
+    // From v5.17.0, use runtime detection of bitmap info instead of hardcode.
+    CGBitmapInfo bitmapInfo = [SDImageCoderHelper preferredPixelFormat:hasAlpha].bitmapInfo;
     CGContextRef context = CGBitmapContextCreate(NULL, newWidth, newHeight, 8, 0, [self colorSpaceGetDeviceRGB], bitmapInfo);
     if (!context) {
         return NULL;
@@ -285,16 +449,8 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     BOOL hasAlpha = [self CGImageContainsAlpha:cgImage];
     // kCGImageAlphaNone is not supported in CGBitmapContextCreate.
     // Check #3330 for more detail about why this bitmap is choosen.
-    CGBitmapInfo bitmapInfo;
-    if (hasAlpha) {
-        // iPhone GPU prefer to use BGRA8888, see: https://forums.raywenderlich.com/t/why-mtlpixelformat-bgra8unorm/53489
-        // BGRA8888
-        bitmapInfo = kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst;
-    } else {
-        // BGR888 previously works on iOS 8~iOS 14, however, iOS 15+ will result a black image. FB9958017
-        // RGB888
-        bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNoneSkipLast;
-    }
+    // From v5.17.0, use runtime detection of bitmap info instead of hardcode.
+    CGBitmapInfo bitmapInfo = [SDImageCoderHelper preferredPixelFormat:hasAlpha].bitmapInfo;
     vImage_CGImageFormat format = (vImage_CGImageFormat) {
         .bitsPerComponent = 8,
         .bitsPerPixel = 32,
@@ -362,46 +518,86 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     return CGSizeMake(resultWidth, resultHeight);
 }
 
++ (CGSize)scaledSizeWithImageSize:(CGSize)imageSize limitBytes:(NSUInteger)limitBytes bytesPerPixel:(NSUInteger)bytesPerPixel frameCount:(NSUInteger)frameCount {
+    if (CGSizeEqualToSize(imageSize, CGSizeZero)) return CGSizeMake(1, 1);
+    NSUInteger totalFramePixelSize = limitBytes / bytesPerPixel / (frameCount ?: 1);
+    CGFloat ratio = imageSize.height / imageSize.width;
+    CGFloat width = sqrt(totalFramePixelSize / ratio);
+    CGFloat height = width * ratio;
+    width = MAX(1, floor(width));
+    height = MAX(1, floor(height));
+    CGSize size = CGSizeMake(width, height);
+    
+    return size;
+}
+
 + (UIImage *)decodedImageWithImage:(UIImage *)image {
-    if (![self shouldDecodeImage:image]) {
+    return [self decodedImageWithImage:image policy:SDImageForceDecodePolicyAutomatic];
+}
+
++ (UIImage *)decodedImageWithImage:(UIImage *)image policy:(SDImageForceDecodePolicy)policy {
+    if (![self shouldDecodeImage:image policy:policy]) {
         return image;
     }
     
+    UIImage *decodedImage;
+    SDImageCoderDecodeSolution decodeSolution = self.defaultDecodeSolution;
 #if SD_UIKIT
-    // See: https://developer.apple.com/documentation/uikit/uiimage/3750834-imagebypreparingfordisplay
-    // Need CGImage-based
-    if (@available(iOS 15, tvOS 15, *)) {
-        UIImage *decodedImage = [image imageByPreparingForDisplay];
-        if (decodedImage) {
-            SDImageCopyAssociatedObject(image, decodedImage);
-            decodedImage.sd_isDecoded = YES;
-            return decodedImage;
+    if (decodeSolution == SDImageCoderDecodeSolutionAutomatic) {
+        // See #3365, CMPhoto iOS 15 only supports JPEG/HEIF format, or it will print an error log :(
+        SDImageFormat format = image.sd_imageFormat;
+        if ((format == SDImageFormatHEIC || format == SDImageFormatHEIF) && SDImageSupportsHardwareHEVCDecoder()) {
+            decodedImage = SDImageDecodeUIKit(image);
+        } else if (format == SDImageFormatJPEG) {
+            decodedImage = SDImageDecodeUIKit(image);
         }
+    } else if (decodeSolution == SDImageCoderDecodeSolutionUIKit) {
+        // Arbitrarily call CMPhoto
+        decodedImage = SDImageDecodeUIKit(image);
+    }
+    if (decodedImage) {
+        return decodedImage;
     }
 #endif
     
     CGImageRef imageRef = image.CGImage;
     if (!imageRef) {
+        // Only decode for CGImage-based
         return image;
     }
-    BOOL hasAlpha = [self CGImageContainsAlpha:imageRef];
-    // Prefer to use new Image Renderer to re-draw image, instead of low-level CGBitmapContext and CGContextDrawImage
-    // This can keep both OS compatible and don't fight with Apple's performance optimization
-    SDGraphicsImageRendererFormat *format = [[SDGraphicsImageRendererFormat alloc] init];
-    format.opaque = !hasAlpha;
-    format.scale = image.scale;
-    CGSize imageSize = image.size;
-    SDGraphicsImageRenderer *renderer = [[SDGraphicsImageRenderer alloc] initWithSize:imageSize format:format];
-    UIImage *decodedImage = [renderer imageWithActions:^(CGContextRef  _Nonnull context) {
-            [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
-    }];
+    
+    if (decodeSolution == SDImageCoderDecodeSolutionCoreGraphics) {
+        CGImageRef decodedImageRef = [self CGImageCreateDecoded:imageRef];
+#if SD_MAC
+        decodedImage = [[UIImage alloc] initWithCGImage:decodedImageRef scale:image.scale orientation:kCGImagePropertyOrientationUp];
+#else
+        decodedImage = [[UIImage alloc] initWithCGImage:decodedImageRef scale:image.scale orientation:image.imageOrientation];
+#endif
+        CGImageRelease(decodedImageRef);
+    } else {
+        BOOL hasAlpha = [self CGImageContainsAlpha:imageRef];
+        // Prefer to use new Image Renderer to re-draw image, instead of low-level CGBitmapContext and CGContextDrawImage
+        // This can keep both OS compatible and don't fight with Apple's performance optimization
+        SDGraphicsImageRendererFormat *format = SDGraphicsImageRendererFormat.preferredFormat;
+        format.opaque = !hasAlpha;
+        format.scale = image.scale;
+        CGSize imageSize = image.size;
+        SDGraphicsImageRenderer *renderer = [[SDGraphicsImageRenderer alloc] initWithSize:imageSize format:format];
+        decodedImage = [renderer imageWithActions:^(CGContextRef  _Nonnull context) {
+                [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
+        }];
+    }
     SDImageCopyAssociatedObject(image, decodedImage);
     decodedImage.sd_isDecoded = YES;
     return decodedImage;
 }
 
 + (UIImage *)decodedAndScaledDownImageWithImage:(UIImage *)image limitBytes:(NSUInteger)bytes {
-    if (![self shouldDecodeImage:image]) {
+    return [self decodedAndScaledDownImageWithImage:image limitBytes:bytes policy:SDImageForceDecodePolicyAutomatic];
+}
+
++ (UIImage *)decodedAndScaledDownImageWithImage:(UIImage *)image limitBytes:(NSUInteger)bytes policy:(SDImageForceDecodePolicy)policy {
+    if (![self shouldDecodeImage:image policy:policy]) {
         return image;
     }
     
@@ -415,6 +611,10 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     tileTotalPixels = destTotalPixels / 3;
     
     CGImageRef sourceImageRef = image.CGImage;
+    if (!sourceImageRef) {
+        // Only decode for CGImage-based
+        return image;
+    }
     CGSize sourceResolution = CGSizeZero;
     sourceResolution.width = CGImageGetWidth(sourceImageRef);
     sourceResolution.height = CGImageGetHeight(sourceImageRef);
@@ -432,23 +632,25 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     destResolution.width = MAX(1, (int)(sourceResolution.width * imageScale));
     destResolution.height = MAX(1, (int)(sourceResolution.height * imageScale));
     
+    UIImage *decodedImage;
 #if SD_UIKIT
-    // See: https://developer.apple.com/documentation/uikit/uiimage/3750835-imagebypreparingthumbnailofsize
-    // Need CGImage-based
-    if (@available(iOS 15, tvOS 15, *)) {
-        // Calculate thumbnail point size
-        CGFloat scale = image.scale ?: 1;
-        CGSize thumbnailSize = CGSizeMake(destResolution.width / scale, destResolution.height / scale);
-        UIImage *decodedImage = [image imageByPreparingThumbnailOfSize:thumbnailSize];
-        if (decodedImage) {
-            SDImageCopyAssociatedObject(image, decodedImage);
-            decodedImage.sd_isDecoded = YES;
-            return decodedImage;
+    SDImageCoderDecodeSolution decodeSolution = self.defaultDecodeSolution;
+    if (decodeSolution == SDImageCoderDecodeSolutionAutomatic) {
+        // See #3365, CMPhoto iOS 15 only supports JPEG/HEIF format, or it will print an error log :(
+        SDImageFormat format = image.sd_imageFormat;
+        if ((format == SDImageFormatHEIC || format == SDImageFormatHEIF) && SDImageSupportsHardwareHEVCDecoder()) {
+            decodedImage = SDImageDecodeAndScaleDownUIKit(image, destResolution);
+        } else if (format == SDImageFormatJPEG) {
+            decodedImage = SDImageDecodeAndScaleDownUIKit(image, destResolution);
         }
+    } else if (decodeSolution == SDImageCoderDecodeSolutionUIKit) {
+        // Arbitrarily call CMPhoto
+        decodedImage = SDImageDecodeAndScaleDownUIKit(image, destResolution);
+    }
+    if (decodedImage) {
+        return decodedImage;
     }
 #endif
-    
-    CGContextRef destContext = NULL;
     
     // autorelease the bitmap context and all vars to help system to free memory when there are memory warning.
     // on iOS7, do not forget to call [[SDImageCache sharedImageCache] clearMemory];
@@ -459,23 +661,15 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
         
         // kCGImageAlphaNone is not supported in CGBitmapContextCreate.
         // Check #3330 for more detail about why this bitmap is choosen.
-        CGBitmapInfo bitmapInfo;
-        if (hasAlpha) {
-            // iPhone GPU prefer to use BGRA8888, see: https://forums.raywenderlich.com/t/why-mtlpixelformat-bgra8unorm/53489
-            // BGRA8888
-            bitmapInfo = kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst;
-        } else {
-            // BGR888 previously works on iOS 8~iOS 14, however, iOS 15+ will result a black image. FB9958017
-            // RGB888
-            bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNoneSkipLast;
-        }
-        destContext = CGBitmapContextCreate(NULL,
-                                            destResolution.width,
-                                            destResolution.height,
-                                            kBitsPerComponent,
-                                            0,
-                                            colorspaceRef,
-                                            bitmapInfo);
+        // From v5.17.0, use runtime detection of bitmap info instead of hardcode.
+        CGBitmapInfo bitmapInfo = [SDImageCoderHelper preferredPixelFormat:hasAlpha].bitmapInfo;
+        CGContextRef destContext = CGBitmapContextCreate(NULL,
+                                                         destResolution.width,
+                                                         destResolution.height,
+                                                         kBitsPerComponent,
+                                                         0,
+                                                         colorspaceRef,
+                                                         bitmapInfo);
         
         if (destContext == NULL) {
             return image;
@@ -522,19 +716,17 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
         sourceTile.size.height += sourceSeemOverlap;
         destTile.size.height += kDestSeemOverlap;
         for( int y = 0; y < iterations; ++y ) {
-            @autoreleasepool {
-                sourceTile.origin.y = y * sourceTileHeightMinusOverlap + sourceSeemOverlap;
-                destTile.origin.y = destResolution.height - (( y + 1 ) * sourceTileHeightMinusOverlap * imageScale + kDestSeemOverlap);
-                sourceTileImageRef = CGImageCreateWithImageInRect( sourceImageRef, sourceTile );
-                if( y == iterations - 1 && remainder ) {
-                    float dify = destTile.size.height;
-                    destTile.size.height = CGImageGetHeight( sourceTileImageRef ) * imageScale;
-                    dify -= destTile.size.height;
-                    destTile.origin.y = MIN(0, destTile.origin.y + dify);
-                }
-                CGContextDrawImage( destContext, destTile, sourceTileImageRef );
-                CGImageRelease( sourceTileImageRef );
+            sourceTile.origin.y = y * sourceTileHeightMinusOverlap + sourceSeemOverlap;
+            destTile.origin.y = destResolution.height - (( y + 1 ) * sourceTileHeightMinusOverlap * imageScale + kDestSeemOverlap);
+            sourceTileImageRef = CGImageCreateWithImageInRect( sourceImageRef, sourceTile );
+            if( y == iterations - 1 && remainder ) {
+                float dify = destTile.size.height;
+                destTile.size.height = CGImageGetHeight( sourceTileImageRef ) * imageScale;
+                dify -= destTile.size.height;
+                destTile.origin.y = MIN(0, destTile.origin.y + dify);
             }
+            CGContextDrawImage( destContext, destTile, sourceTileImageRef );
+            CGImageRelease( sourceTileImageRef );
         }
         
         CGImageRef destImageRef = CGBitmapContextCreateImage(destContext);
@@ -543,18 +735,23 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
             return image;
         }
 #if SD_MAC
-        UIImage *destImage = [[UIImage alloc] initWithCGImage:destImageRef scale:image.scale orientation:kCGImagePropertyOrientationUp];
+        decodedImage = [[UIImage alloc] initWithCGImage:destImageRef scale:image.scale orientation:kCGImagePropertyOrientationUp];
 #else
-        UIImage *destImage = [[UIImage alloc] initWithCGImage:destImageRef scale:image.scale orientation:image.imageOrientation];
+        decodedImage = [[UIImage alloc] initWithCGImage:destImageRef scale:image.scale orientation:image.imageOrientation];
 #endif
         CGImageRelease(destImageRef);
-        if (destImage == nil) {
-            return image;
-        }
-        SDImageCopyAssociatedObject(image, destImage);
-        destImage.sd_isDecoded = YES;
-        return destImage;
+        SDImageCopyAssociatedObject(image, decodedImage);
+        decodedImage.sd_isDecoded = YES;
+        return decodedImage;
     }
+}
+
++ (SDImageCoderDecodeSolution)defaultDecodeSolution {
+    return kDefaultDecodeSolution;
+}
+
++ (void)setDefaultDecodeSolution:(SDImageCoderDecodeSolution)defaultDecodeSolution {
+    kDefaultDecodeSolution = defaultDecodeSolution;
 }
 
 + (NSUInteger)defaultScaleDownLimitBytes {
@@ -639,9 +836,13 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
 #endif
 
 #pragma mark - Helper Function
-+ (BOOL)shouldDecodeImage:(nullable UIImage *)image {
++ (BOOL)shouldDecodeImage:(nullable UIImage *)image policy:(SDImageForceDecodePolicy)policy {
     // Prevent "CGBitmapContextCreateImage: invalid context 0x0" error
     if (image == nil) {
+        return NO;
+    }
+    // Check policy (never)
+    if (policy == SDImageForceDecodePolicyNever) {
         return NO;
     }
     // Avoid extra decode
@@ -656,7 +857,25 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     if (image.sd_isVector) {
         return NO;
     }
-    
+    // Check policy (always)
+    if (policy == SDImageForceDecodePolicyAlways) {
+        return YES;
+    } else {
+        // Check policy (automatic)
+        CGImageRef cgImage = image.CGImage;
+        if (cgImage) {
+            CFStringRef uttype = CGImageGetUTType(cgImage);
+            if (uttype) {
+                // Only ImageIO can set `com.apple.ImageIO.imageSourceTypeIdentifier`
+                return YES;
+            } else {
+                // Now, let's check if the CGImage is hardware supported (not byte-aligned will cause extra copy)
+                BOOL isSupported = [SDImageCoderHelper CGImageIsHardwareSupported:cgImage];
+                return !isSupported;
+            }
+        }
+    }
+
     return YES;
 }
 

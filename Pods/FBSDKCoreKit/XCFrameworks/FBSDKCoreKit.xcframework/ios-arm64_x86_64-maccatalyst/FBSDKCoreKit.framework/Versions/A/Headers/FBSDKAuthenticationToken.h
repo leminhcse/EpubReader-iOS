@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <FBSDKCoreKit/FBSDKAuthenticationTokenProtocols.h>
+#import <FBSDKCoreKit/FBSDKAuthenticationTokenProviding.h>
 
 @class FBSDKAuthenticationTokenClaims;
 @protocol FBSDKTokenCaching;
@@ -59,6 +59,14 @@ NS_SWIFT_NAME(AuthenticationToken)
  @warning INTERNAL - DO NOT USE
  */
 @property (class, nullable, nonatomic, copy) id<FBSDKTokenCaching> tokenCache;
+
+#pragma mark - Test methods
+
+#if DEBUG
+- (instancetype)initWithTokenString:(NSString *)tokenString
+                              nonce:(NSString *)nonce;
++ (void)resetCurrentAuthenticationTokenCache;
+#endif
 
 @end
 

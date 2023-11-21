@@ -17,20 +17,20 @@ RSYNC_PROTECT_TMP_FILES=(--filter "P .*.??????")
 variant_for_slice()
 {
   case "$1" in
-  "FBSDKCoreKit_Basics.xcframework/ios-arm64_x86_64-maccatalyst")
-    echo "maccatalyst"
-    ;;
-  "FBSDKCoreKit_Basics.xcframework/tvos-arm64_x86_64-simulator")
-    echo "simulator"
-    ;;
-  "FBSDKCoreKit_Basics.xcframework/ios-arm64")
-    echo ""
-    ;;
   "FBSDKCoreKit_Basics.xcframework/ios-arm64_x86_64-simulator")
     echo "simulator"
     ;;
   "FBSDKCoreKit_Basics.xcframework/tvos-arm64")
     echo ""
+    ;;
+  "FBSDKCoreKit_Basics.xcframework/ios-arm64")
+    echo ""
+    ;;
+  "FBSDKCoreKit_Basics.xcframework/ios-arm64_x86_64-maccatalyst")
+    echo "maccatalyst"
+    ;;
+  "FBSDKCoreKit_Basics.xcframework/tvos-arm64_x86_64-simulator")
+    echo "simulator"
     ;;
   esac
 }
@@ -38,20 +38,20 @@ variant_for_slice()
 archs_for_slice()
 {
   case "$1" in
-  "FBSDKCoreKit_Basics.xcframework/ios-arm64_x86_64-maccatalyst")
-    echo "arm64 x86_64"
-    ;;
-  "FBSDKCoreKit_Basics.xcframework/tvos-arm64_x86_64-simulator")
-    echo "arm64 x86_64"
-    ;;
-  "FBSDKCoreKit_Basics.xcframework/ios-arm64")
-    echo "arm64"
-    ;;
   "FBSDKCoreKit_Basics.xcframework/ios-arm64_x86_64-simulator")
     echo "arm64 x86_64"
     ;;
   "FBSDKCoreKit_Basics.xcframework/tvos-arm64")
     echo "arm64"
+    ;;
+  "FBSDKCoreKit_Basics.xcframework/ios-arm64")
+    echo "arm64"
+    ;;
+  "FBSDKCoreKit_Basics.xcframework/ios-arm64_x86_64-maccatalyst")
+    echo "arm64 x86_64"
+    ;;
+  "FBSDKCoreKit_Basics.xcframework/tvos-arm64_x86_64-simulator")
+    echo "arm64 x86_64"
     ;;
   esac
 }
@@ -135,5 +135,5 @@ install_xcframework() {
   echo "Copied $source to $destination"
 }
 
-install_xcframework "${PODS_ROOT}/FBSDKCoreKit_Basics/XCFrameworks/FBSDKCoreKit_Basics.xcframework" "FBSDKCoreKit_Basics" "framework" "ios-arm64_x86_64-maccatalyst" "ios-arm64" "ios-arm64_x86_64-simulator"
+install_xcframework "${PODS_ROOT}/FBSDKCoreKit_Basics/XCFrameworks/FBSDKCoreKit_Basics.xcframework" "FBSDKCoreKit_Basics" "framework" "ios-arm64_x86_64-simulator" "ios-arm64" "ios-arm64_x86_64-maccatalyst"
 
