@@ -49,6 +49,10 @@ class ApiWebService {
         return request(ApiRouter.getBookSearch(keySearch: keySearch))
     }
     
+    func putToFavorite(bookId: String, userId: String) -> Observable<[Data]> {
+        return request(ApiRouter.putToFavorite(bookId: bookId, userId: userId))
+    }
+    
     func downloadBook(book: Book, url: URL) -> Observable<Float> {
         let downloadInfo = self.genericDownload(id: book.id, url: url, completion: { success in
             if success {
