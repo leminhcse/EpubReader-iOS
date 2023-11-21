@@ -32,6 +32,14 @@ class BookCell: UICollectionViewCell {
     }
     
     private func setupView() {
+        var titleFont = UIFont.font(with: .h4)
+        var subtitleFont = UIFont.font(with: .h5)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            titleFont = UIFont.font(with: .h3)
+            subtitleFont = UIFont.font(with: .h4)
+        }
+        
         imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
@@ -43,14 +51,14 @@ class BookCell: UICollectionViewCell {
         titleLabel.backgroundColor = .clear
         titleLabel.numberOfLines = 2
         titleLabel.sizeToFit()
-        titleLabel.font = UIFont.font(with: .h4)
+        titleLabel.font = titleFont
         
         subtitleLabel = UILabel()
         subtitleLabel.textColor = UIColor.gray
         subtitleLabel.backgroundColor = .clear
         subtitleLabel.numberOfLines = 1
         subtitleLabel.sizeToFit()
-        subtitleLabel.font = UIFont.font(with: .h5)
+        subtitleLabel.font = subtitleFont
         
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)

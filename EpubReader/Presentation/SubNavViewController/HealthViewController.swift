@@ -1,5 +1,5 @@
 //
-//  CultureHistoryViewController.swift
+//  HealthViewController.swift
 //  EpubReader
 //
 //  Created by mac on 10/09/2022.
@@ -8,8 +8,8 @@
 import UIKit
 import RxSwift
 
-class CultureHistoryViewController: UIViewController {
-    
+class HealthViewController: UIViewController {
+
     private var collectionView: UICollectionView!
     private var flowLayout = UICollectionViewFlowLayout()
     private var bookViewModel = BookViewModel()
@@ -18,8 +18,8 @@ class CultureHistoryViewController: UIViewController {
     private let screenWidth = UIScreen.main.bounds.width - 24
     
     private let disposeBag = DisposeBag()
-    private var listSkillBook = [Book]()
-
+    private var listHealthBook = [Book]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,12 +27,14 @@ class CultureHistoryViewController: UIViewController {
                                                selector: #selector(reloadData(_:)),
                                                name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
                                                object: nil)
+        
         setupView()
         loadData()
     }
     
     private func setupView() {
         view.backgroundColor = UIColor.white
+        
         let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.size.height ?? 64
         let bottom = tabBarHeight + inset*9
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: flowLayout)
@@ -46,36 +48,48 @@ class CultureHistoryViewController: UIViewController {
     }
     
     private func loadData() {
-        bookViewModel.getBookList()
+        bookViewModel.getBookList() { success in
+            if success {
+                print("sucess")
+            } else {
+                if let data = PersistenceHelper.loadData(key: "Books") as? [Book] {
+                    self.listHealthBook = Utilities.shared.importBookList(books: data).filter({$0.type == "6"})
+                    self.collectionView.reloadData()
+                }
+            }
+        }
+
     }
     
     @objc func reloadData(_ notification: NSNotification) {
         if bookViewModel.listBook.count > 0 {
-            self.listSkillBook.removeAll()
-            self.listSkillBook = bookViewModel.listBook.filter({$0.type == "4"})
+            self.listHealthBook.removeAll()
+            self.listHealthBook = bookViewModel.listBook.filter({$0.type == "6"})
             self.collectionView.reloadData()
         }
     }
 }
 
-extension CultureHistoryViewController: UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+extension HealthViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 16
     }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.listSkillBook.count
+        return self.listHealthBook.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BookCell", for: indexPath) as! BookCell
-        let book = self.listSkillBook[indexPath.row]
+        let book = self.listHealthBook[indexPath.row]
         cell.configure(book: book)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let book = self.listSkillBook[indexPath.row]
+        let book = self.listHealthBook[indexPath.row]
         let viewController = BookDetailViewController(book: book)
         viewController.providesPresentationContextTransitionStyle = true
         viewController.definesPresentationContext = true
@@ -84,11 +98,8 @@ extension CultureHistoryViewController: UICollectionViewDataSource {
     }
 }
 
-extension CultureHistoryViewController: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+extension HealthViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if UIDevice.isPad {
             return CGSize(width: screenWidth / 3 - inset*2, height: (screenWidth / 2) + inset)
         }

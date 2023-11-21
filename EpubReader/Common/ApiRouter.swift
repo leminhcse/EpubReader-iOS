@@ -16,6 +16,7 @@ enum ApiRouter: URLRequestConvertible {
     case getAudioList(bookId: String)
     case getFavorites(userId: String)
     case getBookSearch(keySearch: String)
+    case putToFavorite(bookId: String, userId: String)
     
     //MARK: - URLRequestConvertible
     func asURLRequest() throws -> URLRequest {
@@ -41,7 +42,7 @@ enum ApiRouter: URLRequestConvertible {
         //Encoding
         let encoding: ParameterEncoding = {
             switch method {
-            case .get:
+            case .get, .put:
                 return URLEncoding.default
             default:
                 return JSONEncoding.default
@@ -65,6 +66,8 @@ enum ApiRouter: URLRequestConvertible {
             return .get
         case .getUser:
             return .get
+        case .putToFavorite:
+            return .put
         }
     }
     
@@ -82,6 +85,8 @@ enum ApiRouter: URLRequestConvertible {
             return "getBookSearch.php"
         case .getUser:
             return "getUser.php"
+        case .putToFavorite:
+            return "addToFavorite.php"
         }
     }
     
@@ -99,6 +104,8 @@ enum ApiRouter: URLRequestConvertible {
             return [Constants.Parameters.keySearch : keySearch]
         case .getUser(let email, let name):
             return [Constants.Parameters.email: email, Constants.Parameters.name: name]
+        case .putToFavorite(let bookId, let userId):
+            return [Constants.Parameters.bookId: bookId, Constants.Parameters.userId: userId]
         }
     }
 }

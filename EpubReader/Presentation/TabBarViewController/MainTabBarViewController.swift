@@ -55,13 +55,13 @@ class MainTabBarViewController: UITabBarController {
         favoritesVC.tabBarItem = favoriteBarItem
         let favoritesViewController = UINavigationController(rootViewController: favoritesVC)
         
-        let bookmarkVC = BookmarkViewController()
-        let bookMarkImage = UIImage(named: "reading_icon.png")
-        let bookmarkBarItem = UITabBarItem(title: "Đang đọc", image: bookMarkImage, tag: 3)
-        bookmarkVC.tabBarItem = bookmarkBarItem
-        let bookmarkViewController = UINavigationController(rootViewController: bookmarkVC)
+        let readingListVC = ReadingListViewController()
+        let readingImage = UIImage(named: "reading_icon.png")
+        let readingBarItem = UITabBarItem(title: "Đang đọc", image: readingImage, tag: 3)
+        readingListVC.tabBarItem = readingBarItem
+        let readingListViewController = UINavigationController(rootViewController: readingListVC)
         
-        self.viewControllers = [homeViewController, searchViewController, favoritesViewController, bookmarkViewController]
+        self.viewControllers = [homeViewController, searchViewController, favoritesViewController, readingListViewController]
     }
     
     // MARK: Audio Player Events

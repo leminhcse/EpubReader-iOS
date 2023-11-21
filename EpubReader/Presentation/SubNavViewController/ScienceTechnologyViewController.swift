@@ -1,15 +1,15 @@
 //
-//  LiteraryViewController.swift
+//  ScienceTechnologyViewController.swift
 //  EpubReader
 //
-//  Created by mac on 23/07/2022.
+//  Created by mac on 10/09/2022.
 //
 
 import UIKit
 import RxSwift
 
-class LiteraryViewController: UIViewController {
-
+class ScienceTechnologyViewController: UIViewController {
+    
     private var collectionView: UICollectionView!
     private var flowLayout = UICollectionViewFlowLayout()
     private var bookViewModel = BookViewModel()
@@ -18,8 +18,8 @@ class LiteraryViewController: UIViewController {
     private let screenWidth = UIScreen.main.bounds.width - 24
     
     private let disposeBag = DisposeBag()
-    private var listSkillBook = [Book]()
-    
+    private var listScienceBook = [Book]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -48,36 +48,47 @@ class LiteraryViewController: UIViewController {
     }
     
     private func loadData() {
-        bookViewModel.getBookList()
+        bookViewModel.getBookList() { success in
+            if success {
+                print("sucess")
+            } else {
+                if let data = PersistenceHelper.loadData(key: "Books") as? [Book] {
+                    self.listScienceBook = Utilities.shared.importBookList(books: data).filter({$0.type == "5"})
+                    self.collectionView.reloadData()
+                }
+            }
+        }
     }
     
     @objc func reloadData(_ notification: NSNotification) {
         if bookViewModel.listBook.count > 0 {
-            self.listSkillBook.removeAll()
-            self.listSkillBook = bookViewModel.listBook.filter({$0.type == "3"})
+            self.listScienceBook.removeAll()
+            self.listScienceBook = bookViewModel.listBook.filter({$0.type == "5"})
             self.collectionView.reloadData()
         }
     }
 }
 
-extension LiteraryViewController: UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+extension ScienceTechnologyViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 16
     }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.listSkillBook.count
+        return self.listScienceBook.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BookCell", for: indexPath) as! BookCell
-        let book = self.listSkillBook[indexPath.row]
+        let book = self.listScienceBook[indexPath.row]
         cell.configure(book: book)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let book = self.listSkillBook[indexPath.row]
+        let book = self.listScienceBook[indexPath.row]
         let viewController = BookDetailViewController(book: book)
         viewController.providesPresentationContextTransitionStyle = true
         viewController.definesPresentationContext = true
@@ -86,11 +97,8 @@ extension LiteraryViewController: UICollectionViewDataSource {
     }
 }
 
-extension LiteraryViewController: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+extension ScienceTechnologyViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if UIDevice.isPad {
             return CGSize(width: screenWidth / 3 - inset*2, height: (screenWidth / 2) + inset)
         }

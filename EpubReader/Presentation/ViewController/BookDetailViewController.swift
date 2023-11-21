@@ -8,6 +8,7 @@
 import UIKit
 import FolioReaderKit
 import Kingfisher
+import RxSwift
 
 class BookDetailViewController: UIViewController {
     
@@ -104,7 +105,12 @@ class BookDetailViewController: UIViewController {
         label.numberOfLines = 3
         label.textAlignment = .center
         label.sizeToFit()
-        label.font = UIFont.font(with: .h3)
+        label.textColor = .darkText
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            label.font = UIFont.font(with: .h2)
+        } else {
+            label.font = UIFont.font(with: .h3)
+        }
         return label
     }()
     
@@ -115,7 +121,11 @@ class BookDetailViewController: UIViewController {
         label.numberOfLines = 1
         label.textAlignment = .center
         label.sizeToFit()
-        label.font = UIFont.font(with: .h4)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            label.font = UIFont.font(with: .h3)
+        } else {
+            label.font = UIFont.font(with: .h4)
+        }
         return label
     }()
     
@@ -127,10 +137,9 @@ class BookDetailViewController: UIViewController {
         menuView.backgroundColor = UIColor.init(hex: "#f8f8fc").withAlphaComponent(0.2)
         menuView.layer.borderWidth = 0.2
         menuView.layer.cornerRadius = 12.0
-
-        menuView.setReview(hasIn: true, text: "231")
-        menuView.setChapters(chapters: "12")
-        menuView.setPages(pages: "321")
+        menuView.setPageNumber(hasIn: true, pageNumber: self.book.page)
+        menuView.setFavoriteNumber(favoriteNumber: self.getFavoriteNumber())
+        menuView.setReviewNumber(reviewNumber: "168")
         return menuView
     }()
     
@@ -139,7 +148,12 @@ class BookDetailViewController: UIViewController {
         label.backgroundColor = .clear
         label.numberOfLines = 0
         label.sizeToFit()
-        label.font = UIFont.font(with: .h5)
+        label.textColor = .darkText
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            label.font = UIFont.font(with: .h3)
+        } else {
+            label.font = UIFont.font(with: .h5)
+        }
         return label
     }()
     
@@ -157,6 +171,7 @@ class BookDetailViewController: UIViewController {
         downloadButton.setTitle("Tải Sách", for: .normal)
         downloadButton.titleLabel?.font = UIFont.font(with: .h4)
         downloadButton.layer.cornerRadius = 24
+        downloadButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
         if UIDevice.current.userInterfaceIdiom == .pad {
             downloadButton.titleLabel?.font = UIFont.font(with: .h2)
         }
@@ -168,8 +183,6 @@ class BookDetailViewController: UIViewController {
         favoriteButton.tintColor = UIColor.color(with: .background)
         favoriteButton.style(with: .favorite)
         favoriteButton.titleLabel?.font = UIFont.font(with: .h4)
-        favoriteButton.layer.cornerRadius = 30
-        favoriteButton.layer.borderWidth = 1
         favoriteButton.layer.borderColor = UIColor.gray.cgColor
         favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -178,36 +191,43 @@ class BookDetailViewController: UIViewController {
         return favoriteButton
     }()
     
-    private lazy var downloadAudioView: UIView = {
-        let downloadAudioView = UIView()
-        downloadAudioView.backgroundColor = .clear
-        return downloadAudioView
+    private lazy var favoriteButtonView: UIView = {
+        let favoriteButtonView = UIView()
+        favoriteButtonView.backgroundColor = UIColor.init(hex: "#ECECEC")
+        favoriteButtonView.layer.cornerRadius = 24
+        return favoriteButtonView
     }()
     
-    private lazy var miniAudioPlayerView: MiniAudioPlayerView = {
-        let miniAudioPlayerView = MiniAudioPlayerView()
-        miniAudioPlayerView.delegate = self
-        miniAudioPlayerView.isAccessoriesScreen = false
-        return miniAudioPlayerView
-    }()
-    
-    private lazy var audioFlowLayout: UICollectionViewFlowLayout = {
-        let audioFlowLayout = UICollectionViewFlowLayout()
-        audioFlowLayout.sectionInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
-        audioFlowLayout.scrollDirection = .vertical
-        return audioFlowLayout
-    }()
-
-    private lazy var audioCollectionView: UICollectionView = {
-        let audioCollectionView = UICollectionView(frame: .zero, collectionViewLayout: audioFlowLayout)
-        audioCollectionView.register(AudioResourceCell.self, forCellWithReuseIdentifier: "AudioResourceCell")
-        audioCollectionView.delegate = self
-        audioCollectionView.dataSource = self
-        audioCollectionView.isHidden = true
-        audioCollectionView.clipsToBounds = false
-        audioCollectionView.backgroundColor = .white
-        return audioCollectionView
-    }()
+//    private lazy var downloadAudioView: UIView = {
+//        let downloadAudioView = UIView()
+//        downloadAudioView.backgroundColor = .clear
+//        return downloadAudioView
+//    }()
+//
+//    private lazy var miniAudioPlayerView: MiniAudioPlayerView = {
+//        let miniAudioPlayerView = MiniAudioPlayerView()
+//        miniAudioPlayerView.delegate = self
+//        miniAudioPlayerView.isAccessoriesScreen = false
+//        return miniAudioPlayerView
+//    }()
+//
+//    private lazy var audioFlowLayout: UICollectionViewFlowLayout = {
+//        let audioFlowLayout = UICollectionViewFlowLayout()
+//        audioFlowLayout.sectionInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
+//        audioFlowLayout.scrollDirection = .vertical
+//        return audioFlowLayout
+//    }()
+//
+//    private lazy var audioCollectionView: UICollectionView = {
+//        let audioCollectionView = UICollectionView(frame: .zero, collectionViewLayout: audioFlowLayout)
+//        audioCollectionView.register(AudioResourceCell.self, forCellWithReuseIdentifier: "AudioResourceCell")
+//        audioCollectionView.delegate = self
+//        audioCollectionView.dataSource = self
+//        audioCollectionView.isHidden = true
+//        audioCollectionView.clipsToBounds = false
+//        audioCollectionView.backgroundColor = .white
+//        return audioCollectionView
+//    }()
     
     private lazy var textLabel: UILabel = {
         let textLabel = UILabel()
@@ -222,6 +242,16 @@ class BookDetailViewController: UIViewController {
         return textLabel
     }()
     
+    var progressDownloadView: ProgressBarView!
+    
+    var progressDownload: Float! {
+        didSet {
+            DispatchQueue.main.async {
+                self.progressDownloadView.progress = self.progressDownload
+            }
+        }
+    }
+    
     // MARK: - Local variables
     private let listTopic = ["Lời Tựa", "File Audio"]
     private let playerView = UIView()
@@ -234,6 +264,8 @@ class BookDetailViewController: UIViewController {
     private var bookViewModel = BookViewModel()
     private var selectedSegmentIndex: Int = 0
     private var currentPage: Int = 0
+    private var downloadObsDisposable: Disposable?
+    private let disposeBag = DisposeBag()
     
     private let segmentHeight = CGFloat(42)
     private let padding = CGFloat(12)
@@ -252,10 +284,6 @@ class BookDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(reloadData(_:)),
-                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
-                                               object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(reloadFavoriteStatus(_:)),
                                                name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification),
@@ -292,11 +320,20 @@ class BookDetailViewController: UIViewController {
         secondContentView.addSubview(menuBookView)
         secondContentView.addSubview(summaryText)
 
+        favoriteButtonView.addSubview(favoriteButton)
         bottomView.addSubview(downloadButton)
-        bottomView.addSubview(favoriteButton)
+        bottomView.addSubview(favoriteButtonView)
         
         self.view.addSubview(scrollView)
         self.view.addSubview(bottomView)
+        
+        progressDownloadView = ProgressBarView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        progressDownloadView.tintColor = UIColor.color(with: .darkColor)
+//        let gesture = UITapGestureRecognizer(target: self, action: #selector(downloadAudioClick))
+//        progressDownloadView.addGestureRecognizer(gesture)
+        progressDownloadView.isHidden = false
+        progressDownloadView.status = .inProgress
+        downloadButton.addSubview(progressDownloadView)
     }
     
     private func setupConstraint() {
@@ -308,9 +345,16 @@ class BookDetailViewController: UIViewController {
         let marginTop: CGFloat = 16
         let padding: CGFloat = 24
         
-        scrollView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-            make.top.equalToSuperview().offset(-top)
+        if book.description == "" {
+            scrollView.snp.makeConstraints { (make) in
+                make.edges.equalToSuperview()
+                make.top.equalToSuperview().offset(top)
+            }
+        } else {
+            scrollView.snp.makeConstraints { (make) in
+                make.edges.equalToSuperview()
+                make.top.equalToSuperview().offset(-top)
+            }
         }
         
         contentView.snp.makeConstraints { (make) in
@@ -318,7 +362,10 @@ class BookDetailViewController: UIViewController {
             make.top.bottom.equalToSuperview()
         }
         
-        let firstContentHeight = frameHeight/2 + 64
+        var firstContentHeight = frameHeight/2 + padding*2.5
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            firstContentHeight = frameHeight/2 + padding*4
+        }
         firstContentView.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
             make.size.equalTo(CGSize(width: frameWidth, height: firstContentHeight))
@@ -346,10 +393,14 @@ class BookDetailViewController: UIViewController {
             make.size.equalToSuperview()
         }
         
+        var bookImageHeight = bookViewHeight/2 + 32
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            bookImageHeight = bookViewHeight/2 + padding*6
+        }
         bookImage.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.top.equalTo(topButtonView.snp.bottom)
-            make.size.equalTo(CGSize(width: frameWidth/3 + padding*2, height: bookViewHeight/2 + 32))
+            make.top.equalTo(topButtonView.snp.bottom).offset(marginTop)
+            make.size.equalTo(CGSize(width: frameWidth/3 + padding*2, height: bookImageHeight))
         }
         
         // Book Description
@@ -364,7 +415,7 @@ class BookDetailViewController: UIViewController {
         bookComposer.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.top.equalTo(bookTitle.snp.bottom).offset(marginTop/2)
-            make.size.equalTo(CGSize(width: frameWidth/2, height: bookCompose))
+            make.size.equalTo(CGSize(width: frameWidth - 128, height: bookCompose))
         }
         
         secondContentView.snp.makeConstraints { (make) in
@@ -384,16 +435,28 @@ class BookDetailViewController: UIViewController {
             make.leading.equalTo(padding)
         }
 
-        favoriteButton.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(padding/2+4)
-            make.leading.equalTo(downloadButton.snp.trailing).offset(24)
-            make.size.equalTo(CGSize(width: padding*2-8, height: padding*2-8))
+        favoriteButtonView.snp.makeConstraints{ (make) in
+            make.top.equalToSuperview().offset(padding/2)
+            make.leading.equalTo(downloadButton.snp.trailing).offset(padding - 8)
+            make.size.equalTo(CGSize(width: padding*2, height: padding*2))
+        }
+
+        favoriteButton.snp.makeConstraints{ (make) in
+            make.size.equalToSuperview().inset(2)
+            make.leading.equalToSuperview().inset(2)
+            make.top.equalToSuperview().inset(2)
         }
         
+        var menuBookHeight: CGFloat = padding*3
+        var progressDownloadPadding: CGFloat = -padding*2
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            menuBookHeight = menuBookHeight + marginTop
+            progressDownloadPadding = -padding*3
+        }
         menuBookView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(24)
-            make.size.equalTo(CGSize(width: frameWidth - padding*2, height: padding*3))
+            make.top.equalToSuperview().offset(padding)
+            make.size.equalTo(CGSize(width: frameWidth - padding*2, height: menuBookHeight))
         }
         
         summaryText.snp.makeConstraints { (make) in
@@ -402,13 +465,19 @@ class BookDetailViewController: UIViewController {
         }
         
         let summaryHeight: CGFloat = Utils.estimatedHeightOfLabel(text: book.description, font: summaryText.font, width: frameWidth - padding)
-        let height = summaryHeight + frameHeight - top*2 - marginTop
+        let height = summaryHeight + frameHeight - top*3 - marginTop
         scrollView.contentSize = CGSize(width: frameWidth, height: height)
+        
+        progressDownloadView.snp.makeConstraints { (make) in
+            make.size.equalTo(CGSize(width: 24, height: 24))
+            make.centerY.equalToSuperview()
+            make.centerX.equalToSuperview().offset(progressDownloadPadding)
+        }
     }
     
-    private func resetContrainst() {
-        audioCollectionView.snp.removeConstraints()
-    }
+//    private func resetContrainst() {
+//        audioCollectionView.snp.removeConstraints()
+//    }
     
     // MARK: - Setup and Load data
     private func setupData() {
@@ -429,26 +498,61 @@ class BookDetailViewController: UIViewController {
         bookComposer.text = self.book.composer
         
         setStatusButton()
-//        loadAudioData()
+//      loadAudioData()
         audioViewModel.getAudioList(bookId: book.id)
         summaryText.text = book.description
     }
     
     private func setStatusButton() {
+        if isDownloadedBook() {
+            downloadButton.setTitle("Đọc Sách", for: .normal)
+            progressDownloadView.isHidden = true
+        } else {
+            downloadButton.setTitle("Tải Sách", for: .normal)
+            progressDownloadView.status = .notDownloaded
+        }
+        
+        var imageName = "fi_heart.png"
+        if Utilities.shared.isFavorited(bookId: book.id) {
+            imageName = "fi_heart_fill.png"
+        }
+        let uiImage = UIImage.init(named: imageName)?.withRenderingMode(.alwaysTemplate)
+        favoriteButton.setImage(uiImage, for: .normal)
+    }
+    
+    private func isDownloadedBook() -> Bool {
         if let bookUrl = URL(string: book.epub_source) {
             let fileName = bookUrl.lastPathComponent
             let path: String = Utilities.shared.getFileExist(fileName: fileName)
             if path != "" {
-                downloadButton.setTitle("Đọc Sách", for: .normal)
+                return true
             } else {
-                downloadButton.setTitle("Tải Sách", for: .normal)
+                return false
             }
         }
+        return false
+    }
+    
+    private func subscribeDownloadProgress(downloadObs: BehaviorSubject<Float>) {
+        downloadObsDisposable?.dispose()
+        downloadObsDisposable = downloadObs.subscribe(onNext: { [weak self] progress in
+            print("download progress is = \(progress)")
+            self?.progressDownload = progress
+        }, onError: { [weak self] _ in
+            self?.configureDownloadView()
+            Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
+        }, onCompleted: { [weak self] in
+            self?.configureDownloadView()
+        })
+        downloadObsDisposable?.disposed(by: self.disposeBag)
+    }
+    
+    private func configureDownloadView() {
+        guard let progressDownloadView = progressDownloadView else {
+            return
+        }
         
-//        var imageName = "fi_heart.png"
-//        if Utilities.shared.isFavorited(bookId: book.id) {
-//            imageName = "fi_heart_fill.png"
-//        }
+        self.setStatusButton()
     }
     
     private func readerConfiguration(forEpub epub: Epub) -> FolioReaderConfig {
@@ -477,17 +581,27 @@ class BookDetailViewController: UIViewController {
         folioReader.presentReader(parentViewController: self, withEpubPath: path, andConfig: config)
     }
     
-    //MARK: - @objc Attributes
-    @objc func reloadData(_ notification: NSNotification) {
-        if EpubReaderHelper.shared.listAudio.count > 0 {
-            self.listAudio.removeAll()
-            self.listAudio = EpubReaderHelper.shared.listAudio
-            self.audioCollectionView.reloadData()
-            self.textLabel.isHidden = true
-        } else {
-            self.textLabel.isHidden = false
+    private func getFavoriteNumber() -> Int {
+        var count = 100
+        for item in EpubReaderHelper.shared.favoritedBooks {
+            if item.id == self.book.id {
+                count += 1
+            }
         }
+        return count
     }
+    
+    //MARK: - @objc Attributes
+//    @objc func reloadData(_ notification: NSNotification) {
+//        if EpubReaderHelper.shared.listAudio.count > 0 {
+//            self.listAudio.removeAll()
+//            self.listAudio = EpubReaderHelper.shared.listAudio
+//            self.audioCollectionView.reloadData()
+//            self.textLabel.isHidden = true
+//        } else {
+//            self.textLabel.isHidden = false
+//        }
+//    }
     
     @objc func reloadFavoriteStatus(_ notification: NSNotification) {
         setStatusButton()
@@ -544,95 +658,83 @@ class BookDetailViewController: UIViewController {
                     Utilities.shared.noConnectionAlert()
                     return
                 }
+                
                 if !book.epub_source.contains("http") {
                     Utilities.shared.showAlertDialog(title: "", message: "Không thể tải, đã xảy ra lỗi!")
                 } else {
-                    downloadButton.setTitle("Đang tải ... ", for: .normal)
-                    ApiWebService.shared.downloadFile(url: url) { success in
-                        print("download")
-                        if success {
-                            DispatchQueue.main.async {
-                                BannerNotification.downloadSuccessful(title: self.book.title).present()
-                                EpubReaderHelper.shared.downloadBooks.append(self.book)
-                                PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
-                                self.setStatusButton()
-                            }
-                        } else {
-                            DispatchQueue.main.async {
-                                Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
-                                self.setStatusButton()
-                            }
-                        }
-                    }
+                    downloadButton.setTitle(" Đang tải..", for: .normal)
+                    let obs = ApiWebService.shared.downloadBook(book: self.book, url: url)
+                    progressDownloadView.status = .inProgress
+                    subscribeDownloadProgress(downloadObs: obs as! BehaviorSubject<Float>)
                 }
             }
         } else {
-            Utilities.shared.showAlertDialog(title: "", message: "Sorry, this book is comming soon")
+            Utilities.shared.showAlertDialog(title: "", message: "Xin lỗi, cuốn sách này sẽ có trên kệ sau này")
         }
     }
     
-    func handleShowMiniPlayer() {
-        if AudioPlayer.shared.sound != nil {
-            playerView.isHidden = false
-            miniAudioPlayerView.urlThumnail = AudioPlayer.shared.imgThumbnail
-            miniAudioPlayerView.statusPlay = AudioPlayer.shared.isPaused
-            miniAudioPlayerView.setNeedsLayout()
-        } else {
-            playerView.isHidden = true
-        }
-    }
+//    func handleShowMiniPlayer() {
+//        if AudioPlayer.shared.sound != nil {
+//            playerView.isHidden = false
+//            miniAudioPlayerView.urlThumnail = AudioPlayer.shared.imgThumbnail
+//            miniAudioPlayerView.statusPlay = AudioPlayer.shared.isPaused
+//            miniAudioPlayerView.setNeedsLayout()
+//        } else {
+//            playerView.isHidden = true
+//        }
+//    }
 }
 
 //MARK: - Extension with MiniAudioPlayerViewDelegate -
-extension BookDetailViewController: MiniAudioPlayerViewDelegate {
-    func removeController() {
-        AudioPlayer.shared.sound = nil
-        handleShowMiniPlayer()
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
-    }
-    
-    func showFullScreenAudioPlayerFromMiniPlayer() {
-        let viewController = FullScreenAudioPlayerViewController()
-        DispatchQueue.main.async {
-            self.present(viewController, animated: true, completion: nil)
-        }
-    }
-}
+//extension BookDetailViewController: MiniAudioPlayerViewDelegate {
+//    func removeController() {
+//        AudioPlayer.shared.sound = nil
+//        handleShowMiniPlayer()
+//        view.setNeedsLayout()
+//        view.layoutIfNeeded()
+//    }
+//
+//    func showFullScreenAudioPlayerFromMiniPlayer() {
+//        let viewController = FullScreenAudioPlayerViewController()
+//        DispatchQueue.main.async {
+//            self.present(viewController, animated: true, completion: nil)
+//        }
+//    }
+//}
 
 //MARK: - Extension with UICollectionView
-extension BookDetailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.listAudio.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AudioResourceCell", for: indexPath) as! AudioResourceCell
-        let audio = self.listAudio[indexPath.row]
-        cell.configure(audio: audio)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let audio = self.listAudio[indexPath.row]
-        if audio.fileAudio != "" {
-            Utilities.shared.openAudioPlayer(audio: audio, thumbnail: book.thumbnail)
-            Utilities.shared.showFullScreenAudio()
-            self.handleShowMiniPlayer()
-        } else {
-            Utilities.shared.showAlertDialog(title: "", message: "Sorry, this audio is comming soon")
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return AudioResourceCell.sizeForResource(audio: self.listAudio[indexPath.row],
-                                            cellWidth: collectionView.bounds.width,
-                                            cell: audioCollectionView.cellForItem(at: indexPath) as? AudioResourceCell)
-    }
-}
+//extension BookDetailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+//    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        return 1
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return self.listAudio.count
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AudioResourceCell", for: indexPath) as! AudioResourceCell
+//        let audio = self.listAudio[indexPath.row]
+//        cell.configure(audio: audio)
+//        return cell
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let audio = self.listAudio[indexPath.row]
+//        if audio.fileAudio != "" {
+//            Utilities.shared.openAudioPlayer(audio: audio, thumbnail: book.thumbnail)
+//            Utilities.shared.showFullScreenAudio()
+//            self.handleShowMiniPlayer()
+//        } else {
+//            Utilities.shared.showAlertDialog(title: "", message: "Sorry, this audio is comming soon")
+//        }
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView,
+//                        layout collectionViewLayout: UICollectionViewLayout,
+//                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        return AudioResourceCell.sizeForResource(audio: self.listAudio[indexPath.row],
+//                                            cellWidth: collectionView.bounds.width,
+//                                            cell: audioCollectionView.cellForItem(at: indexPath) as? AudioResourceCell)
+//    }
+//}

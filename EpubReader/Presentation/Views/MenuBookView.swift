@@ -12,56 +12,73 @@ class MenuBookView: UIView {
 
     fileprivate lazy var contentView: UIStackView = {
         [unowned self] in
-        let stackView = UIStackView()
-        stackView.axis = NSLayoutConstraint.Axis.horizontal
-        stackView.distribution = .fillEqually
-        stackView.alignment = .center
-        return stackView
-    }()
-
-    public lazy var reviewView: UIView = {
-        [unowned self] in
-        let view: UIView = UIView()
-        view.heightAnchor.constraint(equalToConstant: self.bounds.size.height).isActive = true
-        view.widthAnchor.constraint(equalToConstant: self.bounds.size.width/3).isActive = true
-        return view
-    }()
-
-    public lazy var chapterView: UIView = {
-        [unowned self] in
-        let view: UIView = UIView()
-        view.heightAnchor.constraint(equalToConstant: self.bounds.size.height).isActive = true
-        view.widthAnchor.constraint(equalToConstant: self.bounds.size.width/3).isActive = true
-        return view
+        let contentView = UIStackView()
+        contentView.axis = NSLayoutConstraint.Axis.horizontal
+        contentView.distribution = .fillEqually
+        contentView.alignment = .center
+        return contentView
     }()
 
     public lazy var pageView: UIView = {
         [unowned self] in
-        let view: UIView = UIView()
-        view.heightAnchor.constraint(equalToConstant: self.bounds.size.height).isActive = true
-        view.widthAnchor.constraint(equalToConstant: self.bounds.size.width/3).isActive = true
+        let view = UIView()
+        view.snp.makeConstraints { make in
+            make.height.equalTo(self.bounds.size.height)
+            make.width.equalTo(self.bounds.size.width/3 - 8)
+        }
         return view
     }()
 
-    public lazy var btnReview: ActionButton = {
+    public lazy var ratingView: UIView = {
         [unowned self] in
-        let btnReview: ActionButton = ActionButton()
-        btnReview.btnAction.isEnabled = false
-        return btnReview
+        let view = UIView()
+        view.snp.makeConstraints { make in
+            make.height.equalTo(self.bounds.size.height)
+            make.width.equalTo(self.bounds.size.width/3 - 8)
+        }
+        return view
     }()
 
-    public lazy var btnChapter: ActionButton = {
+    public lazy var reviewView: UIView = {
         [unowned self] in
-        let btnChapter: ActionButton = ActionButton()
-        btnChapter.btnAction.isEnabled = false
-        return btnChapter
+        let view = UIView()
+        view.snp.makeConstraints { make in
+            make.height.equalTo(self.bounds.size.height)
+            make.width.equalTo(self.bounds.size.width/3 - 8)
+        }
+        return view
+    }()
+    
+    public lazy var verticalLine1: UIView = {
+        [unowned self] in
+        let verticalLine1 = UIView()
+        verticalLine1.backgroundColor = UIColor.gray
+        return verticalLine1
+    }()
+    
+    public lazy var verticalLine2: UIView = {
+        [unowned self] in
+        let verticalLine2 = UIView()
+        verticalLine2.backgroundColor = UIColor.gray
+        return verticalLine2
     }()
 
-    public lazy var btnPage: ActionButton = {
+    public lazy var lbPages: BookDetailView = {
         [unowned self] in
-        let btnPage: ActionButton = ActionButton()
-        btnPage.btnAction.isEnabled = false
-        return btnPage
+        let lbPages = BookDetailView()
+        return lbPages
+    }()
+    
+    public lazy var lbRating: BookDetailView = {
+        [unowned self] in
+        let lbRating = BookDetailView()
+        return lbRating
+    }()
+    
+    public lazy var lbReview: BookDetailView = {
+        [unowned self] in
+        let lbReview = BookDetailView()
+        return lbReview
     }()
 
     // MARK: - Constructors
@@ -76,66 +93,89 @@ class MenuBookView: UIView {
         super.init(coder: aDecoder)
     }
 
+    // MARK: - UI Update
     private func setupUI() {
         self.addSubview(self.contentView)
         
-        self.contentView.addArrangedSubview(reviewView)
-        self.contentView.addArrangedSubview(chapterView)
         self.contentView.addArrangedSubview(pageView)
+        self.contentView.addArrangedSubview(ratingView)
+        self.contentView.addArrangedSubview(reviewView)
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
 
-        self.reviewView.addSubview(self.btnReview)
-        self.chapterView.addSubview(self.btnChapter)
-        self.pageView.addSubview(self.btnPage)
+        self.pageView.addSubview(self.lbPages)
+        self.ratingView.addSubview(self.lbRating)
+        self.reviewView.addSubview(self.lbReview)
     }
 
-    fileprivate func setupConstraint() {
+    private func setupConstraint() {
         self.contentView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
         }
 
-        self.btnReview.snp.makeConstraints { make in
+        self.lbPages.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        self.lbRating.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        self.lbReview.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        self.btnChapter.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        self.contentView.addSubview(verticalLine1)
+        self.contentView.addSubview(verticalLine2)
+
+        let padding: CGFloat = 12
+        let verticalHeight = self.frame.height - padding*3
+        var top: CGFloat = 18
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            top = 24
         }
-
-        self.btnPage.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        
+        verticalLine1.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(top)
+            make.leading.equalTo(self.lbPages.snp.trailing).offset(-padding)
+            make.trailing.equalTo(self.lbRating.snp.leading)
+            make.size.equalTo(CGSize(width: 0.5, height: verticalHeight))
+        }
+        
+        verticalLine2.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(top)
+            make.leading.equalTo(self.lbRating.snp.trailing).offset(top/2)
+            make.trailing.equalTo(self.lbReview.snp.leading)
+            make.size.equalTo(CGSize(width: 0.5, height: verticalHeight))
         }
     }
 
-    func setReview(hasIn: Bool, text: String) {
-        self.btnReview.imgView.tintColor = UIColor.color(with: .background)
-        let summary = text + " lượt xem"
-        setTitle(self.btnReview.lbDescription, summary)
-        let tintableImage = UIImage(named: "ic_view.png")?.withRenderingMode(.alwaysTemplate)
-        self.btnReview.imgView.image = tintableImage
-    }
-
-    func setChapters(chapters: String) {
-        self.btnChapter.imgView.tintColor = UIColor.color(with: .background)
-        let title = chapters + " Chương"
-        let tintableImage = UIImage(named: "ic_chapters.png")?.withRenderingMode(.alwaysTemplate)
-
-        setTitle(self.btnChapter.lbDescription, title)
-        self.btnChapter.imgView.image = tintableImage
-    }
-
-    func setPages(pages: String) {
-        self.btnPage.imgView.tintColor = UIColor.color(with: .background)
-        let title = pages + " Trang"
+    // MARK: - Events
+    func setPageNumber(hasIn: Bool, pageNumber: String?) {
+        if pageNumber == "" {
+            self.lbPages.lbTitle.text = "N/A"
+        } else {
+            self.lbPages.lbTitle.text = pageNumber
+        }
+        self.lbPages.lbDescription.text = "Trang"
         let tintableImage = UIImage(named: "ic_pages.png")?.withRenderingMode(.alwaysTemplate)
-
-        setTitle(self.btnPage.lbDescription, title)
-        self.btnPage.imgView.image = tintableImage
+        self.lbPages.imgView.tintColor = UIColor.color(with: .background)
+        self.lbPages.imgView.image = tintableImage
     }
 
-    private func setTitle(_ label: UILabel, _ title: String) {
-        label.text = title
-        label.addCharacterSpacing()
+    func setFavoriteNumber(favoriteNumber: Int) {
+        self.lbRating.lbTitle.text = String(describing: favoriteNumber)
+        self.lbRating.lbDescription.text = "Yêu thích"
+        let tintableImage = UIImage(named: "fi_heart.png")?.withRenderingMode(.alwaysTemplate)
+        self.lbRating.imgView.tintColor = UIColor.systemPink
+        self.lbRating.imgView.image = tintableImage
+    }
+
+    func setReviewNumber(reviewNumber: String) {
+        self.lbReview.lbTitle.text = reviewNumber
+        self.lbReview.lbDescription.text = "Lượt đọc"
+        let tintableImage = UIImage(named: "ic_view.png")?.withRenderingMode(.alwaysTemplate)
+        self.lbReview.imgView.tintColor = UIColor.color(with: .background)
+        self.lbReview.imgView.image = tintableImage
     }
 }

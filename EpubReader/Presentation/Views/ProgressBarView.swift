@@ -62,7 +62,7 @@ class ProgressBarView: UIView {
     }
     
     func willSetStatus(value: Constants.StatusDownloadAudio) {
-        button.tintColor = tintColor
+        button.tintColor = .white
         switch value {
         case .finish:
             viewProgress.isHidden = true
@@ -98,14 +98,14 @@ class ProgressBarView: UIView {
         shapeLayer.path = bgPath.cgPath
         shapeLayer.lineWidth = 2
         shapeLayer.fillColor = nil
-        shapeLayer.strokeColor = UIColor.lightGray.cgColor
+        shapeLayer.strokeColor = UIColor.white.cgColor
         
         progressLayer = CAShapeLayer()
         progressLayer.path = bgPath.cgPath
         progressLayer.lineCap = CAShapeLayerLineCap.round
         progressLayer.lineWidth = 2
         progressLayer.fillColor = nil
-        progressLayer.strokeColor = UIColor.color(with: .hightlight).cgColor
+        progressLayer.strokeColor = UIColor.white.cgColor
         progressLayer.strokeEnd = 0.0
         
         button = UIImageView()
@@ -126,5 +126,4 @@ class ProgressBarView: UIView {
         self.addSubview(viewProgress)
         self.addSubview(button)
     }
-
 }

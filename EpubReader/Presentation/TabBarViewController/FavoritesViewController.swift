@@ -1,16 +1,18 @@
 //
-//  BookmarkViewController.swift
+//  FavoritesViewController.swift
 //  EpubReader
 //
 //  Created by MacBook on 5/23/22.
 //
 
+import Foundation
 import UIKit
 import SnapKit
 
-class BookmarkViewController: BaseViewController {
+class FavoritesViewController: BaseViewController {
     
-    private var readingBook = [ReadingBook]()
+    // MARK: - Local variables
+    private var favoritedBooks = [Book]()
     private var bookViewModel = BookViewModel()
     
     // MARK: - UI Controls
@@ -19,7 +21,7 @@ class BookmarkViewController: BaseViewController {
         label.center = CGPoint(x: 160, y: 285)
         label.textColor = UIColor.color(with: .background)
         label.textAlignment = .center
-        label.text = "Bạn hiện chưa đọc bất kỳ cuốn sách nào"
+        label.text = "Bạn chưa có cuốn sách yêu thích nào"
         label.isHidden = false
         if UIDevice.current.userInterfaceIdiom == .pad {
             label.font = UIFont.font(with: .h1)
@@ -49,19 +51,21 @@ class BookmarkViewController: BaseViewController {
         super.viewDidLoad()
         
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(reloadData),
-                                               name: NSNotification.Name(rawValue: EpubReaderHelper.GetReadingBookSuccessNotification),
+                                               selector: #selector(reloadData(_:)),
+                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(reloadData),
-                                               name: NSNotification.Name(rawValue: EpubReaderHelper.GetReadingBookFailedNotification),
+                                               selector: #selector(reloadData(_:)),
+                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteSuccessfullyNotification),
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(reloadData(_:)),
+                                               name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadFavoriteFailedNotification),
+                                               object: nil)
+        
         setupUI()
+        setupConstranst()
         loadData()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
     }
     
     override func viewDidLayoutSubviews() {
@@ -75,8 +79,6 @@ class BookmarkViewController: BaseViewController {
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(label)
         self.view.addSubview(bookTableView)
-        
-        setupConstranst()
     }
     
     private func setupConstranst() {
@@ -87,20 +89,23 @@ class BookmarkViewController: BaseViewController {
         
         bookTableView.snp.makeConstraints{ (make) in
             make.leading.equalToSuperview()
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().offset(inset)
             make.size.equalTo(CGSize(width: frameWidth, height: frameHeight))
         }
     }
     
+    // MARK: Handle favorite data
     private func loadData() {
-        bookViewModel.getReadingBook()
+        if let user = EpubReaderHelper.shared.user {
+            bookViewModel.getFavoritesBook(userId: user.id)
+        }
     }
     
-    @objc func reloadData() {
-        let count = EpubReaderHelper.shared.readingBook.count
+    @objc func reloadData(_ notification: NSNotification) {
+        let count = EpubReaderHelper.shared.favoritedBooks.count
         if count > 0 {
-            self.readingBook.removeAll()
-            self.readingBook = EpubReaderHelper.shared.readingBook
+            self.favoritedBooks.removeAll()
+            self.favoritedBooks = EpubReaderHelper.shared.favoritedBooks
             self.bookTableView.reloadData()
             self.label.isHidden = true
             self.bookTableView.isHidden = false
@@ -112,9 +117,9 @@ class BookmarkViewController: BaseViewController {
 }
 
 //MARK: - Extension with UITableView
-extension BookmarkViewController: UITableViewDelegate, UITableViewDataSource {
+extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.readingBook.count
+        return self.favoritedBooks.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -127,22 +132,18 @@ extension BookmarkViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookTableViewCell", for: indexPath) as! BookTableViewCell
-        let readingBook = self.readingBook[indexPath.row]
+        let book = self.favoritedBooks[indexPath.row]
         cell.selectionStyle = .none
-        if let book = readingBook.book {
-            cell.configure(book: book, pageNumber: readingBook.currentPage)
-        }
+        cell.configure(book: book)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let readingBook = self.readingBook[indexPath.row]
-        if let book = readingBook.book {
-            let viewController = BookDetailViewController(book: book)
-            viewController.providesPresentationContextTransitionStyle = true
-            viewController.definesPresentationContext = true
-            viewController.modalPresentationStyle = .overCurrentContext
-            tabBarController?.present(viewController, animated: true)
-        }
+        let book = self.favoritedBooks[indexPath.row]
+        let viewController = BookDetailViewController(book: book)
+        viewController.providesPresentationContextTransitionStyle = true
+        viewController.definesPresentationContext = true
+        viewController.modalPresentationStyle = .overCurrentContext
+        tabBarController?.present(viewController, animated: true)
     }
 }

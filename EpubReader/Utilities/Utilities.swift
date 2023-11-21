@@ -29,7 +29,8 @@ class Utilities: NSObject {
                                  thumbnail: item.thumbnail,
                                  year: item.year,
                                  type: item.type,
-                                 epub_source: item.epub_source))
+                                 epub_source: item.epub_source,
+                                 page: item.page))
         }
         return listBook
     }
@@ -238,20 +239,7 @@ class Utilities: NSObject {
                     if !book.epub_source.contains("http") {
                         Utilities.shared.showAlertDialog(title: "", message: "Không thể tải, đã xảy ra lỗi!")
                     } else {
-                        ApiWebService.shared.downloadFile(url: bookUrl) { success in
-                            print("download")
-                            if success {
-                                DispatchQueue.main.async {
-                                    BannerNotification.downloadSuccessful(title: book.title).present()
-                                    EpubReaderHelper.shared.downloadBooks.append(book)
-                                    PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
-                                }
-                            } else {
-                                DispatchQueue.main.async {
-                                    Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
-                                }
-                            }
-                        }
+                        
                     }
                 }
                 alert.addAction(downloadAction)

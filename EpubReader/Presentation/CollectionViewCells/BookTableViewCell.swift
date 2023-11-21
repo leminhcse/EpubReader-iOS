@@ -32,7 +32,7 @@ class BookTableViewCell: UITableViewCell {
         titleLabel.textColor = .darkText
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.5
-        titleLabel.numberOfLines = 1
+        titleLabel.numberOfLines = 2
         return titleLabel
     }()
     
@@ -67,13 +67,21 @@ class BookTableViewCell: UITableViewCell {
         return pageLabel
     }()
     
-    private lazy var moreButton: UIButton = {
-        let moreButton = UIButton()
-        moreButton.style(with: .more)
-        moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
-        moreButton.tintColor = UIColor.darkText
-        moreButton.isHidden = false
-        return moreButton
+    private lazy var favoriteButton: UIButton = {
+        let favoriteButton = UIButton()
+        favoriteButton.style(with: .favorite)
+        favoriteButton.tintColor = UIColor.color(with: .background)
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
+        return favoriteButton
+    }()
+    
+    private lazy var deleteButton: UIButton = {
+        let deleteButton = UIButton()
+        deleteButton.style(with: .delete)
+        deleteButton.tintColor = UIColor.color(with: .background)
+        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        deleteButton.isHidden = true
+        return deleteButton
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -95,58 +103,66 @@ class BookTableViewCell: UITableViewCell {
         self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(composerLabel)
         self.contentView.addSubview(pageLabel)
-        self.contentView.addSubview(moreButton)
+        self.contentView.addSubview(favoriteButton)
+        self.contentView.addSubview(deleteButton)
     }
     
     private func setupConstraints() {
         let width = self.frame.size.width
         let height = self.frame.size.height
+        let padding: CGFloat = 12
         
-        var imageWidth = width/5 + 24
-        var imageHeight = height*2 + 48
+        var imageWidth = width/5 + padding*2
+        var imageHeight = height*2 + padding*4
         var titleWidth = width - imageWidth
         var titleHeight = height/3
-        var titleY = CGFloat(36)
+        var titleY = CGFloat(24)
         
         if UIDevice.current.userInterfaceIdiom == .pad {
-            imageWidth = width/5 + 96
-            imageHeight = height*2 + 144
+            imageWidth = width/5 + padding*8
+            imageHeight = height*2 + padding*12
             titleWidth = titleWidth*2
             titleHeight = titleHeight*1.5
             titleY = CGFloat(58)
         }
         
         image.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview().offset(12)
+            make.leading.equalToSuperview().offset(padding)
             make.size.equalTo(CGSize(width: imageWidth, height: imageHeight))
         }
         
         titleLabel.snp.makeConstraints { (make) in
-            make.leading.equalTo(image.snp.trailing).offset(12)
-            make.size.equalTo(CGSize(width: titleWidth, height: titleHeight*2))
+            make.leading.equalTo(image.snp.trailing).offset(padding)
+            make.size.equalTo(CGSize(width: titleWidth - padding, height: titleHeight*3))
             make.top.equalToSuperview().offset(titleY)
         }
         
         composerLabel.snp.makeConstraints { (make) in
-            make.leading.equalTo(image.snp.trailing).offset(12)
+            make.leading.equalTo(image.snp.trailing).offset(padding)
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.size.equalTo(CGSize(width: titleWidth, height: titleHeight))
         }
         
         pageLabel.snp.makeConstraints { (make) in
-            make.leading.equalTo(image.snp.trailing).offset(12)
+            make.leading.equalTo(image.snp.trailing).offset(padding)
             make.top.equalTo(composerLabel.snp.bottom).offset(8)
             make.size.equalTo(CGSize(width: titleWidth/2, height: titleHeight + 8))
         }
         
-        moreButton.snp.makeConstraints { (make) in
-            make.trailing.equalToSuperview().inset(24)
+        favoriteButton.snp.makeConstraints { (make) in
+            make.trailing.equalToSuperview().inset(padding*2)
             make.centerY.equalToSuperview()
-            make.size.equalTo(CGSize(width: 32, height: titleHeight + 12))
+            make.size.equalTo(CGSize(width: 48, height: 48))
+        }
+        
+        deleteButton.snp.makeConstraints { (make) in
+            make.trailing.equalToSuperview().inset(padding*2)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(CGSize(width: 48, height: 48))
         }
     }
     
-    public func configure(book: Book, pageNumber: Int? = nil) {
+    public func configure(book: Book, pageNumber: Int? = nil, isCanDelete: Bool? = nil) {
         self.book = book
         DispatchQueue.main.async {
             if let url = URL(string: book.thumbnail) {
@@ -165,6 +181,21 @@ class BookTableViewCell: UITableViewCell {
         if pageNumber != nil {
             pageLabel.isHidden = false
             pageLabel.text = "Đã đọc \(pageNumber ?? 1) trang"
+        }
+        
+        if isCanDelete != nil && isCanDelete == true {
+            favoriteButton.isHidden = true
+            deleteButton.isHidden = false
+        } else {
+            favoriteButton.isHidden = false
+            deleteButton.isHidden = true
+            
+            var imageName = "fi_heart.png"
+            if Utilities.shared.isFavorited(bookId: book.id) {
+                imageName = "fi_heart_fill.png"
+            }
+            let uiImage = UIImage.init(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            favoriteButton.setImage(uiImage, for: .normal)
         }
     }
     
@@ -193,7 +224,12 @@ class BookTableViewCell: UITableViewCell {
         composerLabel.text = composer
     }
     
-    @objc func moreButtonTapped() {
+    @objc func favoriteButtonTapped() {
+        if EpubReaderHelper.shared.user == nil {
+            Utilities.shared.showLoginDialog()
+            return
+        }
+        
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         if #available(iOS 13.0, *) {
             alert.view.tintColor = UIColor.primaryTextColor(traitCollection: UITraitCollection.current)
@@ -203,91 +239,44 @@ class BookTableViewCell: UITableViewCell {
         alert.popoverPresentationController?.permittedArrowDirections = []
 
         if self.book != nil {
+            let bookViewModel = BookViewModel()
             if Utilities.shared.isFavorited(bookId: self.book.id) {
-                let favouritesAction = UIAlertAction(title: "Xóa khỏi Yêu thích", style: .default) { action in
-                    if EpubReaderHelper.shared.user == nil {
-                        Utilities.shared.showLoginDialog()
-                        return
-                    }
-                    let bookViewModel = BookViewModel()
-                    bookViewModel.removeFavorite(bookId: self.book.id, userId: EpubReaderHelper.shared.user.id) { success in
-                        BannerNotification.removedFromFavourites.present()
-                    }
+                bookViewModel.removeFavorite(bookId: self.book.id, userId: EpubReaderHelper.shared.user.id) { success in
+                    BannerNotification.removedFromFavourites.present()
                 }
-                alert.addAction(favouritesAction)
             } else {
-                let favouritesAction = UIAlertAction(title: "Thêm vào Yêu thích", style: .default) { action in
-                    if EpubReaderHelper.shared.user == nil {
-                        Utilities.shared.showLoginDialog()
-                        return
-                    }
-                    let bookViewModel = BookViewModel()
-                    bookViewModel.putToFavorites(book: self.book, userId: EpubReaderHelper.shared.user.id) { success in
-                        BannerNotification.addedToFavourites.present()
-                    }
+                bookViewModel.putToFavorites(book: self.book, userId: EpubReaderHelper.shared.user.id) { success in
+                    BannerNotification.addedToFavourites.present()
                 }
-                alert.addAction(favouritesAction)
             }
-        
-            if let bookUrl = URL(string: self.book.epub_source), pageLabel.isHidden {
+        }
+    }
+    
+    @objc func deleteButtonTapped() {
+        let alert = UIAlertController(title: "Xóa sách \(self.book.title)",
+                                      message: "Bạn có chắc muốn xóa cuốn sách này không ?",
+                                      preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Đồng ý", style: .default) { action in
+            if let bookUrl = URL(string: self.book.epub_source) {
                 let fileName = bookUrl.lastPathComponent
                 let path: String = Utilities.shared.getFileExist(fileName: fileName)
                 if path != "" {
-                    let downloadAction = UIAlertAction(title: "Xóa sách", style: .default) { action in
-                        try? FileManager.default.removeItem(atPath: path)
-                        DispatchQueue.main.async {
-                            BannerNotification.downloadDeleted(title: self.book.title).present()
-                            EpubReaderHelper.shared.downloadBooks.removeAll(where: { $0.id == self.book.id})
-                            PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveBookSuccessNotification), object: nil)
-                        }
+                    try? FileManager.default.removeItem(atPath: path)
+                    DispatchQueue.main.async {
+                        BannerNotification.downloadDeleted(title: self.book.title).present()
+                        EpubReaderHelper.shared.downloadBooks.removeAll(where: { $0.id == self.book.id})
+                        PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveBookSuccessNotification), object: nil)
                     }
-                    alert.addAction(downloadAction)
-                } else {
-                    let downloadAction = UIAlertAction(title: "Tải sách", style: .default) { action in
-                        if !Reachability.shared.isConnectedToNetwork {
-                            Utilities.shared.noConnectionAlert()
-                            return
-                        }
-                        if !self.book.epub_source.contains("http") {
-                            Utilities.shared.showAlertDialog(title: "", message: "Không thể tải, đã xảy ra lỗi!")
-                        } else {
-                            ApiWebService.shared.downloadFile(url: bookUrl) { success in
-                                print("download")
-                                if success {
-                                    DispatchQueue.main.async {
-                                        BannerNotification.downloadSuccessful(title: self.book.title).present()
-                                        EpubReaderHelper.shared.downloadBooks.append(self.book)
-                                        PersistenceHelper.saveData(object: EpubReaderHelper.shared.downloadBooks, key: "downloadBook")
-                                    }
-                                } else {
-                                    DispatchQueue.main.async {
-                                        Utilities.shared.showAlertDialog(title: "", message: "Download không thành công, vui lòng kiểm tra kết nối internet!")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    alert.addAction(downloadAction)
                 }
             }
-        } else if self.audio != nil {
-            let deleteAction = UIAlertAction(title: "Xóa audio", style: .default) { action in
-                if let id = self.audio?.id, let itemPath = DatabaseHelper.getFilePath(id: id), FileManager.default.fileExists(atPath: itemPath) {
-                    try? FileManager.default.removeItem(atPath: itemPath)
-                    EpubReaderHelper.shared.downloadAudio.removeAll(where: {$0.id == self.audio?.id})
-                    PersistenceHelper.saveAudioData(object: EpubReaderHelper.shared.downloadAudio, key: "downloadAudio")
-                    BannerNotification.downloadDeleted(title: self.audio.title).present()
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: EpubReaderHelper.RemoveAudioSuccessNotification), object: nil)
-                }
-            }
-            alert.addAction(deleteAction)
-        } else {
-            return
         }
-
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(okAction)
+        let cancelAction = UIAlertAction(title: "Hủy bỏ", style: .cancel)
         alert.addAction(cancelAction)
-        UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
+        
+        DispatchQueue.main.async {
+            UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
+        }
     }
 }

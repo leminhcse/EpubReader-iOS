@@ -1,14 +1,14 @@
 //
-//  EconomicsViewController.swift
+//  CultureHistoryViewController.swift
 //  EpubReader
 //
-//  Created by MacBook on 6/4/22.
+//  Created by mac on 10/09/2022.
 //
 
 import UIKit
 import RxSwift
 
-class EconomicsViewController: UIViewController {
+class CultureHistoryViewController: UIViewController {
     
     private var collectionView: UICollectionView!
     private var flowLayout = UICollectionViewFlowLayout()
@@ -19,7 +19,7 @@ class EconomicsViewController: UIViewController {
     
     private let disposeBag = DisposeBag()
     private var listSkillBook = [Book]()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,14 +27,12 @@ class EconomicsViewController: UIViewController {
                                                selector: #selector(reloadData(_:)),
                                                name: NSNotification.Name(rawValue: EpubReaderHelper.ReloadDataNotification),
                                                object: nil)
-        
         setupView()
         loadData()
     }
     
     private func setupView() {
         view.backgroundColor = UIColor.white
-        
         let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.size.height ?? 64
         let bottom = tabBarHeight + inset*9
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: flowLayout)
@@ -48,19 +46,28 @@ class EconomicsViewController: UIViewController {
     }
     
     private func loadData() {
-        bookViewModel.getBookList()
+        bookViewModel.getBookList() { success in
+            if success {
+                print("sucess")
+            } else {
+                if let data = PersistenceHelper.loadData(key: "Books") as? [Book] {
+                    self.listSkillBook = Utilities.shared.importBookList(books: data).filter({$0.type == "4"})
+                    self.collectionView.reloadData()
+                }
+            }
+        }
     }
     
     @objc func reloadData(_ notification: NSNotification) {
         if bookViewModel.listBook.count > 0 {
             self.listSkillBook.removeAll()
-            self.listSkillBook = bookViewModel.listBook.filter({$0.type == "2"})
+            self.listSkillBook = bookViewModel.listBook.filter({$0.type == "4"})
             self.collectionView.reloadData()
         }
     }
 }
 
-extension EconomicsViewController: UICollectionViewDataSource {
+extension CultureHistoryViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 16
@@ -86,7 +93,7 @@ extension EconomicsViewController: UICollectionViewDataSource {
     }
 }
 
-extension EconomicsViewController: UICollectionViewDelegateFlowLayout {
+extension CultureHistoryViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
